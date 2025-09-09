@@ -14,6 +14,14 @@
   <?= $header; ?>
 
   <style>
+    /* Fuente general */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fafafa;
+  color: #000;
+  line-height: 1.6;
+}
+
     /* ====== MAPA Y CATEGORÍAS ====== */
 #explora {
   background: #f9f9f9;
@@ -111,7 +119,7 @@
     padding: 12px 15px;
   }
 }
-
+/* ====== DESTACADO DEL MES ====== */
 .scroll-wrapper {
   position: relative;
 }
@@ -123,11 +131,11 @@
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   padding: 1rem 0;
-  scrollbar-width: none; 
-  -ms-overflow-style: none; 
+  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
 }
 .scroll-container::-webkit-scrollbar {
-  display: none; 
+  display: none; /* Chrome, Safari */
 }
 
 .scroll-card {
@@ -136,24 +144,44 @@
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-  transition: transform 0.3s;
+  transition: transform 0.3s, box-shadow 0.3s;
   scroll-snap-align: start;
+  background: #fff;
 }
 .scroll-card:hover {
   transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 .scroll-card img {
-  height: 190px;
+  height: 200px;
   object-fit: cover;
   width: 100%;
+  border-bottom: 3px solid #ffc107; /* amarillo bootstrap */
 }
 
+.scroll-card .card-body {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 1rem;
+}
+.scroll-card .card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+}
+.scroll-card .card-text {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
 
+/* Botones de scroll */
 .scroll-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-70%);
-  background: #e19600;
+  background: #dc3545;
   border: none;
   font-size: 2rem;
   cursor: pointer;
@@ -162,41 +190,30 @@
   border-radius: 50%;
   box-shadow: 0 2px 5px rgba(0,0,0,0.3);
   z-index: 10;
+  color: #fff;
 }
 .scroll-btn.left { left: -30px; }
 .scroll-btn.right { right: -30px; }
 .scroll-btn:hover {
-  background: #ffad09;
+  background: #bb2d3b; /* rojo más oscuro */
 }
 .scroll-btn:focus {
-  outline: 2px solid #ffad09;
+  outline: 2px solid #ffc107;
   outline-offset: 3px;
 }
 
-
-.platos-container {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  padding: 1rem 0;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.platos-container::-webkit-scrollbar {
-  display: none;
+/* Responsive */
+@media (max-width: 768px) {
+  .scroll-card {
+    flex: 0 0 80%;
+  }
+  .scroll-card img {
+    height: 180px;
+  }
+  .scroll-btn.left { left: 5px; }
+  .scroll-btn.right { right: 5px; }
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
  #chatbot-fab {
       position: fixed;
@@ -223,6 +240,15 @@
     }
   </style>
   <main>
+
+  <div class="container my-5">
+  <h3 class="text-center mb-3"><b>Encuentra tu restaurante favorito</b></h3>
+  <div class="input-group shadow">
+    <input type="text" class="form-control" placeholder="Buscar por nombre o plato..." id="buscador">
+    <button class="btn btn-danger"><i class="fas fa-search"></i></button>
+  </div>
+</div>
+
   <!-- Mapa y Categorias -->
 <section id="explora" class="py-5 bg-light">
   <div class="container">
@@ -276,9 +302,9 @@
 </section>
 
     <!-- RESTAURANTES DESTACADOS -->
-    <section class="py-5 bg-black">
+    <section class="py-5 bg-white">
       <div class="container">
-        <h2 class="text-center mb-4 text-white"><b>Destacado Del Mes</b></h2>
+        <h2 class="text-center mb-4 text-black"><b>Destacado Del Mes</b></h2>
 
         <div class="scroll-wrapper">
           <!-- Botones -->
@@ -293,6 +319,7 @@
                 <h5 class="card-title"><b>El Punto Marino</b></h5>
                 <p class="card-text">¡Explora el Encanto del Mar en el Punto Marino!</p>
                 <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+
               </div>
             </div>
 
@@ -344,6 +371,35 @@
         </div>
       </div>
     </section>
+
+    <section class="py-5 bg-light text-dark text-center">
+  <h3><b>¿Tienes un restaurante en Chincha?</b></h3>
+  <p>Únete a <b>Ruta del Sabor Chincha</b> y haz que tu negocio aparezca en nuestra plataforma.</p>
+  
+  <form class="row g-2 justify-content-center mt-3" style="max-width: 900px; margin: auto;">
+    <!-- Nombre del negocio -->
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="Nombre del negocio" required>
+    </div>
+    <!-- Correo -->
+    <div class="col-md-5">
+      <input type="email" class="form-control" placeholder="Correo de contacto" required>
+    </div>
+    <!-- Número de celular -->
+    <div class="col-md-5">
+      <input type="tel" class="form-control" placeholder="Número de celular" maxlength="9" required>
+    </div>
+    <!-- Descripción del negocio -->
+    <div class="col-md-5">
+      <input type="text" class="form-control" placeholder="¿De qué trata tu negocio?" required>
+    </div>
+    <!-- Botón -->
+    <div class="col-12">
+      <button class="btn btn-danger px-4 mt-2"><b>Quiero unirme</b></button>
+    </div>
+  </form>
+</section>
+
 
   
 
