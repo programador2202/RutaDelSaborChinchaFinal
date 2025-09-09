@@ -1,0 +1,97 @@
+/* ====== MAPA Y CATEGORÍAS ====== */
+#explora {
+  background: #f9f9f9;
+}
+
+#map {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 3px solid #fff;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+#map:hover {
+  transform: scale(1.01);
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ====== TÍTULO ====== */
+#explora h3 {
+  font-size: 1.6rem;
+  color: #333;
+  font-weight: 700;
+  position: relative;
+}
+
+#explora h3::after {
+  content: "";
+  width: 60px;
+  height: 3px;
+  background: #dc3545; /* rojo bootstrap */
+  display: block;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* ====== LISTA DE CATEGORÍAS ====== */
+#explora .list-group {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#explora .list-group-item {
+  border: none;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  background: #fff;
+  color: #444;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+#explora .list-group-item i {
+  font-size: 1.3rem;
+  color: #dc3545;
+  transition: transform 0.3s ease;
+}
+
+/* Hover dinámico */
+#explora .list-group-item:hover {
+  background: #dc3545;
+  color: #fff;
+  transform: translateX(5px);
+}
+
+#explora .list-group-item:hover i {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+/* Estado activo */
+#explora .list-group-item.active {
+  background: #dc3545 !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+#explora .list-group-item.active i {
+  color: #fff !important;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  #map {
+    height: 400px;
+  }
+
+  #explora h3 {
+    font-size: 1.3rem;
+  }
+
+  #explora .list-group-item {
+    font-size: 0.95rem;
+    padding: 12px 15px;
+  }
+}

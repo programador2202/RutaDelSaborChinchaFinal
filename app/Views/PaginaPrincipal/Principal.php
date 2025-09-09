@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ruta del Sabor Chincha</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+</head>
+<body>
+
+  <?= $header; ?>
+
+  <style>
+    /* ====== MAPA Y CATEGORÍAS ====== */
+#explora {
+  background: #f9f9f9;
+}
+
+#map {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 3px solid #fff;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+#map:hover {
+  transform: scale(1.01);
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ====== TÍTULO ====== */
+#explora h3 {
+  font-size: 1.6rem;
+  color: #333;
+  font-weight: 700;
+  position: relative;
+}
+
+#explora h3::after {
+  content: "";
+  width: 400px;
+  height: 3px;
+  background: #dc3545; /* rojo bootstrap */
+  display: block;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* ====== LISTA DE CATEGORÍAS ====== */
+#explora .list-group {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+#explora .list-group-item {
+  border: none;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-weight: 500;
+  background: #fff;
+  color: #444;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+#explora .list-group-item i {
+  font-size: 1.3rem;
+  color: #dc3545;
+  transition: transform 0.3s ease;
+}
+
+/* Hover dinámico */
+#explora .list-group-item:hover {
+  background: #dc3545;
+  color: #fff;
+  transform: translateX(5px);
+}
+
+#explora .list-group-item:hover i {
+  color: #fff;
+  transform: scale(1.2);
+}
+
+/* Estado activo */
+#explora .list-group-item.active {
+  background: #dc3545 !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+#explora .list-group-item.active i {
+  color: #fff !important;
+}
+
+/* ====== RESPONSIVE ====== */
+@media (max-width: 768px) {
+  #map {
+    height: 400px;
+  }
+
+  #explora h3 {
+    font-size: 1.3rem;
+  }
+
+  #explora .list-group-item {
+    font-size: 0.95rem;
+    padding: 12px 15px;
+  }
+}
+
+.scroll-wrapper {
+  position: relative;
+}
+
+.scroll-container {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 1rem 0;
+  scrollbar-width: none; 
+  -ms-overflow-style: none; 
+}
+.scroll-container::-webkit-scrollbar {
+  display: none; 
+}
+
+.scroll-card {
+  flex: 0 0 clamp(220px, 70vw, 300px); 
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+  transition: transform 0.3s;
+  scroll-snap-align: start;
+}
+.scroll-card:hover {
+  transform: translateY(-10px);
+}
+.scroll-card img {
+  height: 190px;
+  object-fit: cover;
+  width: 100%;
+}
+
+
+.scroll-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-70%);
+  background: #e19600;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  padding: 0.3rem 0.6rem;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  z-index: 10;
+}
+.scroll-btn.left { left: -30px; }
+.scroll-btn.right { right: -30px; }
+.scroll-btn:hover {
+  background: #ffad09;
+}
+.scroll-btn:focus {
+  outline: 2px solid #ffad09;
+  outline-offset: 3px;
+}
+
+
+.platos-container {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding: 1rem 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.platos-container::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+ #chatbot-fab {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      z-index: 9999;
+      background: #007baf;
+      color: #fff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+    #chatbot-fab:hover {
+      background: #005f7f;
+      color: #fff;
+      text-decoration: none;
+    }
+  </style>
+  <main>
+  <!-- Mapa y Categorias -->
+<section id="explora" class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <!-- Columna izquierda: Mapa -->
+      <div class="col-md-8 mb-4">
+        <div id="map" style="height: 600px;  border-radius: 12px; overflow: hidden;"></div>
+      </div>
+
+      <!-- Columna derecha: Categorías -->
+      <div class="col-md-4">
+        <h3 class="text-center mb-4"><b>Explora por Categorías</b></h3>
+        <div class="list-group shadow-sm">
+
+          <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('oriental')">
+            <i class="fas fa-utensils me-2"></i> Comida Oriental
+          </button>
+
+          <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('hamburguesa')">
+            <i class="fas fa-hamburger me-2"></i> Hamburguesas
+          </button>
+
+          <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('marisco')">
+            <i class="fas fa-fish me-2"></i> Mariscos
+          </button>
+
+          <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('polleria')">
+            <i class="fas fa-drumstick-bite me-2"></i> Pollerías
+          </button>
+
+          <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('pizza')">
+            <i class="fas fa-pizza-slice me-2"></i> Pizzerías
+          </button>
+
+          <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('cafe')">
+            <i class="fas fa-coffee me-2"></i> Cafeterías y Pastelerías
+          </button>
+
+          <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('parrilla')">
+            <i class="fas fa-fire me-2"></i> Parrillas
+          </button>
+
+          <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('vino')">
+            <i class="fas fa-wine-glass-alt me-2"></i> Vitivinícolas
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- RESTAURANTES DESTACADOS -->
+    <section class="py-5 bg-black">
+      <div class="container">
+        <h2 class="text-center mb-4 text-white"><b>Destacado Del Mes</b></h2>
+
+        <div class="scroll-wrapper">
+          <!-- Botones -->
+          <button class="scroll-btn left" onclick="scrollRestaurantes(-1)">&#10094;</button>
+          <button class="scroll-btn right" onclick="scrollRestaurantes(1)">&#10095;</button>
+
+          <div class="scroll-container" id="restaurantesScroll">
+            <!-- Tarjetas -->
+            <div class="card scroll-card">
+              <img src="<?= base_url('img/causa_agresiva (2).jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>El Punto Marino</b></h5>
+                <p class="card-text">¡Explora el Encanto del Mar en el Punto Marino!</p>
+                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+
+            <div class="card scroll-card">
+              <img src="<?= base_url('img/Chijaukay.jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>Mister Wok</b></h5>
+                <p class="card-text">¿Antojo de comida china? Descubre el auténtico sabor del chifa en Mister Wok</p>
+                <a href="<?= base_url('views/restaurantes/MisterWok.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+
+            <div class="card scroll-card">
+              <img src="<?= base_url('img/el_gran_combo restaurante_chincha_c (3).jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>El Gran Combo</b></h5>
+                <p class="card-text">Una experiencia gastronómica que celebra las ricas tradiciones culinarias.</p>
+                <a href="<?= base_url('views/restaurantes/ElGranCombo.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+
+            <div class="card scroll-card">
+              <img src="<?= base_url('img/3.jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>Daddy’s Truck’s Burger!</b></h5>
+                <p class="card-text">Una experiencia de comida rápida diferente en Chincha.</p>
+                <a href="<?= base_url('views/restaurantes/DaddyTrick.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+
+            <div class="card scroll-card">
+              <img src="<?= base_url('img/daito (5).jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>DAITO</b></h5>
+                <p class="card-text">Exquisita cocina Nikkei, mezcla de Perú y Japón.</p>
+                <a href="<?= base_url('views/restaurantes/Daito.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+
+            <div class="card scroll-card">
+              <img src="<?= base_url('img/vitivinicola_chincha_san_carlos (1).jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>Viñedos San Carlos</b></h5>
+                <p class="card-text">Una bodega en el pintoresco valle de Sunampe, Chincha, Perú.</p>
+                <a href="<?= base_url('views/restaurantes/ViñedosSanCarlos.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  
+
+  <!-- Chat -->
+  <a href="#" id="chatbot-fab" title="Chat inteligente"><i class="fas fa-robot"></i></a>
+  <div id="chatbot-window" style="display:none; position:fixed; bottom:100px; right:32px; width:320px; background:#fff; border-radius:16px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:10000; overflow:hidden;">
+    <div style="background:#007baf; color:#fff; padding:12px; font-weight:bold;">Chat Inteligente
+      <span style="float:right; cursor:pointer;" onclick="document.getElementById('chatbot-window').style.display='none'">&times;</span>
+    </div>
+    <div style="text-align:center; color:#888; font-size:0.9rem;">¡Hola! ¿En qué puedo ayudarte?</div>
+    <div id="chatbot-messages" style="height:260px; overflow-y:auto; padding:10px; font-size:1rem;"></div>
+    <form id="chatbot-form" style="display:flex; border-top:1px solid #eee;">
+      <input type="text" id="chatbot-input" autocomplete="off" placeholder="Escribe tu consulta..." style="flex:1; border:none; padding:10px;">
+      <button type="submit" style="background:#007baf; color:#fff; border:none; padding:0 16px;">Enviar</button>
+    </form>
+  </div>
+
+  <?= $footer; ?>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+ <!-- JS Leaflet -->
+<script>
+  // Inicializar mapa
+  var map = L.map('map').setView([-13.4096, -76.1325], 13); // Chincha
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  // Datos de ejemplo (simulación de BD)
+  var restaurantes = [
+    {nombre: "Sushi House", categoria: "oriental", lat: -13.41, lng: -76.14},
+    {nombre: "Burger King", categoria: "hamburguesa", lat: -13.42, lng: -76.13},
+    {nombre: "Mariscos del Puerto", categoria: "marisco", lat: -13.40, lng: -76.12},
+    {nombre: "Pollería El Sabor", categoria: "polleria", lat: -13.415, lng: -76.135},
+    {nombre: "Pizza Italia", categoria: "pizza", lat: -13.418, lng: -76.138}
+  ];
+
+  var markers = [];
+
+  function filtrarCategoria(cat) {
+    // Eliminar marcadores anteriores
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+
+    // Filtrar restaurantes por categoría
+    var filtrados = restaurantes.filter(r => r.categoria === cat);
+
+    filtrados.forEach(r => {
+      var marker = L.marker([r.lat, r.lng]).addTo(map)
+        .bindPopup("<b>" + r.nombre + "</b>");
+      markers.push(marker);
+    });
+
+    // Centrar mapa en el primer restaurante
+    if (filtrados.length > 0) {
+      map.setView([filtrados[0].lat, filtrados[0].lng], 15);
+    }
+  }
+</script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const selectCategoria = document.querySelector('select[name="categoria"]');
+      fetch("<?= base_url('controllers/Categoria.php?task=getAll') ?>")
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(categoria => {
+            const option = document.createElement("option");
+            option.value = categoria.idcategoria;
+            option.textContent = categoria.nombre;
+            selectCategoria.appendChild(option);
+          });
+        })
+        .catch(error => console.error("Error al cargar categorías:", error));
+    });
+
+    function scrollRestaurantes(direction) {
+      const container = document.getElementById('restaurantesScroll');
+      const cardWidth = container.querySelector('.scroll-card').offsetWidth + 16; 
+      container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
+    }
+
+    // Chat flotante
+    document.getElementById('chatbot-fab').onclick = function(e) {
+      e.preventDefault();
+      var win = document.getElementById('chatbot-window');
+      win.style.display = win.style.display === 'none' ? 'block' : 'none';
+    };
+
+    document.getElementById('chatbot-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatbot-input');
+      const msg = input.value.trim();
+      if(!msg) return;
+      addMessage('Tú', msg);
+      input.value = '';
+      const res = await fetch('<?= base_url('controllers/chatbot.php') ?>', {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: 'msg=' + encodeURIComponent(msg)
+      });
+      const data = await res.text();
+      addMessage('Bot', data);
+    };
+
+    function addMessage(sender, text) {
+      const box = document.getElementById('chatbot-messages');
+      box.innerHTML += `<div><b>${sender}:</b> ${text}</div>`;
+      box.scrollTop = box.scrollHeight;
+    }
+  </script>
+</body>
+</html>
