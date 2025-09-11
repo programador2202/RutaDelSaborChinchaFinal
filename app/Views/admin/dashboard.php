@@ -34,9 +34,9 @@
           <li class="nav-item mx-2"><a class="nav-link" href="datos.php"></i>Inicio</a></li>
           <li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/Listacategorias') ?>"></i>Categorías</a>
           </li>
-          <li class="nav-item mx-2"><a class="nav-link" href="restaurantes.php"> Secciones</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="platos.php">Personas</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="">Negocios</a></li>
+          <li class="nav-item mx-2"><li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/Listasecciones') ?>"> Secciones</a></li>
+          <li class="nav-item mx-2"><li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/Listapersonas') ?>"> Personas</a></li>
+          <li class="nav-item mx-2"><li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/ListarNegocios') ?>">Negocios</a></li>
           <li class="nav-item mx-2"><a class="nav-link" href="">Locales</a></li>
           <li class="nav-item mx-2"><a class="nav-link" href="">Horario</a></li>
           <li class="nav-item mx-2"><a class="nav-link" href="">Carta</a></li>
