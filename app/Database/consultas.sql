@@ -8,18 +8,14 @@ INSERT INTO provincias (provincia, iddepartamento) VALUES
 INSERT INTO distritos (distrito, idprovincia) VALUES
 ('Chincha Alta', 1), ('Sunampe', 1), ('Tambo de Mora', 1), ('San Juan de Miraflores', 4), ('Cercado', 5);
 
--- =============================
--- CATEGORÍAS Y SECCIONES
--- =============================
+
 INSERT INTO categorias (categoria) VALUES
 ('Pollería'), ('Pizzería'), ('Mariscos'), ('Cafetería'), ('Chifa');
 
 INSERT INTO secciones (seccion) VALUES
 ('Entradas'), ('Platos de Fondo'), ('Bebidas'), ('Postres'), ('Promociones');
 
--- =============================
--- PERSONAS
--- =============================
+
 INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono) VALUES
 ('García Pérez', 'Juan', 'DNI', '12345678', '987654321'),
 ('Rojas Díaz', 'María', 'DNI', '87654321', '912345678'),
@@ -27,9 +23,7 @@ INSERT INTO personas (apellidos, nombres, tipodoc, numerodoc, telefono) VALUES
 ('Fernández Soto', 'Lucía', 'DNI', '43218765', '934567890'),
 ('Torres Ramos', 'Pedro', 'DNI', '11112222', '945678901');
 
--- =============================
--- NEGOCIOS
--- =============================
+
 INSERT INTO negocios (idcategoria, idrepresentante, nombre, nombrecomercial, slogan, ruc) VALUES
 (1, 1, 'Pollos Don Juan', 'Don Juan', 'El mejor pollo a la brasa', '20123456789'),
 (2, 2, 'Pizza Bella', 'Bella Pizza', 'El auténtico sabor italiano', '20112233445'),
@@ -37,9 +31,7 @@ INSERT INTO negocios (idcategoria, idrepresentante, nombre, nombrecomercial, slo
 (4, 3, 'Café Aroma', 'Aroma Café', 'Pasión por el café', '20876543210'),
 (5, 4, 'Chifa Pekín', 'Pekín', 'Sabor oriental en cada plato', '20765432109');
 
--- =============================
--- LOCALES
--- =============================
+
 INSERT INTO locales (idnegocio, iddistrito, direccion, telefono, latitud, longitud) VALUES
 (1, 1, 'Av. Grau 123, Chincha Alta', '956123456', -13.40960000, -76.13250000),
 (2, 2, 'Jr. Lima 456, Sunampe', '956654321', -13.42000000, -76.14000000),
@@ -107,9 +99,7 @@ INSERT INTO comentarios (idlocales, tokenusuario, fechahora, comentario, valorac
 (4, 'token456', NOW(), 'El café estaba algo frío.', 3),
 (5, 'token567', NOW(), 'Muy buen servicio en general.', 5);
 
--- =============================
--- RESERVAS
--- =============================
+
 INSERT INTO reservas (idhorario, fechahora, cantidadpersonas, confirmacion, idusuariovalida, idpersonasolicitud) VALUES
 (1, '2024-06-01 19:00:00', 4, TRUE, 1, 2),
 (2, '2024-06-02 20:00:00', 2, FALSE, NULL, 3),

@@ -31,17 +31,15 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item mx-2">
-              <a class="nav-link" href="/RutaDelSaborChincha123/index.php"></i>Inicio</a>
+              <a class="nav-link" href="<?= base_url('/') ?>">Inicio</a>
             </li>
       
               <li class="nav-item mx-2">
-              <a class="nav-link" href="/RutaDelSaborChincha123/views/nosotros.php"></i>Nosotros</a>
+              <a class="nav-link" href="<?= base_url('/nosotros') ?>">Nosotros</a>
             </li>
 
               <li class="nav-item  mx-2">
-              <a class="nav-link" href="#categoria">
-                Categorías
-              </a>
+             <a class="nav-link" href="<?= base_url('/categorias') ?>">Categorías</a>
             </li>
 
             <li class="nav-item mx-2"><a class="nav-link" href="/RutaDelSaborChincha123/views/categorias/Vitinicolas.php"> Vitinícolas</a></li>
@@ -49,7 +47,12 @@
             <li class="nav-item mx-2"><a class="nav-link" href="#"><i class="fab fa-facebook fa-lg"></i></a></li>
             <li class="nav-item mx-2"><a class="nav-link" href="#"><i class="fab fa-whatsapp fa-lg"></i></a></li>
             <li class="nav-item mx-2"><a class="nav-link" href="#"><i class="fab fa-tiktok fa-lg"></i></a></li>
-            <li class="nav-item mx-2"><a class="nav-link" href="http://localhost/RutaDelSaborChincha123/views/admin/datos.php"><i class="fas fa-user-circle fa-lg"></i></a></li>
+            <li class="nav-item mx-2">
+                <a class="nav-link" href="<?= base_url('/index') ?>" title="Panel de Administración">
+                    <i class="fas fa-user-circle fa-lg"></i>
+                    <span class="visually-hidden">Acceso Administrador</span>
+                </a>
+            </li>
 
           </ul>
         </div>
@@ -57,16 +60,19 @@
     </nav>
   </header>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 
   
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
   <script>
     const navLinks = document.querySelectorAll('.nav-link');
     const navCollapse = document.getElementById('navbarSupportedContent');
 
     navLinks.forEach(link => {
       link.addEventListener('click', () => {
-        if (window.innerWidth < 992) {
+        if (window.innerWidth < 992) { 
           const collapse = new bootstrap.Collapse(navCollapse, { toggle: false });
           collapse.hide();
         }

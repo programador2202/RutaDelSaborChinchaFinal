@@ -212,7 +212,7 @@
 
   // Datos de ejemplo (simulación de BD)
   var restaurantes = [
-    {nombre: "Sushi House", categoria: "oriental", lat: -13.41, lng: -76.14},
+    {nombre: "Sushi House", categoria: "hamburguesa", lat: -13.41, lng: -76.14},
     {nombre: "Burger King", categoria: "hamburguesa", lat: -13.42, lng: -76.13},
     {nombre: "Mariscos del Puerto", categoria: "marisco", lat: -13.40, lng: -76.12},
     {nombre: "Pollería El Sabor", categoria: "polleria", lat: -13.415, lng: -76.135},
