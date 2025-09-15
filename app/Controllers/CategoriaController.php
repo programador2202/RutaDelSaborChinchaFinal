@@ -6,8 +6,8 @@ use App\Controllers\BaseController;
 use App\Models\Categorias;
 
 class CategoriaController extends BaseController
-
-{    public function index(): string
+{    
+    public function index(): string
     {
         $categoriaModel = new Categorias();
 
@@ -16,7 +16,6 @@ class CategoriaController extends BaseController
 
         return view('admin/categorias/Listar', $datos);
     }
-
 
     public function registrar()
     {
@@ -28,10 +27,9 @@ class CategoriaController extends BaseController
 
         $categoriaModel->insert($registro);
 
-        return redirect()->to(base_url('admin/categorias/'))
+        return redirect()->to(base_url('admin/categorias'))
                          ->with('mensaje', 'registrado');
     }
-
 
     public function actualizar()
     {
@@ -44,22 +42,21 @@ class CategoriaController extends BaseController
 
         $categoriaModel->update($id, $datos);
 
-        return redirect()->to(base_url('admin/categorias/'))
+        return redirect()->to(base_url('admin/categorias'))
                          ->with('mensaje', 'editado');
     }
 
- 
     public function borrar($id = null)
     {
         $categoriaModel = new Categorias();
 
         if ($categoriaModel->find($id)) {
             $categoriaModel->delete($id);
-            return redirect()->to(base_url('categorias'))
+            return redirect()->to(base_url('admin/categorias'))
                              ->with('mensaje', 'eliminado');
         }
 
-        return redirect()->to(base_url('categorias'))
+        return redirect()->to(base_url('admin/categorias'))
                          ->with('mensaje', 'no_existe');
     }
 }

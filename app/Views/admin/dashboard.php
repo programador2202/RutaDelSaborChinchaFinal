@@ -6,6 +6,7 @@
   <title>Ruta del Sabor Chincha</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  
 </head>
 
 <body>
@@ -15,11 +16,7 @@
 
     <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2">
       <div class="container">
-        <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="datos.php">
-          <img src="img/inicio_logo.png" alt="" 
-               width="130" height="55" class="me-2">
-        </a>
+     
 
         <!-- Botón hamburguesa -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
@@ -29,26 +26,44 @@
         </button>
 
         <!-- Menú -->
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item mx-2"><a class="nav-link" href="datos.php"></i>Inicio</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/Listacategorias') ?>"></i>Categorías</a>
-          </li>
-          <li class="nav-item mx-2"><li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/Listasecciones') ?>"> Secciones</a></li>
-          <li class="nav-item mx-2"><li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/Listapersonas') ?>"> Personas</a></li>
-          <li class="nav-item mx-2"><li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/ListarNegocios') ?>">Negocios</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="">Locales</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="">Horario</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="">Carta</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="">Recurso</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="">Usuarios</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="">Contratos</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="">Comentarios</a></li>
-          <li class="nav-item mx-2"><a class="nav-link" href="">Reservas</a></li>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="datos.php"><i class="fas fa-home me-1"></i>Inicio</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="<?= base_url('/personas') ?>"><i class="fas fa-user-friends me-1"></i>Personas</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="<?= base_url('/usuarios') ?>"><i class="fas fa-users-cog me-1"></i>Usuarios</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="<?= base_url('/negocios') ?>"><i class="fas fa-store me-1"></i>Negocios</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="<?= base_url('/locales') ?>"><i class="fas fa-map-marker-alt me-1"></i>Locales</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="<?= base_url('/cartas') ?>"><i class="fas fa-utensils me-1"></i>Cartas</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="#"><i class="fas fa-clock me-1"></i>Horario</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="#"><i class="fas fa-box-open me-1"></i>Recurso</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="#"><i class="fas fa-file-contract me-1"></i>Contratos</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="#"><i class="fas fa-comments me-1"></i>Comentarios</a>
+    </li>
+    <li class="nav-item mx-2">
+      <a class="nav-link" href="#"><i class="fas fa-calendar-check me-1"></i>Reservas</a>
+    </li>
+  </ul>
+</div>
 
-          </ul>
-        </div>
-      </div>
     </nav>
   </header>
 

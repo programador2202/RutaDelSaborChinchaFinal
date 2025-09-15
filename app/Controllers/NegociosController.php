@@ -3,74 +3,77 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Negocios;
+use App\Models\Negocio;
+use App\Models\Categorias;
+use App\Models\Personas;
 
 class NegociosController extends BaseController
 {
     public function index(): string
     {
-        $negocioModel = new Negocios();
+        $negocioModel   = new Negocio();
+        $categoriaModel = new Categorias();
+        $personaModel   = new Personas();
 
-       $datos['negocios'] = $negocioModel
-            ->select("negocios.*, categorias.categoria AS nombre_categoria, 
-                      CONCAT(personas.apellidos, ' ', personas.nombres) AS representante")
-            ->join("categorias", "categorias.idcategoria = negocios.idcategoria")
-            ->join("personas",   "personas.idpersona = negocios.idrepresentante")
-            ->orderBy("negocios.idnegocio", "ASC")
+        // Traemos los negocios con categoría y representante
+        $datos['negocios'] = $negocioModel
+            ->select('negocios.*, categorias.categoria, personas.nombres, personas.apellidos')
+            ->join('categorias', 'categorias.idcategoria = negocios.idcategoria')
+            ->join('personas', 'personas.idpersona = negocios.idrepresentante')
+            ->orderBy('negocios.idnegocio', 'ASC')
             ->findAll();
+
+        $datos['categorias']   = $categoriaModel->orderBy('categoria', 'ASC')->findAll();
+        $datos['personas']     = $personaModel->orderBy('apellidos', 'ASC')->findAll();
+
         $datos['header'] = view('admin/dashboard');
-        return view('admin/negocios/Listar', $datos);
+
+        return view('admin/recursos/Negocios', $datos);
     }
 
-
-
-    public function registrar()
+    public function store()
     {
-        $negocioModel = new Negocios();
+        $negocioModel = new Negocio();
 
         $data = [
-            'idcategoria'       => $this->request->getPost('idcategoria'),
-            'idseccion'         => $this->request->getPost('idseccion'),
-            'idpersona'         => $this->request->getPost('idpersona'),
-            'nombre'            => $this->request->getPost('nombre'),
-            'nombre_comercial'  => $this->request->getPost('nombre_comercial'),
-            'slogan'            => $this->request->getPost('slogan'),
-            'ruc'               => $this->request->getPost('ruc'),
+            'idcategoria'      => $this->request->getPost('idcategoria'),
+            'idrepresentante'  => $this->request->getPost('idrepresentante'),
+            'nombre'           => $this->request->getPost('nombre'),
+            'nombrecomercial'  => $this->request->getPost('nombrecomercial'),
+            'slogan'           => $this->request->getPost('slogan'),
+            'ruc'              => $this->request->getPost('ruc'),
         ];
 
         $negocioModel->insert($data);
-        return redirect()->to(base_url('negocios'))->with('mensaje', 'registrado');
+
+        return redirect()->to(base_url('negocios'))->with('msg', 'Negocio creado correctamente');
     }
 
-    public function actualizar()
+    public function update()
     {
-        $negocioModel = new Negocios();
+        $negocioModel = new Negocio();
 
-        $id = $this->request->getPost('idnegocio');
+        $idnegocio = $this->request->getPost('idnegocio');
 
         $data = [
-            'idcategoria'       => $this->request->getPost('idcategoria'),
-            'idseccion'         => $this->request->getPost('idseccion'),
-            'idpersona'         => $this->request->getPost('idpersona'),
-            'nombre'            => $this->request->getPost('nombre'),
-            'nombre_comercial'  => $this->request->getPost('nombre_comercial'),
-            'slogan'            => $this->request->getPost('slogan'),
-            'ruc'               => $this->request->getPost('ruc'),
+            'idcategoria'      => $this->request->getPost('idcategoria'),
+            'idrepresentante'  => $this->request->getPost('idrepresentante'),
+            'nombre'           => $this->request->getPost('nombre'),
+            'nombrecomercial'  => $this->request->getPost('nombrecomercial'),
+            'slogan'           => $this->request->getPost('slogan'),
+            'ruc'              => $this->request->getPost('ruc'),
         ];
 
-        $negocioModel->update($id, $data);
-        return redirect()->to(base_url('negocios'))->with('mensaje', 'editado');
+        $negocioModel->update($idnegocio, $data);
+
+        return redirect()->to(base_url('negocios'))->with('msg', 'Negocio actualizado correctamente');
     }
 
-    public function borrar($id = null)
+    public function delete($idnegocio = null)
     {
-        $negocioModel = new Negocios();
+        $negocioModel = new Negocio();
+        $negocioModel->delete($idnegocio);
 
-        if ($negocioModel->find($id)) {
-            $negocioModel->delete($id);
-            return redirect()->to(base_url('negocios'))->with('mensaje', 'eliminado');
-        } else {
-            return redirect()->to(base_url('negocios'))->with('mensaje', 'no_existe');
-        }
+        return redirect()->to(base_url('negocios'))->with('msg', 'Negocio eliminado correctamente');
     }
 }

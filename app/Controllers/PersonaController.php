@@ -3,65 +3,68 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
-use App\Models\Categorias;
 use App\Models\Personas;
-use App\Models\Secciones;
 
 class PersonaController extends BaseController
-
-{    public function index(): string
+{
+    public function index(): string
     {
-        $categoriaModel = new Personas();
+        $personaModel = new Personas();
 
-        $datos['personas'] = $categoriaModel->orderBy('idpersona', 'ASC')->findAll();
-        $datos['header'] = view('admin/dashboard');
+        $datos['personas'] = $personaModel->orderBy('idpersona', 'ASC')->findAll();
+        $datos['header']   = view('admin/dashboard');
 
-        return view('admin/personas/Listar', $datos);
+        return view('admin/recursos/Personas', $datos);
     }
-
 
     public function registrar()
     {
-        $categoriaModel = new Categorias();
+        $personaModel = new Personas();
 
         $registro = [
-            'categoria' => $this->request->getVar('nombre')
+            'apellidos'  => $this->request->getVar('apellidos'),
+            'nombres'    => $this->request->getVar('nombres'),
+            'tipodoc'    => $this->request->getVar('tipodoc'),
+            'numerodoc'  => $this->request->getVar('numerodoc'),
+            'telefono'   => $this->request->getVar('telefono'),
         ];
 
-        $categoriaModel->insert($registro);
+        $personaModel->insert($registro);
 
-        return redirect()->to(base_url('admin/categorias/'))
+        return redirect()->to(base_url('admin/personas/'))
                          ->with('mensaje', 'registrado');
     }
 
-
     public function actualizar()
     {
-        $categoriaModel = new Categorias();
+        $personaModel = new Personas();
 
-        $id = $this->request->getVar('idcategoria');
+        $id = $this->request->getVar('idpersona');
         $datos = [
-            'categoria' => $this->request->getVar('nombre')
+            'apellidos'  => $this->request->getVar('apellidos'),
+            'nombres'    => $this->request->getVar('nombres'),
+            'tipodoc'    => $this->request->getVar('tipodoc'),
+            'numerodoc'  => $this->request->getVar('numerodoc'),
+            'telefono'   => $this->request->getVar('telefono'),
         ];
 
-        $categoriaModel->update($id, $datos);
+        $personaModel->update($id, $datos);
 
-        return redirect()->to(base_url('admin/categorias/'))
+        return redirect()->to(base_url('admin/personas/'))
                          ->with('mensaje', 'editado');
     }
 
- 
     public function borrar($id = null)
     {
-        $categoriaModel = new Categorias();
+        $personaModel = new Personas();
 
-        if ($categoriaModel->find($id)) {
-            $categoriaModel->delete($id);
-            return redirect()->to(base_url('categorias'))
+        if ($personaModel->find($id)) {
+            $personaModel->delete($id);
+            return redirect()->to(base_url('admin/personas'))
                              ->with('mensaje', 'eliminado');
         }
 
-        return redirect()->to(base_url('categorias'))
+        return redirect()->to(base_url('admin/personas'))
                          ->with('mensaje', 'no_existe');
     }
 }
