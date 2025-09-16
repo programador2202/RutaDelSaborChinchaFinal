@@ -17,12 +17,18 @@ class PersonaController extends BaseController
         return view('admin/recursos/Personas', $datos);
     }
 
-    // Nuevo método para AJAX
+    // Método para AJAX
     public function ajax()
     {
         $personaModel = new Personas();
         $accion = $this->request->getVar('accion');
         $respuesta = ['status' => 'error', 'mensaje' => 'Acción no definida'];
+
+        // RUTA BASE DE FOTOS
+        $carpetaFotos = FCPATH . 'uploads/personas/';
+        if (!is_dir($carpetaFotos)) {
+            mkdir($carpetaFotos, 0777, true);
+        }
 
         if ($accion === 'registrar') {
             $foto = $this->request->getFile('foto');
@@ -30,7 +36,7 @@ class PersonaController extends BaseController
 
             if ($foto && $foto->isValid() && !$foto->hasMoved()) {
                 $nuevoNombre = $foto->getRandomName();
-                $foto->move('uploads/personas/', $nuevoNombre);
+                $foto->move($carpetaFotos, $nuevoNombre);
                 $rutaFoto = 'uploads/personas/' . $nuevoNombre;
             }
 
@@ -55,15 +61,16 @@ class PersonaController extends BaseController
             }
 
             $foto = $this->request->getFile('foto');
-            $rutaFoto = $persona['foto'];
+            $rutaFoto = $persona['foto']; // conservar la foto anterior
 
             if ($foto && $foto->isValid() && !$foto->hasMoved()) {
+                // eliminar la foto anterior
                 if (!empty($persona['foto']) && file_exists(FCPATH . $persona['foto'])) {
                     unlink(FCPATH . $persona['foto']);
                 }
 
                 $nuevoNombre = $foto->getRandomName();
-                $foto->move('uploads/personas/', $nuevoNombre);
+                $foto->move($carpetaFotos, $nuevoNombre);
                 $rutaFoto = 'uploads/personas/' . $nuevoNombre;
             }
 

@@ -31,49 +31,117 @@ class NegociosController extends BaseController
         return view('admin/recursos/Negocios', $datos);
     }
 
-    public function store()
+
+    public function ajax()
     {
         $negocioModel = new Negocio();
+        $accion = $this->request->getVar('accion');
+        $respuesta = ['status' => 'error', 'mensaje' => 'Acción no definida'];
 
-        $data = [
-            'idcategoria'      => $this->request->getPost('idcategoria'),
-            'idrepresentante'  => $this->request->getPost('idrepresentante'),
-            'nombre'           => $this->request->getPost('nombre'),
-            'nombrecomercial'  => $this->request->getPost('nombrecomercial'),
-            'slogan'           => $this->request->getPost('slogan'),
-            'ruc'              => $this->request->getPost('ruc'),
-        ];
+        // RUTA BASE DE IMÁGENES
+        $carpetaImagenes = FCPATH . 'uploads/negocios/';
+        if (!is_dir($carpetaImagenes)) {
+            mkdir($carpetaImagenes, 0777, true);
+        }
 
-        $negocioModel->insert($data);
+        if ($accion === 'registrar') {
+            $logo = $this->request->getFile('logo');
+            $banner = $this->request->getFile('banner');
+            $rutaLogo = null;
+            $rutaBanner = null;
 
-        return redirect()->to(base_url('negocios'))->with('msg', 'Negocio creado correctamente');
+            if ($logo && $logo->isValid() && !$logo->hasMoved()) {
+                $nuevoNombreLogo = $logo->getRandomName();
+                $logo->move($carpetaImagenes, $nuevoNombreLogo);
+                $rutaLogo = 'uploads/negocios/' . $nuevoNombreLogo;
+            }
+
+            if ($banner && $banner->isValid() && !$banner->hasMoved()) {
+                $nuevoNombreBanner = $banner->getRandomName();
+                $banner->move($carpetaImagenes, $nuevoNombreBanner);
+                $rutaBanner = 'uploads/negocios/' . $nuevoNombreBanner;
+            }
+
+            $registro = [
+                'idcategoria'      => $this->request->getVar('idcategoria'),
+                'idseccion'        => $this->request->getVar('idseccion'),
+                'idrepresentante'  => $this->request->getVar('idrepresentante'),
+                'nombre'           => $this->request->getVar('nombre'),
+                'nombre_comercial' => $this->request->getVar('nombre_comercial'),
+                'slogan'           => $this->request->getVar('slogan'),
+                'ruc'              => $this->request->getVar('ruc'),
+                'logo'             => $rutaLogo,
+                'banner'           => $rutaBanner
+            ];
+
+            $negocioModel->insert($registro);
+            $respuesta = ['status' => 'success', 'mensaje' => 'Negocio registrado'];
+
+        } elseif ($accion === 'actualizar') {
+            $id = $this->request->getVar('idnegocio');
+            $negocio = $negocioModel->find($id);
+            if (!$negocio) {
+                return $this->response->setJSON(['status' => 'error', 'mensaje' => 'Negocio no existe']);
+            }
+            $logo = $this->request->getFile('logo');
+            $banner = $this->request->getFile('banner');
+            
+            if ($logo && $logo->isValid() && !$logo->hasMoved()) {
+                // eliminar el logo anterior
+                if (!empty($negocio['logo']) && file_exists(FCPATH . $negocio['logo'])) {
+                    unlink(FCPATH . $negocio['logo']);
+                }
+                $nuevoNombreLogo = $logo->getRandomName();
+                $logo->move($carpetaImagenes, $nuevoNombreLogo);
+                $rutaLogo = 'uploads/negocios/' . $nuevoNombreLogo;
+            } else {
+                $rutaLogo = $negocio['logo']; // conservar el logo anterior
+            }
+            if ($banner && $banner->isValid() && !$banner->hasMoved()) {
+                // eliminar el banner anterior
+                if (!empty($negocio['banner']) && file_exists(FCPATH . $negocio['banner'])) {
+                    unlink(FCPATH . $negocio['banner']);
+                }
+                $nuevoNombreBanner = $banner->getRandomName();
+                $banner->move($carpetaImagenes, $nuevoNombreBanner);
+                $rutaBanner = 'uploads/negocios/' . $nuevoNombreBanner;
+            } else {
+                $rutaBanner = $negocio['banner']; // conservar el banner anterior
+            }
+            $datos = [
+                'idcategoria'      => $this->request->getVar('idcategoria'),
+                'idseccion'        => $this->request->getVar('idseccion'),
+                'idrepresentante'  => $this->request->getVar('idrepresentante'),
+                'nombre'           => $this->request->getVar('nombre'),
+                'nombre_comercial' => $this->request->getVar('nombre_comercial'),
+                'slogan'           => $this->request->getVar('slogan'),
+                'ruc'              => $this->request->getVar('ruc'),
+                'logo'             => $rutaLogo,
+                'banner'           => $rutaBanner
+            ];
+            $negocioModel->update($id, $datos);
+            $respuesta = ['status' => 'success', 'mensaje' => 'Negocio actualizado'];
+
+        } elseif ($accion === 'borrar') {
+            // Lógica para borrar un negocio
+            $id = $this->request->getVar('idnegocio');
+            $negocio = $negocioModel->find($id);   
+            if ($negocio) {
+                // eliminar logo y banner
+                if (!empty($negocio['logo']) && file_exists(FCPATH . $negocio['logo'])) {
+                    unlink(FCPATH . $negocio['logo']);
+                }
+                if (!empty($negocio['banner']) && file_exists(FCPATH . $negocio['banner'])) {
+                    unlink(FCPATH . $negocio['banner']);
+                }
+                $negocioModel->delete($id);
+                $respuesta = ['status' => 'success', 'mensaje' => 'Negocio eliminado'];
+            } else {
+                $respuesta = ['status' => 'error', 'mensaje' => 'Negocio no encontrado'];
+            }
+
+        }
+        return $this->response->setJSON($respuesta);
     }
 
-    public function update()
-    {
-        $negocioModel = new Negocio();
-
-        $idnegocio = $this->request->getPost('idnegocio');
-
-        $data = [
-            'idcategoria'      => $this->request->getPost('idcategoria'),
-            'idrepresentante'  => $this->request->getPost('idrepresentante'),
-            'nombre'           => $this->request->getPost('nombre'),
-            'nombrecomercial'  => $this->request->getPost('nombrecomercial'),
-            'slogan'           => $this->request->getPost('slogan'),
-            'ruc'              => $this->request->getPost('ruc'),
-        ];
-
-        $negocioModel->update($idnegocio, $data);
-
-        return redirect()->to(base_url('negocios'))->with('msg', 'Negocio actualizado correctamente');
-    }
-
-    public function delete($idnegocio = null)
-    {
-        $negocioModel = new Negocio();
-        $negocioModel->delete($idnegocio);
-
-        return redirect()->to(base_url('negocios'))->with('msg', 'Negocio eliminado correctamente');
-    }
 }

@@ -32,10 +32,15 @@
                 <td><?= $p['numerodoc'] ?></td>
                 <td><?= $p['telefono'] ?></td>
                 <td>
-                    <?php if(!empty($p['foto'])): ?>
-                        <img src="<?= base_url($p['foto']) ?>" alt="Foto" width="50" height="50" class="rounded">
-                    <?php endif; ?>
-                </td>
+                <?php if (!empty($p['foto'])): ?>
+                <img src="<?= base_url($p['foto']) ?>" width="50" height="50" class="rounded mx-auto d-block">
+
+              <?php else: ?>
+                <img src="<?= base_url("uploads/personas/icono.png") ?>" alt="Sin foto" width="50" height="50" class="rounded mx-auto d-block">
+              <?php endif; ?>
+
+              </td>
+
                 <td class="text-center">
                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar<?= $p['idpersona'] ?>">
                         <i class="bi bi-pencil-square"></i>
