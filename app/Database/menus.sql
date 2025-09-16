@@ -1,7 +1,7 @@
 CREATE DATABASE sistema_menus;
 USE sistema_menus;
 
-drop database sistema_menus;
+-- 1. DEPARTAMENTOS
 CREATE TABLE departamentos (
     iddepartamento INT AUTO_INCREMENT PRIMARY KEY,
     departamento VARCHAR(100) NOT NULL
@@ -23,20 +23,21 @@ CREATE TABLE distritos (
     FOREIGN KEY (idprovincia) REFERENCES provincias(idprovincia)
 );
 
--- 4. CATEGORÍAS
+-- 4. CATEGORÍAS (sin imagen)
 CREATE TABLE categorias (
     idcategoria INT AUTO_INCREMENT PRIMARY KEY,
     categoria VARCHAR(100) NOT NULL
 );
 
--- 5. PERSONAS
+-- 5. PERSONAS (con foto de perfil opcional)
 CREATE TABLE personas (
     idpersona INT AUTO_INCREMENT PRIMARY KEY,
     apellidos VARCHAR(100) NOT NULL,
     nombres VARCHAR(100) NOT NULL,
-    tipodoc VARCHAR(20)NOT NULL,
+    tipodoc VARCHAR(20) NOT NULL,
     numerodoc VARCHAR(20) NOT NULL UNIQUE,
-    telefono VARCHAR(20) NOT NULL
+    telefono VARCHAR(20) NOT NULL,
+    foto VARCHAR(255) NULL
 );
 
 -- 6. USUARIOS
@@ -49,7 +50,7 @@ CREATE TABLE usuarios (
     FOREIGN KEY (idpersona) REFERENCES personas(idpersona)
 );
 
--- 7. NEGOCIOS
+-- 7. NEGOCIOS (con logo y banner opcionales)
 CREATE TABLE negocios (
     idnegocio INT AUTO_INCREMENT PRIMARY KEY,
     idcategoria INT NOT NULL,
@@ -58,11 +59,13 @@ CREATE TABLE negocios (
     nombrecomercial VARCHAR(150),
     slogan VARCHAR(255),
     ruc VARCHAR(20) UNIQUE,
+    logo VARCHAR(255) NULL,
+    banner VARCHAR(255) NULL,
     FOREIGN KEY (idcategoria) REFERENCES categorias(idcategoria),
     FOREIGN KEY (idrepresentante) REFERENCES personas(idpersona)
 );
 
--- 8. LOCALES
+-- 8. LOCALES (con foto principal opcional)
 CREATE TABLE locales (
     idlocales INT AUTO_INCREMENT PRIMARY KEY,
     idnegocio INT NOT NULL,
@@ -71,6 +74,7 @@ CREATE TABLE locales (
     telefono VARCHAR(20),
     latitud DECIMAL(10,8),
     longitud DECIMAL(11,8),
+    foto VARCHAR(255) NULL,
     FOREIGN KEY (idnegocio) REFERENCES negocios(idnegocio),
     FOREIGN KEY (iddistrito) REFERENCES distritos(iddistrito)
 );
@@ -95,8 +99,7 @@ CREATE TABLE secciones (
 ALTER TABLE cartas
     ADD CONSTRAINT fk_cartas_seccion FOREIGN KEY (idseccion) REFERENCES secciones(idseccion);
 
-SELECT * FROM secciones;
--- 11. RECURSOS
+-- 11. RECURSOS (para imágenes/videos de platos)
 CREATE TABLE recursos (
     idrecurso INT AUTO_INCREMENT PRIMARY KEY,
     idcarta INT NOT NULL,

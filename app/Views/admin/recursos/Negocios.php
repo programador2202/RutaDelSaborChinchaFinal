@@ -18,6 +18,8 @@
                 <th>RUC</th>
                 <th>Categoría</th>
                 <th>Representante</th>
+                <th>Logo</th>
+                <th>Banner</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -31,6 +33,8 @@
                 <td><?= $n['ruc'] ?></td>
                 <td><?= $n['categoria'] ?></td>
                 <td><?= $n['apellidos'] . ', ' . $n['nombres'] ?></td>
+                <td><?= $n['logo'] ?></td>
+                <td><?= $n['banner'] ?></td>
                 <td>
                     <!-- Botón editar -->
                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar<?= $n['idnegocio'] ?>"><i class="bi bi-pencil-square"></i></button>

@@ -17,54 +17,84 @@ class PersonaController extends BaseController
         return view('admin/recursos/Personas', $datos);
     }
 
-    public function registrar()
+    // Nuevo método para AJAX
+    public function ajax()
     {
         $personaModel = new Personas();
+        $accion = $this->request->getVar('accion');
+        $respuesta = ['status' => 'error', 'mensaje' => 'Acción no definida'];
 
-        $registro = [
-            'apellidos'  => $this->request->getVar('apellidos'),
-            'nombres'    => $this->request->getVar('nombres'),
-            'tipodoc'    => $this->request->getVar('tipodoc'),
-            'numerodoc'  => $this->request->getVar('numerodoc'),
-            'telefono'   => $this->request->getVar('telefono'),
-        ];
+        if ($accion === 'registrar') {
+            $foto = $this->request->getFile('foto');
+            $rutaFoto = null;
 
-        $personaModel->insert($registro);
+            if ($foto && $foto->isValid() && !$foto->hasMoved()) {
+                $nuevoNombre = $foto->getRandomName();
+                $foto->move('uploads/personas/', $nuevoNombre);
+                $rutaFoto = 'uploads/personas/' . $nuevoNombre;
+            }
 
-        return redirect()->to(base_url('admin/personas/'))
-                         ->with('mensaje', 'registrado');
-    }
+            $registro = [
+                'apellidos'  => $this->request->getVar('apellidos'),
+                'nombres'    => $this->request->getVar('nombres'),
+                'tipodoc'    => $this->request->getVar('tipodoc'),
+                'numerodoc'  => $this->request->getVar('numerodoc'),
+                'telefono'   => $this->request->getVar('telefono'),
+                'foto'       => $rutaFoto
+            ];
 
-    public function actualizar()
-    {
-        $personaModel = new Personas();
+            $personaModel->insert($registro);
+            $respuesta = ['status' => 'success', 'mensaje' => 'Persona registrada'];
 
-        $id = $this->request->getVar('idpersona');
-        $datos = [
-            'apellidos'  => $this->request->getVar('apellidos'),
-            'nombres'    => $this->request->getVar('nombres'),
-            'tipodoc'    => $this->request->getVar('tipodoc'),
-            'numerodoc'  => $this->request->getVar('numerodoc'),
-            'telefono'   => $this->request->getVar('telefono'),
-        ];
+        } elseif ($accion === 'actualizar') {
+            $id = $this->request->getVar('idpersona');
+            $persona = $personaModel->find($id);
 
-        $personaModel->update($id, $datos);
+            if (!$persona) {
+                return $this->response->setJSON(['status' => 'error', 'mensaje' => 'Persona no existe']);
+            }
 
-        return redirect()->to(base_url('admin/personas/'))
-                         ->with('mensaje', 'editado');
-    }
+            $foto = $this->request->getFile('foto');
+            $rutaFoto = $persona['foto'];
 
-    public function borrar($id = null)
-    {
-        $personaModel = new Personas();
+            if ($foto && $foto->isValid() && !$foto->hasMoved()) {
+                if (!empty($persona['foto']) && file_exists(FCPATH . $persona['foto'])) {
+                    unlink(FCPATH . $persona['foto']);
+                }
 
-        if ($personaModel->find($id)) {
-            $personaModel->delete($id);
-            return redirect()->to(base_url('admin/personas'))
-                             ->with('mensaje', 'eliminado');
+                $nuevoNombre = $foto->getRandomName();
+                $foto->move('uploads/personas/', $nuevoNombre);
+                $rutaFoto = 'uploads/personas/' . $nuevoNombre;
+            }
+
+            $datos = [
+                'apellidos'  => $this->request->getVar('apellidos'),
+                'nombres'    => $this->request->getVar('nombres'),
+                'tipodoc'    => $this->request->getVar('tipodoc'),
+                'numerodoc'  => $this->request->getVar('numerodoc'),
+                'telefono'   => $this->request->getVar('telefono'),
+                'foto'       => $rutaFoto
+            ];
+
+            $personaModel->update($id, $datos);
+            $respuesta = ['status' => 'success', 'mensaje' => 'Persona actualizada'];
+
+        } elseif ($accion === 'borrar') {
+            $id = $this->request->getVar('idpersona');
+            $persona = $personaModel->find($id);
+
+            if ($persona) {
+                if (!empty($persona['foto']) && file_exists(FCPATH . $persona['foto'])) {
+                    unlink(FCPATH . $persona['foto']);
+                }
+
+                $personaModel->delete($id);
+                $respuesta = ['status' => 'success', 'mensaje' => 'Persona eliminada'];
+            } else {
+                $respuesta = ['status' => 'error', 'mensaje' => 'Persona no existe'];
+            }
         }
 
-        return redirect()->to(base_url('admin/personas'))
-                         ->with('mensaje', 'no_existe');
+        return $this->response->setJSON($respuesta);
     }
 }

@@ -13,6 +13,13 @@ $routes->get('/index', 'Home::admin');
 
 
 // Rutas para el CRUD de Personas
+
+$routes->group('admin/personas', function($routes) {
+    $routes->get('/personas', 'PersonaController::index');       
+    $routes->post('ajax', 'PersonaController::ajax');    
+});
+
+
 $routes->get('/personas', 'PersonaController::index');
 $routes->post('personas/registrar', 'PersonaController::registrar');
 $routes->post('personas/actualizar', 'PersonaController::actualizar');
