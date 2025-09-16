@@ -50,20 +50,27 @@
                   <form action="<?= base_url('admin/personas/actualizar') ?>" method="post" class="modal-content">
                     <input type="hidden" name="idpersona" value="<?= $p['idpersona'] ?>">
                     <div class="modal-header bg-warning text-dark">
-                      <h5 class="modal-title">Editar Persona</h5>
+                      <h5 class="modal-title"><i class="fa fa-edit"></i> Editar Persona</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
 
                       <label for="">Apellidos:</label><input type="text" name="apellidos" class="form-control mb-2" value="<?= $p['apellidos'] ?>" required>
                       <label for="">Nombres</label><input type="text" name="nombres" class="form-control mb-2" value="<?= $p['nombres'] ?>" required>
-                      <label for="">Tipo de Documento:</label><input type="text" name="tipodoc" class="form-control mb-2" value="<?= $p['tipodoc'] ?>">
+                      <label for="">Tipo de Documento:</label>
+                      <select name="tipodoc" class="form-control mb-2" required>
+                        <option value="DNI" <?= $p['tipodoc'] == 'DNI' ? 'selected' : '' ?>>DNI</option>
+                        <option value="CE" <?= $p['tipodoc'] == 'CE' ? 'selected' : '' ?>>Carné de Extranjería</option>
+                        <option value="PASAPORTE" <?= $p['tipodoc'] == 'PASAPORTE' ? 'selected' : '' ?>>Pasaporte</option>
+                        <option value="RUC" <?= $p['tipodoc'] == 'RUC' ? 'selected' : '' ?>>RUC</option>
+                        <option value="OTROS" <?= $p['tipodoc'] == 'OTROS' ? 'selected' : '' ?>>Otros</option>
+                      </select>
                       <label for="">Numero de Documento</label><input type="text" name="numerodoc" class="form-control mb-2" value="<?= $p['numerodoc'] ?>">
                       <label for="">Telefono</label><input type="text" name="telefono" class="form-control mb-2" value="<?= $p['telefono'] ?>">
                     </div>
                     <div class="modal-footer">
-                      <button type="submit" class="btn btn-primary">
-                          <i class="bi bi-save"></i> Guardar
+                      <button type="submit" class="btn btn-warning">
+                          <i class="bi bi-save"></i> Actualizar
                       </button>
                     </div>
                   </form>
@@ -87,7 +94,15 @@
         <div class="modal-body">
           <label for="">Apellidos:</label><input type="text" name="apellidos" class="form-control mb-2" placeholder="Apellidos" required>
           <label for="">Nombres:</label><input type="text" name="nombres" class="form-control mb-2" placeholder="Nombres" required>
-          <label for="">Tipo De Documento:</label><input type="text" name="tipodoc" class="form-control mb-2" placeholder="Tipo Doc">
+          <label for="">Tipo De Documento:</label>
+          <select name="tipodoc" class="form-control mb-2" required>
+            <option value="">Seleccione...</option>
+            <option value="DNI">DNI</option>
+            <option value="CE">Carné de Extranjería</option>
+            <option value="PASAPORTE">Pasaporte</option>
+            <option value="RUC">RUC</option>
+            <option value="OTROS">Otros</option>
+          </select>
           <label for="">Numero de Documento:</label><input type="text" name="numerodoc" class="form-control mb-2" placeholder="Número Doc">
           <label for="">Telefono:</label><input type="text" name="telefono" class="form-control mb-2" placeholder="Teléfono">
         </div>

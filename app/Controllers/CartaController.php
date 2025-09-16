@@ -15,11 +15,13 @@ class CartaController extends BaseController
 
         // Unir con locales y secciones para mostrar los nombres
         $datos['cartas'] = $cartaModel
-            ->select('cartas.*, locales.direccion AS local, secciones.seccion AS seccion')
-            ->join('locales', 'locales.idlocales = cartas.idlocales')
-            ->join('secciones', 'secciones.idseccion = cartas.idseccion')
-            ->orderBy('cartas.idcarta', 'ASC')
-            ->findAll();
+        ->select('cartas.*, negocios.nombre AS negocio, locales.direccion AS local, secciones.seccion AS seccion')
+        ->join('locales', 'locales.idlocales = cartas.idlocales')
+        ->join('negocios', 'negocios.idnegocio = locales.idnegocio') // negocio desde local
+        ->join('secciones', 'secciones.idseccion = cartas.idseccion')
+        ->orderBy('cartas.idcarta', 'ASC')
+        ->findAll();
+
 
         $datos['header'] = view('admin/dashboard');
         return view('admin/recursos/Carta', $datos);

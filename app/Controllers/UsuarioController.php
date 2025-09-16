@@ -11,6 +11,7 @@ class UsuarioController extends BaseController
 public function index(): string
 {
     $usuarioModel = new Usuario();
+    $personaModel = new Personas();
 
     $datos['usuarios'] = $usuarioModel
         ->select('usuarios.*, personas.nombres, personas.apellidos')
@@ -18,10 +19,12 @@ public function index(): string
         ->orderBy('usuarios.idusuario', 'ASC')
         ->findAll();
 
+    $datos['personas'] = $personaModel->findAll(); 
     $datos['header'] = view('admin/dashboard');
 
     return view('admin/recursos/Usuarios', $datos);
 }
+
 
 
     public function create()

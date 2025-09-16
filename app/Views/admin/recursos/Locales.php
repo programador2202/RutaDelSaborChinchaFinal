@@ -59,8 +59,8 @@
 <div class="modal fade" id="modalRegistrar" tabindex="-1">
   <div class="modal-dialog">
     <form action="<?= base_url('admin/locales/registrar') ?>" method="post" class="modal-content">
-      <div class="modal-header bg-success text-white">
-        <h5 class="modal-title"><i class="fa fa-plus"></i> Registrar Local</h5>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title"></i> Registrar Local</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -98,7 +98,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-success">Guardar</button>
+        <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Guardar</button>
       </div>
     </form>
   </div>
@@ -148,7 +148,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-warning">Actualizar</button>
+        <button type="submit" class="btn btn-warning"> <i class="bi bi-save"></i> Actualizar</button>
       </div>
     </form>
   </div>

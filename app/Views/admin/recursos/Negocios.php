@@ -47,7 +47,7 @@
                   <form action="<?= base_url('negocios/actualizar') ?>" method="post">
                     <input type="hidden" name="idnegocio" value="<?= $n['idnegocio'] ?>">
                     <div class="modal-header bg-warning">
-                      <h5 class="modal-title">Editar Negocio</h5>
+                      <h5 class="modal-title"><i class="fa fa-edit"></i> Editar Negocio</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -82,7 +82,8 @@
                       </select>
                     </div>
                     <div class="modal-footer">
-                      <button type="submit" class="btn btn-primary">Guardar</button>
+                      <button type="submit" class="btn btn-warning">
+                         <i class="bi bi-save"></i> Actualizar</button>
                     </div>
                   </form>
                 </div>
@@ -130,7 +131,7 @@
           </select>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Guardar</button>
+          <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Guardar</button>
         </div>
       </form>
     </div>

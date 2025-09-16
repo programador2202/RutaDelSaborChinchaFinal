@@ -1,5 +1,7 @@
 CREATE DATABASE sistema_menus;
 USE sistema_menus;
+
+drop database sistema_menus;
 CREATE TABLE departamentos (
     iddepartamento INT AUTO_INCREMENT PRIMARY KEY,
     departamento VARCHAR(100) NOT NULL
@@ -32,9 +34,9 @@ CREATE TABLE personas (
     idpersona INT AUTO_INCREMENT PRIMARY KEY,
     apellidos VARCHAR(100) NOT NULL,
     nombres VARCHAR(100) NOT NULL,
-    tipodoc VARCHAR(20),
-    numerodoc VARCHAR(20),
-    telefono VARCHAR(20)
+    tipodoc VARCHAR(20)NOT NULL,
+    numerodoc VARCHAR(20) NOT NULL UNIQUE,
+    telefono VARCHAR(20) NOT NULL
 );
 
 -- 6. USUARIOS
@@ -93,6 +95,7 @@ CREATE TABLE secciones (
 ALTER TABLE cartas
     ADD CONSTRAINT fk_cartas_seccion FOREIGN KEY (idseccion) REFERENCES secciones(idseccion);
 
+SELECT * FROM secciones;
 -- 11. RECURSOS
 CREATE TABLE recursos (
     idrecurso INT AUTO_INCREMENT PRIMARY KEY,

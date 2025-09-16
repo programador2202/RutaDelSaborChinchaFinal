@@ -9,14 +9,12 @@
         <i class="fa fa-plus"></i> Nueva Carta
     </button>
 
-
-<div class="container mt-4">
-    <h3 class="mb-3">Listado de Cartas</h3>
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
                 <th>Local</th>
+                <th>Ubicacion</th>
                 <th>Sección</th>
                 <th>Plato</th>
                 <th>Precio</th>
@@ -28,7 +26,8 @@
                 <?php foreach ($cartas as $carta): ?>
                     <tr>
                         <td><?= $carta['idcarta'] ?></td>
-                        <td><?= $carta['local'] ?></td>
+                        <td><?= esc($carta['negocio']) ?></td>
+                        <td><?= esc($carta['local']) ?></td>
                         <td><?= $carta['seccion'] ?></td>
                         <td><?= $carta['nombreplato'] ?></td>
                         <td>S/ <?= number_format($carta['precio'], 2) ?></td>

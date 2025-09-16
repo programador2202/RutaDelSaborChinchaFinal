@@ -39,7 +39,7 @@
             </li>
 
               <li class="nav-item  mx-2">
-             <a class="nav-link" href="<?= base_url('/categorias') ?>">Categorías</a>
+             <a class="nav-link" href="<?= base_url('/mostrar') ?>">Categorías</a>
             </li>
 
             <li class="nav-item mx-2"><a class="nav-link" href="/RutaDelSaborChincha123/views/categorias/Vitinicolas.php"> Vitinícolas</a></li>

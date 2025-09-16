@@ -47,10 +47,10 @@
       <a class="nav-link" href="<?= base_url('/cartas') ?>"><i class="fas fa-utensils me-1"></i>Cartas</a>
     </li>
     <li class="nav-item mx-2">
-      <a class="nav-link" href="#"><i class="fas fa-clock me-1"></i>Horario</a>
+       <a class="nav-link" href="<?= base_url('/horarios') ?>"><i class="fas fa-clock me-1"></i>Horario</a>
     </li>
     <li class="nav-item mx-2">
-      <a class="nav-link" href="#"><i class="fas fa-box-open me-1"></i>Recurso</a>
+       <a class="nav-link" href="<?= base_url('/recursos') ?>"><i class="fas fa-box-open me-1"></i>Recurso</a>
     </li>
     <li class="nav-item mx-2">
       <a class="nav-link" href="#"><i class="fas fa-file-contract me-1"></i>Contratos</a>

@@ -52,3 +52,11 @@ INSERT INTO cartas (idlocales, idseccion, nombreplato, precio) VALUES
 (1, 1, 'Causa Limeña', 15.00),
 (1, 2, 'Lomo Saltado', 28.00),
 (2, 3, 'Café Espresso', 8.00);
+
+-- 11. HORARIOS
+INSERT INTO horarios (idlocales, diasemana, inicio, fin) VALUES
+(1, 'Lunes', '09:00:00', '22:00:00'),
+(1, 'Sábado', '10:00:00', '23:00:00'),
+(2, 'Lunes', '08:00:00', '20:00:00');
+
+-- 12. RECURSOS

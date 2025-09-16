@@ -65,12 +65,19 @@
                         <option value="usuario" <?= $u['nivelacceso']=='usuario'?'selected':'' ?>>Usuario</option>
                       </select>
 
-                      <label>ID Persona:</label>
-                      <input type="text" name="idpersona" class="form-control mb-2" value="<?= $u['idpersona'] ?>">
+                    <label>Persona:</label>
+                    <select name="idpersona" class="form-control mb-2" required>
+                      <?php foreach ($personas as $p): ?>
+                        <option value="<?= $p['idpersona'] ?>" 
+                          <?= $u['idpersona'] == $p['idpersona'] ? 'selected' : '' ?>>
+                          <?= $p['apellidos'] . " " . $p['nombres'] ?>
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
                     </div>
                     <div class="modal-footer">
-                      <button type="submit" class="btn btn-primary">
-                          <i class="bi bi-save"></i> Guardar
+                      <button type="submit" class="btn btn-warning">
+                          <i class="bi bi-save"></i> Actualizar
                       </button>
                     </div>
                   </form>
@@ -104,9 +111,16 @@
             <option value="usuario">Usuario</option>
           </select>
 
-          <label>ID Persona:</label>
-          <input type="text" name="idpersona" class="form-control mb-2" placeholder="ID Persona">
-        </div>
+          <label>Persona:</label>
+        <select name="idpersona" class="form-control mb-2" required>
+          <option value="">Seleccione persona...</option>
+          <?php foreach ($personas as $p): ?>
+            <option value="<?= $p['idpersona'] ?>">
+              <?= $p['apellidos'] . " " . $p['nombres'] ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">
               <i class="bi bi-check-circle"></i> Guardar

@@ -43,8 +43,12 @@ $routes->get('locales/borrar/(:num)', 'LocalController::borrar/$1');
 $routes->get('/cartas', 'CartaController::index');
 
 
+// Rutas para horarios
+$routes->get('/horarios', 'HorarioController::index');
 
-$routes->get('/ListarNegocios', 'NegociosController::index');
-$routes->post('negocios/registrar', 'NegocioController::registrar');
-$routes->post('negocios/actualizar', 'NegocioController::actualizar');
-$routes->get('negocios/borrar/(:num)', 'NegocioController::borrar/$1');
+
+// Rutas para recursos
+$routes->get('/recursos', 'RecursoController::index');
+
+// Rutas para mostrar en la página principal
+$routes->get('/mostrar', 'MostrarController::index');
