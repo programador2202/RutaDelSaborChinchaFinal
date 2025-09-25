@@ -33,12 +33,10 @@
                         <i class="bi bi-pencil-square"></i>
                     </button>
 
-                    <!-- Botón eliminar -->
-                    <a href="<?= base_url('admin/usuarios/'.$u['idusuario']) ?>" 
-                       class="btn btn-danger btn-sm" 
-                       onclick="return confirm('¿Seguro de eliminar este usuario?')">
+                    <!-- Botón borrar -->
+                    <button class="btn btn-danger btn-sm btn-borrar" data-id="<?= $u['idusuario'] ?>">
                         <i class="bi bi-trash"></i>
-                    </a>
+                    </button>
                 </td>
             </tr>
 
@@ -46,8 +44,10 @@
             <div class="modal fade" id="modalEditar<?= $u['idusuario'] ?>" tabindex="-1" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered"> 
                 <div class="modal-content">
-                  <form action="<?= base_url('admin/usuarios/actualizar') ?>" method="post" class="modal-content">
+                  <form class="form-usuario" enctype="multipart/form-data">
+                    <input type="hidden" name="accion" value="actualizar">
                     <input type="hidden" name="idusuario" value="<?= $u['idusuario'] ?>">
+
                     <div class="modal-header bg-warning text-dark">
                       <h5 class="modal-title">Editar Usuario</h5>
                       <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -65,15 +65,15 @@
                         <option value="usuario" <?= $u['nivelacceso']=='usuario'?'selected':'' ?>>Usuario</option>
                       </select>
 
-                    <label>Persona:</label>
-                    <select name="idpersona" class="form-control mb-2" required>
-                      <?php foreach ($personas as $p): ?>
-                        <option value="<?= $p['idpersona'] ?>" 
-                          <?= $u['idpersona'] == $p['idpersona'] ? 'selected' : '' ?>>
-                          <?= $p['apellidos'] . " " . $p['nombres'] ?>
-                        </option>
-                      <?php endforeach; ?>
-                    </select>
+                      <label>Persona:</label>
+                      <select name="idpersona" class="form-control mb-2" required>
+                        <?php foreach ($personas as $p): ?>
+                          <option value="<?= $p['idpersona'] ?>" 
+                            <?= $u['idpersona'] == $p['idpersona'] ? 'selected' : '' ?>>
+                            <?= $p['apellidos'] . " " . $p['nombres'] ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
                     </div>
                     <div class="modal-footer">
                       <button type="submit" class="btn btn-warning">
@@ -93,7 +93,9 @@
 <div class="modal fade" id="modalRegistrar" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <form action="<?= base_url('admin/usuarios') ?>" method="post" class="modal-content">
+      <form class="form-usuario" enctype="multipart/form-data">
+        <input type="hidden" name="accion" value="registrar">
+
         <div class="modal-header bg-primary text-white">
           <h5 class="modal-title">Nuevo Usuario</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -112,15 +114,15 @@
           </select>
 
           <label>Persona:</label>
-        <select name="idpersona" class="form-control mb-2" required>
-          <option value="">Seleccione persona...</option>
-          <?php foreach ($personas as $p): ?>
-            <option value="<?= $p['idpersona'] ?>">
-              <?= $p['apellidos'] . " " . $p['nombres'] ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-
+          <select name="idpersona" class="form-control mb-2" required>
+            <option value="">Seleccione persona...</option>
+            <?php foreach ($personas as $p): ?>
+              <option value="<?= $p['idpersona'] ?>">
+                <?= $p['apellidos'] . " " . $p['nombres'] ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+        </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">
               <i class="bi bi-check-circle"></i> Guardar
@@ -131,5 +133,74 @@
   </div>
 </div>
 
-<!-- Bootstrap JS (bundle incluye Popper) -->
+<!-- Bootstrap JS y SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+// Registrar / actualizar
+document.querySelectorAll('.form-usuario').forEach(form => {
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    let formData = new FormData(this);
+
+    fetch("<?= base_url('usuarios/ajax')?>", {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      Swal.fire({
+        icon: data.status === 'success' ? 'success' : 'error',
+        title: data.mensaje,
+        timer: 1500,
+        showConfirmButton: false
+      }).then(() => {
+        if (data.status === 'success') location.reload();
+      });
+    })
+    .catch(err => console.error(err));
+  });
+});
+
+// Borrar usuario
+document.querySelectorAll('.btn-borrar').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault();
+
+    Swal.fire({
+      title: '¿Seguro de eliminar este usuario?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let id = btn.dataset.id;
+        let formData = new FormData();
+        formData.append('accion', 'borrar');
+        formData.append('idusuario', id);
+
+        fetch("<?= base_url('usuarios/ajax') ?>", {
+          method: 'POST',
+          body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+          Swal.fire({
+            icon: data.status === 'success' ? 'success' : 'error',
+            title: data.mensaje,
+            timer: 1500,
+            showConfirmButton: false
+          }).then(() => {
+            if (data.status === 'success') location.reload();
+          });
+        });
+      }
+    });
+  });
+});
+</script>

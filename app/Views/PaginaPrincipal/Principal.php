@@ -204,13 +204,13 @@
  <!-- JS Leaflet -->
 <script>
   // Inicializar mapa
-  var map = L.map('map').setView([-13.4096, -76.1325], 13); // Chincha
+  var map = L.map('map').setView([-13.4096, -76.1325], 13);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '© OpenStreetMap'
   }).addTo(map);
 
-  // Datos de ejemplo (simulación de BD)
+  // Datos de ejemplo (simulación de BD) ->falta conectar a la db
   var restaurantes = [
     {nombre: "Sushi House", categoria: "hamburguesa", lat: -13.41, lng: -76.14},
     {nombre: "Burger King", categoria: "hamburguesa", lat: -13.42, lng: -76.13},

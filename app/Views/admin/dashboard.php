@@ -32,13 +32,13 @@
       <a class="nav-link" href="datos.php"><i class="fas fa-home me-1"></i>Inicio</a>
     </li>
     <li class="nav-item mx-2">
-      <a class="nav-link" href="<?= base_url('/personas') ?>"><i class="fas fa-user-friends me-1"></i>Personas</a>
+      <a class="nav-link" href="<?= base_url('/ListaPersona') ?>"><i class="fas fa-user-friends me-1"></i>Personas</a>
     </li>
     <li class="nav-item mx-2">
-      <a class="nav-link" href="<?= base_url('/usuarios') ?>"><i class="fas fa-users-cog me-1"></i>Usuarios</a>
+      <a class="nav-link" href="<?= base_url('/ListaUsuarios') ?>"><i class="fas fa-users-cog me-1"></i>Usuarios</a>
     </li>
     <li class="nav-item mx-2">
-      <a class="nav-link" href="<?= base_url('/negocios') ?>"><i class="fas fa-store me-1"></i>Negocios</a>
+      <a class="nav-link" href="<?= base_url('negocios') ?>"><i class="fas fa-store me-1"></i>Negocios</a>
     </li>
     <li class="nav-item mx-2">
       <a class="nav-link" href="<?= base_url('/locales') ?>"><i class="fas fa-map-marker-alt me-1"></i>Locales</a>

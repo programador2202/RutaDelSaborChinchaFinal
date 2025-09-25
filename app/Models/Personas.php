@@ -18,4 +18,6 @@ class Personas extends Model
         'telefono',
         'foto'
     ];
+
+    
 }

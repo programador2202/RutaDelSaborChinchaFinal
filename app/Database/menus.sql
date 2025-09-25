@@ -1,5 +1,10 @@
 CREATE DATABASE sistema_menus;
+
+drop database sistema_menus;
 USE sistema_menus;
+
+
+
 
 -- 1. DEPARTAMENTOS
 CREATE TABLE departamentos (
@@ -23,7 +28,7 @@ CREATE TABLE distritos (
     FOREIGN KEY (idprovincia) REFERENCES provincias(idprovincia)
 );
 
--- 4. CATEGORÍAS (sin imagen)
+-- 4. CATEGORÍAS 
 CREATE TABLE categorias (
     idcategoria INT AUTO_INCREMENT PRIMARY KEY,
     categoria VARCHAR(100) NOT NULL
@@ -36,8 +41,7 @@ CREATE TABLE personas (
     nombres VARCHAR(100) NOT NULL,
     tipodoc VARCHAR(20) NOT NULL,
     numerodoc VARCHAR(20) NOT NULL UNIQUE,
-    telefono VARCHAR(20) NOT NULL,
-    foto VARCHAR(255) NULL
+    telefono VARCHAR(20) NOT NULL
 );
 
 -- 6. USUARIOS
@@ -60,10 +64,11 @@ CREATE TABLE negocios (
     slogan VARCHAR(255),
     ruc VARCHAR(20) UNIQUE,
     logo VARCHAR(255) NULL,
-    banner VARCHAR(255) NULL,
     FOREIGN KEY (idcategoria) REFERENCES categorias(idcategoria),
     FOREIGN KEY (idrepresentante) REFERENCES personas(idpersona)
 );
+
+SELECT*FROM negocios;
 
 -- 8. LOCALES (con foto principal opcional)
 CREATE TABLE locales (

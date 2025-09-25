@@ -21,82 +21,67 @@ class PersonaController extends BaseController
     public function ajax()
     {
         $personaModel = new Personas();
-        $accion = $this->request->getVar('accion');
-        $respuesta = ['status' => 'error', 'mensaje' => 'Acción no definida'];
-
-        // RUTA BASE DE FOTOS
-        $carpetaFotos = FCPATH . 'uploads/personas/';
-        if (!is_dir($carpetaFotos)) {
-            mkdir($carpetaFotos, 0777, true);
-        }
+        $accion       = $this->request->getVar('accion');
+        $respuesta    = ['status' => 'error', 'mensaje' => 'Acción no definida'];
 
         if ($accion === 'registrar') {
-            $foto = $this->request->getFile('foto');
-            $rutaFoto = null;
-
-            if ($foto && $foto->isValid() && !$foto->hasMoved()) {
-                $nuevoNombre = $foto->getRandomName();
-                $foto->move($carpetaFotos, $nuevoNombre);
-                $rutaFoto = 'uploads/personas/' . $nuevoNombre;
-            }
-
             $registro = [
-                'apellidos'  => $this->request->getVar('apellidos'),
-                'nombres'    => $this->request->getVar('nombres'),
-                'tipodoc'    => $this->request->getVar('tipodoc'),
-                'numerodoc'  => $this->request->getVar('numerodoc'),
-                'telefono'   => $this->request->getVar('telefono'),
-                'foto'       => $rutaFoto
+                'apellidos' => $this->request->getVar('apellidos'),
+                'nombres'   => $this->request->getVar('nombres'),
+                'tipodoc'   => $this->request->getVar('tipodoc'),
+                'numerodoc' => $this->request->getVar('numerodoc'),
+                'telefono'  => $this->request->getVar('telefono'),
             ];
 
             $personaModel->insert($registro);
-            $respuesta = ['status' => 'success', 'mensaje' => 'Persona registrada'];
+            $respuesta = ['status' => 'success', 'mensaje' => 'Persona registrada correctamente'];
 
         } elseif ($accion === 'actualizar') {
             $id = $this->request->getVar('idpersona');
             $persona = $personaModel->find($id);
 
             if (!$persona) {
-                return $this->response->setJSON(['status' => 'error', 'mensaje' => 'Persona no existe']);
-            }
-
-            $foto = $this->request->getFile('foto');
-            $rutaFoto = $persona['foto']; // conservar la foto anterior
-
-            if ($foto && $foto->isValid() && !$foto->hasMoved()) {
-                // eliminar la foto anterior
-                if (!empty($persona['foto']) && file_exists(FCPATH . $persona['foto'])) {
-                    unlink(FCPATH . $persona['foto']);
-                }
-
-                $nuevoNombre = $foto->getRandomName();
-                $foto->move($carpetaFotos, $nuevoNombre);
-                $rutaFoto = 'uploads/personas/' . $nuevoNombre;
+                return $this->response->setJSON([
+                    'status'  => 'error',
+                    'mensaje' => 'Persona no existe'
+                ]);
             }
 
             $datos = [
-                'apellidos'  => $this->request->getVar('apellidos'),
-                'nombres'    => $this->request->getVar('nombres'),
-                'tipodoc'    => $this->request->getVar('tipodoc'),
-                'numerodoc'  => $this->request->getVar('numerodoc'),
-                'telefono'   => $this->request->getVar('telefono'),
-                'foto'       => $rutaFoto
+                'apellidos' => $this->request->getVar('apellidos'),
+                'nombres'   => $this->request->getVar('nombres'),
+                'tipodoc'   => $this->request->getVar('tipodoc'),
+                'numerodoc' => $this->request->getVar('numerodoc'),
+                'telefono'  => $this->request->getVar('telefono'),
             ];
 
             $personaModel->update($id, $datos);
-            $respuesta = ['status' => 'success', 'mensaje' => 'Persona actualizada'];
+            $respuesta = ['status' => 'success', 'mensaje' => 'Persona actualizada correctamente'];
 
         } elseif ($accion === 'borrar') {
             $id = $this->request->getVar('idpersona');
             $persona = $personaModel->find($id);
 
             if ($persona) {
-                if (!empty($persona['foto']) && file_exists(FCPATH . $persona['foto'])) {
-                    unlink(FCPATH . $persona['foto']);
+                try {
+                    $personaModel->delete($id);
+                    $respuesta = [
+                        'status'  => 'success',
+                        'mensaje' => 'Persona eliminada correctamente'
+                    ];
+                } catch (\Exception $e) {
+                    if (strpos($e->getMessage(), '1451') !== false) {
+                        $respuesta = [
+                            'status'  => 'error',
+                            'mensaje' => 'No se puede eliminar la persona porque está relacionada con otros registros'
+                        ];
+                    } else {
+                        $respuesta = [
+                            'status'  => 'error',
+                            'mensaje' => 'Ocurrió un error al intentar eliminar la persona'
+                        ];
+                    }
                 }
-
-                $personaModel->delete($id);
-                $respuesta = ['status' => 'success', 'mensaje' => 'Persona eliminada'];
             } else {
                 $respuesta = ['status' => 'error', 'mensaje' => 'Persona no existe'];
             }

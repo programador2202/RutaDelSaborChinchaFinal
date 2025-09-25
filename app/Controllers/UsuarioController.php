@@ -27,67 +27,57 @@ public function index(): string
 
 
 
-    public function create()
-    {
-        $personaModel = new Personas();
-        $datos['personas'] = $personaModel->findAll();
+  
+   public function ajax()
+{
+    $usuarioModel = new Usuario();
+    $accion = $this->request->getVar('accion');
+    $respuesta = ['status' => 'error', 'mensaje' => 'Acción no definida'];
 
-        return view('admin/usuarios/Crear', $datos);
-    }
-
-    public function store()
-    {
-        $usuarioModel = new Usuario();
-
-        $data = [
-            'nombreusuario' => $this->request->getPost('nombreusuario'),
-            'claveacceso'   => password_hash($this->request->getPost('claveacceso'), PASSWORD_DEFAULT),
-            'nivelacceso'   => $this->request->getPost('nivelacceso'),
-            'idpersona'     => $this->request->getPost('idpersona'),
+    if ($accion === 'registrar') {
+        $registro = [
+            'nombreusuario' => $this->request->getVar('nombreusuario'),
+            'claveacceso'   => $this->request->getVar('claveacceso'),
+            'nivelacceso'   => $this->request->getVar('nivelacceso'),
+            'idpersona'     => $this->request->getVar('idpersona')
         ];
 
-        $usuarioModel->insert($data);
+        $usuarioModel->insert($registro);
+        $respuesta = ['status' => 'success', 'mensaje' => 'Usuario registrado correctamente'];
 
-        return redirect()->to(base_url('usuarios'))->with('msg', 'Usuario creado correctamente');
-    }
+    } elseif ($accion === 'actualizar') {
+        $id = $this->request->getVar('idusuario');
+        $usuario = $usuarioModel->find($id);
 
-    public function edit($idusuario = null)
-    {
-        $usuarioModel = new Usuario();
-        $personaModel = new Personas();
-
-        $datos['usuario']  = $usuarioModel->find($idusuario);
-        $datos['personas'] = $personaModel->findAll();
-
-        return view('admin/usuarios/Editar', $datos);
-    }
-
-    public function update()
-    {
-        $usuarioModel = new Usuario();
-
-        $idusuario = $this->request->getPost('idusuario');
-
-        $data = [
-            'nombreusuario' => $this->request->getPost('nombreusuario'),
-            'nivelacceso'   => $this->request->getPost('nivelacceso'),
-            'idpersona'     => $this->request->getPost('idpersona'),
-        ];
-
-        if ($this->request->getPost('claveacceso')) {
-            $data['claveacceso'] = password_hash($this->request->getPost('claveacceso'), PASSWORD_DEFAULT);
+        if (!$usuario) {
+            return $this->response->setJSON(['status'=>'error','mensaje'=>'Usuario no existe']);
         }
 
-        $usuarioModel->update($idusuario, $data);
+        $datos = [
+            'nombreusuario' => $this->request->getVar('nombreusuario'),
+            'claveacceso'   => $this->request->getVar('claveacceso'),
+            'nivelacceso'   => $this->request->getVar('nivelacceso'),
+            'idpersona'     => $this->request->getVar('idpersona')
+        ];
 
-        return redirect()->to(base_url('usuarios'))->with('msg', 'Usuario actualizado correctamente');
+        $usuarioModel->update($id, $datos);
+        $respuesta = ['status'=>'success','mensaje'=>'Usuario actualizado correctamente'];
+
+    } elseif ($accion === 'borrar') {
+        $id = $this->request->getVar('idusuario');
+        $usuario = $usuarioModel->find($id);
+
+        if ($usuario) {
+            $usuarioModel->delete($id);
+            $respuesta = ['status'=>'success','mensaje'=>'Usuario eliminado correctamente'];
+        } else {
+            $respuesta = ['status'=>'error','mensaje'=>'Usuario no existe'];
+        }
     }
 
-    public function delete($idusuario = null)
-    {
-        $usuarioModel = new Usuario();
-        $usuarioModel->delete($idusuario);
+    return $this->response->setJSON($respuesta);
+        }
 
-        return redirect()->to(base_url('usuarios'))->with('msg', 'Usuario eliminado correctamente');
     }
-}
+
+

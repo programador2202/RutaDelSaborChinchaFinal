@@ -19,13 +19,12 @@
                 <th>Categoría</th>
                 <th>Representante</th>
                 <th>Logo</th>
-                <th>Banner</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($negocios as $n): ?>
-            <tr>
+            <tr id="row<?= $n['idnegocio'] ?>">
                 <td><?= $n['idnegocio'] ?></td>
                 <td><?= $n['nombre'] ?></td>
                 <td><?= $n['nombrecomercial'] ?></td>
@@ -35,21 +34,15 @@
                 <td><?= $n['apellidos'] . ', ' . $n['nombres'] ?></td>
                 <td>
                   <?php if (!empty($n['logo'])): ?>
-                    <img src="<?= base_url($n['logo']) ?>" width="50" height="50" class="rounded mx-auto d-block">
-                  <?php endif; ?>
-                </td>
-                <td>
-                  <?php if (!empty($n['banner'])): ?>
-                    <img src="<?= base_url($n['banner']) ?>" width="50" height="50" class="rounded mx-auto d-block">
+                    <img src="<?= base_url($n['logo']) ?>" width="50">
                   <?php endif; ?>
                 </td>
                 <td>
                     <!-- Botón editar -->
                     <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar<?= $n['idnegocio'] ?>"><i class="bi bi-pencil-square"></i></button>
 
-                    <!-- Eliminar con fetch -->
-                    <button class="btn btn-danger btn-sm btn-borrar" data-id="<?= $n['idnegocio'] ?>">
-                        <i class="bi bi-trash"></i>
+                    <button class="btn btn-danger btn-sm btnEliminar" data-id="<?= $n['idnegocio'] ?>">
+                      <i class="bi bi-trash"></i>
                     </button>
                 </td>
             </tr>
@@ -58,61 +51,59 @@
             <div class="modal fade" id="modalEditar<?= $n['idnegocio'] ?>" tabindex="-1" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
-                  <form action="<?= base_url('negocios/actualizar') ?>" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="idnegocio" value="<?= $n['idnegocio'] ?>">
-                    <div class="modal-header bg-warning">
-                      <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar Negocio</h5>
-                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                      <label>Nombre:</label>
-                      <input type="text" name="nombre" class="form-control mb-2" value="<?= $n['nombre'] ?>" required>
+                  <form class="formEditar" enctype="multipart/form-data" method="post">
+                      <input type="hidden" name="accion" value="actualizar">
+                      <input type="hidden" name="idnegocio" value="<?= $n['idnegocio'] ?>">
 
-                      <label>Nombre Comercial:</label>
-                      <input type="text" name="nombrecomercial" class="form-control mb-2" value="<?= $n['nombrecomercial'] ?>">
+                      <div class="modal-header bg-warning">
+                        <h5 class="modal-title"><i class="bi bi-pencil-square"></i> Editar Negocio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
 
-                      <label>Slogan:</label>
-                      <input type="text" name="slogan" class="form-control mb-2" value="<?= $n['slogan'] ?>">
+                      <div class="modal-body">
+                        <label>Nombre:</label>
+                        <input type="text" name="nombre" class="form-control mb-2" value="<?= $n['nombre'] ?>" required>
 
-                      <label>RUC:</label>
-                      <input type="text" name="ruc" class="form-control mb-2" value="<?= $n['ruc'] ?>">
+                        <label>Nombre Comercial:</label>
+                        <input type="text" name="nombrecomercial" class="form-control mb-2" value="<?= $n['nombrecomercial'] ?>">
 
-                      <label>Categoría:</label>
-                      <select name="idcategoria" class="form-control mb-2">
-                        <?php foreach ($categorias as $c): ?>
-                          <option value="<?= $c['idcategoria'] ?>" <?= $n['idcategoria']==$c['idcategoria']?'selected':'' ?>>
-                            <?= $c['categoria'] ?>
-                          </option>
-                        <?php endforeach; ?>
-                      </select>
+                        <label>Slogan:</label>
+                        <input type="text" name="slogan" class="form-control mb-2" value="<?= $n['slogan'] ?>">
 
-                      <label>Representante:</label>
-                      <select name="idrepresentante" class="form-control mb-2">
-                        <?php foreach ($personas as $p): ?>
-                          <option value="<?= $p['idpersona'] ?>" <?= $n['idrepresentante']==$p['idpersona']?'selected':'' ?>>
-                            <?= $p['apellidos'] . ', ' . $p['nombres'] ?>
-                          </option>
-                        <?php endforeach; ?>
-                      </select>
+                        <label>RUC:</label>
+                        <input type="text" name="ruc" class="form-control mb-2" value="<?= $n['ruc'] ?>">
 
-                      <label>Logo:</label>
-                      <input type="file" name="logo" class="form-control mb-2">
-                      <?php if (!empty($n['logo'])): ?>
-                        <small class="text-muted">Logo actual:</small><br>
-                        <img src="<?= base_url($n['logo']) ?>" width="80" class="mb-2">
-                      <?php endif; ?>
+                        <label>Categoría:</label>
+                        <select name="idcategoria" class="form-control mb-2">
+                          <?php foreach ($categorias as $c): ?>
+                            <option value="<?= $c['idcategoria'] ?>" <?= $n['idcategoria']==$c['idcategoria']?'selected':'' ?>>
+                              <?= $c['categoria'] ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
 
-                      <label>Banner:</label>
-                      <input type="file" name="banner" class="form-control mb-2">
-                      <?php if (!empty($n['banner'])): ?>
-                        <small class="text-muted">Banner actual:</small><br>
-                        <img src="<?= base_url($n['banner']) ?>" width="120" class="mb-2">
-                      <?php endif; ?>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="submit" class="btn btn-warning">
-                         <i class="bi bi-save"></i> Actualizar</button>
-                    </div>
+                        <label>Representante:</label>
+                        <select name="idrepresentante" class="form-control mb-2">
+                          <?php foreach ($personas as $p): ?>
+                            <option value="<?= $p['idpersona'] ?>" <?= $n['idrepresentante']==$p['idpersona']?'selected':'' ?>>
+                              <?= $p['apellidos'] . ', ' . $p['nombres'] ?>
+                            </option>
+                          <?php endforeach; ?>
+                        </select>
+
+                        <label>Logo:</label>
+                        <input type="file" name="logo" class="form-control mb-2">
+                        <?php if (!empty($n['logo'])): ?>
+                          <small class="text-muted">Logo actual:</small><br>
+                          <img src="<?= base_url($n['logo']) ?>" width="80" class="mb-2">
+                        <?php endif; ?>
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="submit" class="btn btn-warning">
+                          <i class="bi bi-save"></i> Actualizar
+                        </button>
+                      </div>
                   </form>
                 </div>
               </div>
@@ -126,11 +117,14 @@
 <div class="modal fade" id="modalRegistrar" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <form id="formRegistrar" action="<?= base_url('negocios') ?>" method="post" enctype="multipart/form-data">
+      <form id="formRegistrar" enctype="multipart/form-data" method="post">
+        <input type="hidden" name="accion" value="registrar">
+
         <div class="modal-header bg-primary text-white">
           <h5 class="modal-title">Nuevo Negocio</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
+
         <div class="modal-body">
           <label>Nombre:</label>
           <input type="text" name="nombre" class="form-control mb-2" required>
@@ -145,14 +139,16 @@
           <input type="text" name="ruc" class="form-control mb-2">
 
           <label>Categoría:</label>
-          <select name="idcategoria" class="form-control mb-2">
+          <select name="idcategoria" class="form-control mb-2" required>
+            <option value="">Seleccione una categoría</option>
             <?php foreach ($categorias as $c): ?>
               <option value="<?= $c['idcategoria'] ?>"><?= $c['categoria'] ?></option>
             <?php endforeach; ?>
           </select>
 
           <label>Representante:</label>
-          <select name="idrepresentante" class="form-control mb-2">
+          <select name="idrepresentante" class="form-control mb-2" required>
+            <option value="">Seleccione un representante</option>
             <?php foreach ($personas as $p): ?>
               <option value="<?= $p['idpersona'] ?>"><?= $p['apellidos'] . ', ' . $p['nombres'] ?></option>
             <?php endforeach; ?>
@@ -160,79 +156,95 @@
 
           <label>Logo:</label>
           <input type="file" name="logo" class="form-control mb-2">
-
-          <label>Banner:</label>
-          <input type="file" name="banner" class="form-control mb-2">
         </div>
+
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i> Guardar</button>
+          <button type="submit" class="btn btn-success">
+            <i class="bi bi-check-circle"></i> Guardar
+          </button>
         </div>
       </form>
     </div>
   </div>
 </div>
 
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Registro con fetch
-    const formRegistrar = document.querySelector('#formRegistrar');
-    formRegistrar.addEventListener('submit', function(event) {
-        event.preventDefault();
-        const formData = new FormData(formRegistrar);
+$(function(){
 
-        fetch('<?= base_url('negocios') ?>', {
-            method: 'POST',
-            body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-            Swal.fire({
-                icon: data.status === 'success' ? 'success' : 'error',
-                title: data.mensaje,
-                timer: 1500,
-                showConfirmButton: false
-            }).then(() => {
-                if (data.status === 'success') location.reload();
-            });
-        })
-        .catch(err => console.error('Error:', err));
-    });
+    // Registrar negocio
+    $("#formRegistrar").submit(function(e){
+        e.preventDefault();
+        let formData = new FormData(this);
 
-    // Eliminar con fetch y sweetalert
-    document.querySelectorAll('.btn-borrar').forEach(btn => {
-        btn.addEventListener('click', function() {
-            let id = this.dataset.id;
-            Swal.fire({
-                title: '¿Eliminar negocio?',
-                text: "Esta acción no se puede deshacer.",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch("<?= base_url('negocios/eliminar') ?>/" + id, {
-                        method: 'POST'
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        Swal.fire({
-                            icon: data.status === 'success' ? 'success' : 'error',
-                            title: data.mensaje,
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(() => {
-                            if (data.status === 'success') location.reload();
-                        });
-                    })
-                }
-            });
+        $.ajax({
+            url: "<?= base_url('negocios/ajax') ?>",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(resp){
+                Swal.fire("Éxito", "Negocio registrado correctamente", "success")
+                  .then(()=> location.reload());
+            },
+            error: function(){
+                Swal.fire("Error", "No se pudo registrar el negocio", "error");
+            }
         });
     });
+
+    // Editar negocio
+    $(".formEditar").submit(function(e){
+        e.preventDefault();
+        let formData = new FormData(this);
+
+        $.ajax({
+            url: "<?= base_url('negocios/ajax') ?>",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(resp){
+                Swal.fire("Éxito", "Negocio actualizado correctamente", "success")
+                  .then(()=> location.reload());
+            },
+            error: function(){
+                Swal.fire("Error", "No se pudo actualizar", "error");
+            }
+        });
+    });
+
+    // Eliminar negocio
+    $(".btnEliminar").click(function(){
+        let id = $(this).data("id");
+        Swal.fire({
+            title: "¿Seguro?",
+            text: "Esto eliminará el negocio",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result)=>{
+            if(result.isConfirmed){
+                $.ajax({
+                    url: "<?= base_url('negocios/ajax') ?>",
+                    type: "POST",
+                    data: {accion:"borrar", idnegocio:id},
+                    success: function(resp){
+                        Swal.fire("Eliminado", "El negocio fue eliminado", "success")
+                          .then(()=> location.reload());
+                    },
+                    error: function(){
+                        Swal.fire("Error", "No se pudo eliminar", "error");
+                    }
+                });
+            }
+        });
+    });
+
 });
 </script>

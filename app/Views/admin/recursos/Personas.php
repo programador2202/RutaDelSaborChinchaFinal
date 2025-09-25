@@ -18,7 +18,6 @@
                 <th>Tipo Doc</th>
                 <th>Número Doc</th>
                 <th>Teléfono</th>
-                <th>Foto</th>
                 <th class="text-center">Acciones</th>
             </tr>
         </thead>
@@ -31,13 +30,7 @@
                 <td><?= $p['tipodoc'] ?></td>
                 <td><?= $p['numerodoc'] ?></td>
                 <td><?= $p['telefono'] ?></td>
-                <td>
-                <?php if (!empty($p['foto'])): ?>
-                <img src="<?= base_url($p['foto']) ?>" width="50" height="50" class="rounded mx-auto d-block">
 
-              <?php else: ?>
-                <img src="<?= base_url("uploads/personas/icono.png") ?>" alt="Sin foto" width="50" height="50" class="rounded mx-auto d-block">
-              <?php endif; ?>
 
               </td>
 
@@ -85,8 +78,6 @@
                       <label>Teléfono:</label>
                       <input type="text" name="telefono" class="form-control mb-2" value="<?= $p['telefono'] ?>">
 
-                      <label>Foto:</label>
-                      <input type="file" name="foto" class="form-control mb-2">
                     </div>
                     <div class="modal-footer">
                       <button type="submit" class="btn btn-warning">
@@ -107,7 +98,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <form enctype="multipart/form-data">
-        <input type="hidden" name="accion" value="registrar">
+        <input type="hidden" name="accion" value="registrar" method="post">
         <div class="modal-header bg-primary text-white">
           <h5 class="modal-title">Nueva Persona</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -135,8 +126,6 @@
           <label>Teléfono:</label>
           <input type="text" name="telefono" class="form-control mb-2" placeholder="Teléfono">
 
-          <label>Foto:</label>
-          <input type="file" name="foto" class="form-control mb-2">
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-success">
@@ -161,7 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             let formData = new FormData(this);
 
-            fetch("<?= base_url('admin/personas/ajax') ?>", {
+            fetch("<?= base_url('personas/ajax') ?>", {
                 method: 'POST',
                 body: formData
             })
@@ -200,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     formData.append('accion', 'borrar');
                     formData.append('idpersona', id);
 
-                    fetch("<?= base_url('admin/personas/ajax') ?>", {
+                    fetch("<?= base_url('personas/ajax') ?>", {
                         method: 'POST',
                         body: formData
                     })

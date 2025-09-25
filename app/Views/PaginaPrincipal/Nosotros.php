@@ -16,10 +16,10 @@
   <!-- Presentación principal -->
   <section class="bg-light py-5 shadow-sm">
     <div class="container text-center">
-      <img src="../public/img/Quique.jpg"
-           class="rounded-circle shadow mb-3"
-           alt="Quique Ronceros - CEO Ruta del Sabor"
-           width="200" height="200">
+      <img src="<?= base_url('img/Quique.jpg') ?>" 
+     class="rounded-circle shadow mb-3"
+     alt="Quique Ronceros - CEO Ruta del Sabor"
+     width="200" height="208">
       <p class=" text-black">Nuestro CEO</p>
       <h4 class="fw-bold text-warning" >Quique Ronceros</h4>
       <h2 class="fw-bold mt-2 text-warning">Ruta del Sabor Chincha</h2>

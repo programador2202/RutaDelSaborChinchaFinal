@@ -42,7 +42,9 @@
              <a class="nav-link" href="<?= base_url('/mostrar') ?>">Categorías</a>
             </li>
 
-            <li class="nav-item mx-2"><a class="nav-link" href="/RutaDelSaborChincha123/views/categorias/Vitinicolas.php"> Vitinícolas</a></li>
+            <li class="nav-item mx-2"> 
+              <a class="nav-link" href="<?= base_url('/vino') ?>">Vitinícolas</a>
+          </li>
             <li class="nav-item mx-2"><a class="nav-link" href="#"> Blog</a></li>
             <li class="nav-item mx-2"><a class="nav-link" href="#"><i class="fab fa-facebook fa-lg"></i></a></li>
             <li class="nav-item mx-2"><a class="nav-link" href="#"><i class="fab fa-whatsapp fa-lg"></i></a></li>
