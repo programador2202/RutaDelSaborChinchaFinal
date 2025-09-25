@@ -6,12 +6,23 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
 <style>
   /* Card hover */
-  .card-business {
-    transition: transform 0.3s, box-shadow 0.3s;
-    border-radius: 12px;
-    overflow: hidden;
-  }
-  .card-business:hover {
+
+  .swiper-slide {
+  display: flex;          /* hace que ocupe toda la altura */
+  height: auto;           /* evita que Swiper fuerce tamaños */
+}
+
+.card-business {
+  height: 100%;           /* todas las cards igual de altas */
+  display: flex;
+  flex-direction: column; /* cuerpo flexible */
+}
+.card-business .card-body {
+  flex-grow: 1;           /* hace que el body se expanda */
+  display: flex;
+  flex-direction: column;
+}
+ .card-business:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   }

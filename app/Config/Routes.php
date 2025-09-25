@@ -27,7 +27,6 @@ $routes->post('usuarios/ajax', 'UsuarioController::ajax');
 $routes->get('/buscar', 'BuscarController::index'); 
 $routes->get('/buscar/sugerencias', 'BuscarController::sugerencias'); 
 
-$routes->get('/mapa', 'MapController::index');
 
 
 
@@ -40,12 +39,11 @@ $routes->post('negocios/ajax', 'NegociosController::ajax');
 
 // Rutas para el CRUD de Locales
 $routes->get('/locales', 'LocalController::index');
-$routes->post('locales/registrar', 'LocalController::registrar');
-$routes->post('locales/actualizar', 'LocalController::actualizar');
-$routes->get('locales/borrar/(:num)', 'LocalController::borrar/$1');
+$routes->post('locales/ajax', 'LocalController::ajax');
 
 // Rutas para cartas
 $routes->get('/cartas', 'CartaController::index');
+$routes->post('cartas/ajax', 'CartaController::ajax');
 
 
 // Rutas para horarios

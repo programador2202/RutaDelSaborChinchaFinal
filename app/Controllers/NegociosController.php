@@ -50,18 +50,6 @@ class NegociosController extends BaseController
 
         try {
             if ($accion === 'registrar') {
-                // Validación
-                if (!$this->validate([
-                    'idcategoria'     => 'required|integer',
-                    'idrepresentante' => 'required|integer',
-                    'nombre'          => 'required|min_length[3]',
-                    'ruc'             => 'permit_empty|numeric|exact_length[11]'
-                ])) {
-                    return $this->response->setJSON([
-                        'status'  => 'error',
-                        'mensaje' => $this->validator->listErrors()
-                    ]);
-                }
 
                 // Logo
                 $logo = $this->request->getFile('logo');

@@ -83,7 +83,49 @@
                 <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
               </div>
             </div>
-            <!-- Agrega más tarjetas igual que arriba -->
+
+             <div class="card scroll-card">
+              <img src="<?= base_url('img/Chijaukay.jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>Mister Wok</b></h5>
+                <p class="card-text">¿Antojo de comida china? Descubre el auténtico sabor del chifa en Mister Wok</p>
+                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+             <div class="card scroll-card">
+              <img src="<?= base_url('img/el_gran_combo restaurante_chincha_c (3).jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>El Gran Combo</b></h5>
+                <p class="card-text">Somos el lugar ideal para disfrutar de una experiencia gastronómica que celebra las ricas tradiciones culinarias.</p>
+                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+             <div class="card scroll-card">
+              <img src="<?= base_url('img/3.jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>¡Daddy’s Truck’s Burger!</b></h5>
+                <p class="card-text">Daddy’s Trucks Burger es un restaurante único en Chincha que se distingue por ofrecer una experiencia de comida rápida diferente</p>
+                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+             <div class="card scroll-card">
+              <img src="<?= base_url('img/daito (5).jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>DAITO</b></h5>
+                <p class="card-text">En Daito, nos enorgullecemos de ser un restaurante dedicado a presentar la exquisita cocina Nikkei,
+                  mezcla de sabores que refleja la rica herencia cultural de Perú y Japón.</p>
+                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
+            <div class="card scroll-card">
+              <img src="<?= base_url('img/vitivinicola_chincha_san_carlos (1).jpg') ?>" class="card-img-top">
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title"><b>Viñedos San Carlos</b></h5>
+                <p class="card-text">Somos una bodega ubicada en el pintoresco valle de Sunampe, Chincha, Perú. 
+                Viñedos San Carlos se destaca por su dedicación a la calidad, la innovación y el respeto por el medio ambiente.</p>
+                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -206,6 +248,28 @@
         map.setView([filtrados[0].lat, filtrados[0].lng], 15);
       }
     }
+
+    if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+
+      // Centrar mapa en la ubicación del usuario
+      map.setView([userLat, userLng], 14);
+
+      // Agregar un marcador para la ubicación del usuario
+      const userMarker = L.marker([userLat, userLng]).addTo(map)
+        .bindPopup("<b>Estás aquí</b>").openPopup();
+    },
+    function(error) {
+      console.warn("Error obteniendo ubicación:", error.message);
+    }
+  );
+} else {
+  alert("Tu navegador no soporta geolocalización.");
+}
+
   </script>
 
   <!-- Scroll tarjetas -->

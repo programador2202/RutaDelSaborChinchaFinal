@@ -98,7 +98,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <form enctype="multipart/form-data">
-        <input type="hidden" name="accion" value="registrar" method="post">
+        <input type="hidden" name="accion" value="registrar" >
         <div class="modal-header bg-primary text-white">
           <h5 class="modal-title">Nueva Persona</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
