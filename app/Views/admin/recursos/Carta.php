@@ -60,6 +60,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="formRegistrarCarta">
+                <input type="hidden" name="accion" value="registrar">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title">Registrar Carta</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
@@ -105,6 +106,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="formEditarCarta">
+                <input type="hidden" name="accion" value="actualizar">
                 <input type="hidden" name="idcarta" id="editId">
                 <div class="modal-header bg-warning text-dark">
                     <h5 class="modal-title">Editar Carta</h5>
