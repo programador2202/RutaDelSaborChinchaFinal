@@ -16,4 +16,8 @@ class Locales extends Model
         'latitud',
         'longitud'
     ];
-}
+
+
+    
+    }
+

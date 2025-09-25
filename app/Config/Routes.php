@@ -24,6 +24,11 @@ $routes->get('/ListaUsuarios', 'UsuarioController::index');
 $routes->post('usuarios/ajax', 'UsuarioController::ajax');    
 
 
+$routes->get('/buscar', 'BuscarController::index'); 
+$routes->get('/buscar/sugerencias', 'BuscarController::sugerencias'); 
+
+$routes->get('/mapa', 'MapController::index');
+
 
 
 

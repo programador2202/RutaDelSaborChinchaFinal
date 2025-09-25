@@ -9,13 +9,13 @@ USE sistema_menus;
 -- 1. DEPARTAMENTOS
 CREATE TABLE departamentos (
     iddepartamento INT AUTO_INCREMENT PRIMARY KEY,
-    departamento VARCHAR(100) NOT NULL
+    departamento VARCHAR(100) NOT NULL UNIQUE
 );
 
 -- 2. PROVINCIAS
 CREATE TABLE provincias (
     idprovincia INT AUTO_INCREMENT PRIMARY KEY,
-    provincia VARCHAR(100) NOT NULL,
+    provincia VARCHAR(100) NOT NULL UNIQUE,
     iddepartamento INT NOT NULL,
     FOREIGN KEY (iddepartamento) REFERENCES departamentos(iddepartamento)
 );
@@ -80,7 +80,9 @@ CREATE TABLE locales (
     latitud DECIMAL(10,8),
     longitud DECIMAL(11,8),
     foto VARCHAR(255) NULL,
-    FOREIGN KEY (idnegocio) REFERENCES negocios(idnegocio),
+   FOREIGN KEY (idnegocio) REFERENCES negocios(idnegocio) 
+    ON DELETE CASCADE 
+    ON UPDATE CASCADE,
     FOREIGN KEY (iddistrito) REFERENCES distritos(iddistrito)
 );
 
