@@ -87,8 +87,7 @@
                     <label>Plato</label>
                     <input type="text" class="form-control mb-2" name="nombreplato" required>
 
-                    <label>Descripción</label>
-                    <textarea class="form-control mb-2" name="descripcion"></textarea>
+    
 
                     <label>Precio</label>
                     <input type="number" step="0.01" class="form-control" name="precio" required>
@@ -132,8 +131,6 @@
                     <label>Plato</label>
                     <input type="text" class="form-control mb-2" name="nombreplato" id="editNombreplato" required>
 
-                    <label>Descripción</label>
-                    <textarea class="form-control mb-2" name="descripcion" id="editDescripcion"></textarea>
 
                     <label>Precio</label>
                     <input type="number" step="0.01" class="form-control" name="precio" id="editPrecio" required>
@@ -176,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('editLocal').value = data.idlocales;
             document.getElementById('editSeccion').value = data.idseccion;
             document.getElementById('editNombreplato').value = data.nombreplato;
-            document.getElementById('editDescripcion').value = data.descripcion;
             document.getElementById('editPrecio').value = data.precio;
             new bootstrap.Modal(document.getElementById('modalEditar')).show();
         });

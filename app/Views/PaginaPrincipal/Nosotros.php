@@ -65,7 +65,7 @@
       <p class="text-center mb-5">Al unirte, disfrutarás de estos increíbles beneficios:</p>
       <div class="row g-4">
         <div class="col-md-6 col-lg-3">
-          <div class="card h-100 text-center shadow-sm border-0">
+          <div class="card h-100 text-center shadow-sm border-1">
             <div class="card-body">
               <i class="fab fa-facebook-f fa-2x text-danger mb-3"></i>
               <h6 class="fw-bold">Alcance en redes sociales</h6>
@@ -74,7 +74,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="card h-100 text-center shadow-sm border-0">
+          <div class="card h-100 text-center shadow-sm border-1">
             <div class="card-body">
               <i class="fas fa-globe fa-2x text-danger mb-3"></i>
               <h6 class="fw-bold">Visibilidad en nuestra web</h6>
@@ -83,7 +83,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="card h-100 text-center shadow-sm border-0">
+          <div class="card h-100 text-center shadow-sm border-1">
             <div class="card-body">
               <i class="fas fa-bullhorn fa-2x text-danger mb-3"></i>
               <h6 class="fw-bold">Publicidad personalizada</h6>
@@ -92,7 +92,7 @@
           </div>
         </div>
         <div class="col-md-6 col-lg-3">
-          <div class="card h-100 text-center shadow-sm border-0">
+          <div class="card h-100 text-center shadow-sm border-1">
             <div class="card-body">
               <i class="fas fa-camera fa-2x text-danger mb-3"></i>
               <h6 class="fw-bold">Fotografías profesionales</h6>

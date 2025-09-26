@@ -45,6 +45,8 @@ $routes->post('locales/ajax', 'LocalController::ajax');
 $routes->get('/cartas', 'CartaController::index');
 $routes->post('cartas/ajax', 'CartaController::ajax');
 
+//ruta para mapa
+$routes->get('/mapa', 'MapController::index');
 
 // Rutas para horarios
 $routes->get('/horarios', 'HorarioController::index');
