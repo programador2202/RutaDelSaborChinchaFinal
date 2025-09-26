@@ -14,7 +14,7 @@
   <?= $header; ?>
   <main>
     <!-- Buscador -->
-    <div class="container my-5">
+   <div class="container my-5">
       <h3 class="text-center mb-3"><b>Encuentra tu restaurante favorito</b></h3>
       <div class="input-group shadow position-relative">
         <input type="text" class="form-control" placeholder="Buscar por nombre o plato..." id="buscador" autocomplete="off">
@@ -25,14 +25,14 @@
     </div>
 
     <!-- Mapa y Categorías -->
-    <section id="explora" class="py-5 bg-light">
+   <!-- <section id="explora" class="py-5 bg-light">
       <div class="container">
         <div class="row">
-          <!-- Mapa -->
-          <div class="col-md-8 mb-4">
+           Mapa -->
+          <!--<div class="col-md-8 mb-4">
             <div id="map" style="height: 600px; border-radius: 12px; overflow: hidden;"></div>
           </div>
-          <!-- Categorías -->
+           Categorías 
           <div class="col-md-4">
             <h3 class="text-center mb-4"><b>Explora por Categorías</b></h3>
             <div class="list-group shadow-sm">
@@ -65,6 +65,7 @@
         </div>
       </div>
     </section>
+    -->
 
     <!-- Destacados -->
     <section class="py-5 bg-white">
