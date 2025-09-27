@@ -137,70 +137,88 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<!-- Bootstrap JS y SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- Bootstrap JS y SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-// Registrar / actualizar
-document.querySelectorAll('.form-usuario').forEach(form => {
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
 
-    let formData = new FormData(this);
+  // 🔹 Función genérica para mostrar alertas
+  const showAlert = (icon, title, timer = 1500) => {
+    return Swal.fire({
+      icon,
+      title,
+      timer,
+      showConfirmButton: false,
+      timerProgressBar: true
+    });
+  };
 
-    fetch("<?= base_url('usuarios/ajax')?>", {
-      method: 'POST',
-      body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-      Swal.fire({
-        icon: data.status === 'success' ? 'success' : 'error',
-        title: data.mensaje,
-        timer: 1500,
-        showConfirmButton: false
-      }).then(() => {
-        if (data.status === 'success') location.reload();
-      });
-    })
-    .catch(err => console.error(err));
-  });
-});
+  // Función helper para peticiones fetch con SweetAlert
+  const enviarPeticion = async (url, formData, successCallback = null) => {
+    try {
+      const res = await fetch(url, { method: "POST", body: formData });
+      const data = await res.json();
 
-// Borrar usuario
-document.querySelectorAll('.btn-borrar').forEach(btn => {
-  btn.addEventListener('click', function(e) {
-    e.preventDefault();
-
-    Swal.fire({
-      title: '¿Seguro de eliminar este usuario?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        let id = btn.dataset.id;
-        let formData = new FormData();
-        formData.append('accion', 'borrar');
-        formData.append('idusuario', id);
-
-        fetch("<?= base_url('usuarios/ajax') ?>", {
-          method: 'POST',
-          body: formData
-        })
-        .then(res => res.json())
-        .then(data => {
-          Swal.fire({
-            icon: data.status === 'success' ? 'success' : 'error',
-            title: data.mensaje,
-            timer: 1500,
-            showConfirmButton: false
-          }).then(() => {
-            if (data.status === 'success') location.reload();
-          });
+      showAlert(data.status === "success" ? "success" : "error", data.mensaje)
+        .then(() => {
+          if (data.status === "success" && typeof successCallback === "function") {
+            successCallback();
+          }
         });
-      }
+
+    } catch (err) {
+      console.error("Error en la petición:", err);
+      showAlert("error", "No se pudo procesar la solicitud");
+    }
+  };
+
+  // Manejo de registrar / actualizar usuario
+  document.querySelectorAll(".form-usuario").forEach(form => {
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      
+            // Mostrar loading mientras se procesa
+            Swal.fire({
+                title: "Procesando...",
+                text: "Por favor espera",
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
+            
+      enviarPeticion("<?= base_url('usuarios/ajax') ?>", formData, () => location.reload());
     });
   });
+
+  //Manejo de borrar usuario
+  document.querySelectorAll(".btn-borrar").forEach(btn => {
+    btn.addEventListener("click", () => {
+      Swal.fire({
+        title: "¿Seguro de eliminar este usuario?",
+        text: "Esta acción no se puede deshacer",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+      }).then(result => {
+        if (result.isConfirmed) {
+          const formData = new FormData();
+          formData.append("accion", "borrar");
+          formData.append("idusuario", btn.dataset.id);
+
+          enviarPeticion("<?= base_url('usuarios/ajax') ?>", formData, () => location.reload());
+        }
+      });
+    });
+  });
+
 });
 </script>

@@ -140,74 +140,100 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.all.min.js"></script>
 
+
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Función genérica para mostrar alertas
+    const showAlert = (icon, title, timer = 1500) => {
+        return Swal.fire({
+            icon,
+            title,
+            timer,
+            showConfirmButton: false,
+            timerProgressBar: true
+        });
+    };
+
+    // Función para enviar datos al backend
+    const sendRequest = async (formData) => {
+        try {
+            const res = await fetch("<?= base_url('personas/ajax') ?>", {
+                method: "POST",
+                body: formData
+            });
+            return await res.json();
+        } catch (err) {
+            console.error("Error en la petición:", err);
+            showAlert("error", "Error de conexión");
+            return null;
+        }
+    };
 
     // Registrar / Actualizar
-    document.querySelectorAll('form').forEach(form => {
-        form.addEventListener('submit', function(e) {
+    document.querySelectorAll("form").forEach(form => {
+        form.addEventListener("submit", async (e) => {
             e.preventDefault();
+            const formData = new FormData(form);
 
-            let formData = new FormData(this);
+            // Mostrar loading mientras se procesa
+            Swal.fire({
+                title: "Procesando...",
+                text: "Por favor espera",
+                allowOutsideClick: false,
+                didOpen: () => Swal.showLoading()
+            });
 
-            fetch("<?= base_url('personas/ajax') ?>", {
-                method: 'POST',
-                body: formData
-            })
-            .then(res => res.json())
-            .then(data => {
-                Swal.fire({
-                    icon: data.status === 'success' ? 'success' : 'error',
-                    title: data.mensaje,
-                    timer: 1500,
-                    showConfirmButton: false
-                }).then(() => {
-                    if(data.status === 'success') location.reload();
+            const data = await sendRequest(formData);
+
+            if (data) {
+                Swal.close(); // Cerrar loading
+                showAlert(data.status === "success" ? "success" : "error", data.mensaje)
+                .then(() => {
+                    if (data.status === "success") location.reload();
                 });
-            })
-            .catch(err => console.error(err));
+            }
         });
     });
 
-    // Borrar
-    document.querySelectorAll('.btn-borrar').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-
-            Swal.fire({
-                title: '¿Seguro de eliminar esta persona?',
-                icon: 'warning',
+    // Borrar persona
+    document.querySelectorAll(".btn-borrar").forEach(btn => {
+        btn.addEventListener("click", async () => {
+            const result = await Swal.fire({
+                title: "¿Seguro de eliminar esta persona?",
+                text: "No podrás deshacer esta acción",
+                icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if(result.isConfirmed){
-                    let id = btn.dataset.id;
-                    let formData = new FormData();
-                    formData.append('accion', 'borrar');
-                    formData.append('idpersona', id);
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            });
 
-                    fetch("<?= base_url('personas/ajax') ?>", {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(res => res.json())
-                    .then(data => {
-                        Swal.fire({
-                            icon: data.status === 'success' ? 'success' : 'error',
-                            title: data.mensaje,
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(() => {
-                            if(data.status === 'success') location.reload();
-                        });
+            if (result.isConfirmed) {
+                const formData = new FormData();
+                formData.append("accion", "borrar");
+                formData.append("idpersona", btn.dataset.id);
+
+                Swal.fire({
+                    title: "Eliminando...",
+                    allowOutsideClick: false,
+                    didOpen: () => Swal.showLoading()
+                });
+
+                const data = await sendRequest(formData);
+
+                if (data) {
+                    Swal.close();
+                    showAlert(data.status === "success" ? "success" : "error", data.mensaje)
+                    .then(() => {
+                        if (data.status === "success") location.reload();
                     });
                 }
-            });
+            }
         });
     });
 
 });
 </script>
+

@@ -174,77 +174,97 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-$(function(){
+document.addEventListener("DOMContentLoaded", () => {
 
-    // Registrar negocio
-    $("#formRegistrar").submit(function(e){
-        e.preventDefault();
-        let formData = new FormData(this);
-
-        $.ajax({
-            url: "<?= base_url('negocios/ajax') ?>",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(resp){
-                Swal.fire("Éxito", "Negocio registrado correctamente", "success")
-                  .then(()=> location.reload());
-            },
-            error: function(){
-                Swal.fire("Error", "No se pudo registrar el negocio", "error");
-            }
-        });
+  // 🔹 Función genérica para mostrar alertas
+  const showAlert = (icon, title, timer = 1500) => {
+    return Swal.fire({
+      icon,
+      title,
+      timer,
+      showConfirmButton: false,
+      timerProgressBar: true
     });
+  };
 
-    // Editar negocio
-    $(".formEditar").submit(function(e){
-        e.preventDefault();
-        let formData = new FormData(this);
+  // 🔹 Función helper para peticiones fetch con SweetAlert
+  const enviarPeticion = async (url, formData, successCallback = null) => {
+    try {
+      const res = await fetch(url, { method: "POST", body: formData });
+      const data = await res.json();
 
-        $.ajax({
-            url: "<?= base_url('negocios/ajax') ?>",
-            type: "POST",
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(resp){
-                Swal.fire("Éxito", "Negocio actualizado correctamente", "success")
-                  .then(()=> location.reload());
-            },
-            error: function(){
-                Swal.fire("Error", "No se pudo actualizar", "error");
-            }
+      showAlert(data.status === "success" ? "success" : "error", data.mensaje)
+        .then(() => {
+          if (data.status === "success" && typeof successCallback === "function") {
+            successCallback();
+          }
         });
-    });
 
-    // Eliminar negocio
-    $(".btnEliminar").click(function(){
-        let id = $(this).data("id");
-        Swal.fire({
-            title: "¿Seguro?",
-            text: "Esto eliminará el negocio",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sí, eliminar",
-            cancelButtonText: "Cancelar"
-        }).then((result)=>{
-            if(result.isConfirmed){
-                $.ajax({
-                    url: "<?= base_url('negocios/ajax') ?>",
-                    type: "POST",
-                    data: {accion:"borrar", idnegocio:id},
-                    success: function(resp){
-                        Swal.fire("Eliminado", "El negocio fue eliminado", "success")
-                          .then(()=> location.reload());
-                    },
-                    error: function(){
-                        Swal.fire("Error", "No se pudo eliminar", "error");
-                    }
-                });
-            }
-        });
+    } catch (err) {
+      console.error("Error en la petición:", err);
+      showAlert("error", "No se pudo procesar la solicitud");
+    }
+  };
+
+  // 🔹 Manejo de registrar negocio
+  const formRegistrar = document.querySelector("#formRegistrar");
+  if (formRegistrar) {
+    formRegistrar.addEventListener("submit", e => {
+      e.preventDefault();
+      const formData = new FormData(formRegistrar);
+
+      // Mostrar loading mientras se procesa
+      Swal.fire({
+        title: "Procesando...",
+        text: "Por favor espera",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      enviarPeticion("<?= base_url('negocios/ajax') ?>", formData, () => location.reload());
     });
+  }
+
+  // 🔹 Manejo de editar negocio
+  document.querySelectorAll(".formEditar").forEach(form => {
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      Swal.fire({
+        title: "Procesando...",
+        text: "Por favor espera",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+      });
+
+      enviarPeticion("<?= base_url('negocios/ajax') ?>", formData, () => location.reload());
+    });
+  });
+
+  // 🔹 Manejo de borrar negocio
+  document.querySelectorAll(".btnEliminar").forEach(btn => {
+    btn.addEventListener("click", () => {
+      Swal.fire({
+        title: "¿Seguro de eliminar este negocio?",
+        text: "Esta acción no se puede deshacer",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+      }).then(result => {
+        if (result.isConfirmed) {
+          const formData = new FormData();
+          formData.append("accion", "borrar");
+          formData.append("idnegocio", btn.dataset.id);
+
+          enviarPeticion("<?= base_url('negocios/ajax') ?>", formData, () => location.reload());
+        }
+      });
+    });
+  });
 
 });
 </script>

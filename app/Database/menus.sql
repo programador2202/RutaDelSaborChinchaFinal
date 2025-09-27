@@ -1,6 +1,5 @@
 CREATE DATABASE sistema_menus;
 
-drop database sistema_menus;
 USE sistema_menus;
 
 
@@ -67,6 +66,7 @@ CREATE TABLE negocios (
     FOREIGN KEY (idcategoria) REFERENCES categorias(idcategoria),
     FOREIGN KEY (idrepresentante) REFERENCES personas(idpersona)
 );
+ALTER TABLE negocios MODIFY ruc VARCHAR(11) NULL;
 
 SELECT*FROM negocios;
 

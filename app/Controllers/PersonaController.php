@@ -25,11 +25,21 @@ class PersonaController extends BaseController
         $respuesta    = ['status' => 'error', 'mensaje' => 'Acción no definida'];
 
         if ($accion === 'registrar') {
+            $numerodoc = $this->request->getVar('numerodoc');
+
+            // Verificar si ya existe un numerodoc igual
+            if ($numerodoc && $personaModel->where('numerodoc', $numerodoc)->first()) {
+                return $this->response->setJSON([
+                    'status'  => 'error',
+                    'mensaje' => 'El número de documento ya está registrado'
+                ]);
+            }
+
             $registro = [
                 'apellidos' => $this->request->getVar('apellidos'),
                 'nombres'   => $this->request->getVar('nombres'),
                 'tipodoc'   => $this->request->getVar('tipodoc'),
-                'numerodoc' => $this->request->getVar('numerodoc'),
+                'numerodoc' => $numerodoc,
                 'telefono'  => $this->request->getVar('telefono'),
             ];
 
@@ -37,8 +47,9 @@ class PersonaController extends BaseController
             $respuesta = ['status' => 'success', 'mensaje' => 'Persona registrada correctamente'];
 
         } elseif ($accion === 'actualizar') {
-            $id = $this->request->getVar('idpersona');
-            $persona = $personaModel->find($id);
+            $id        = $this->request->getVar('idpersona');
+            $numerodoc = $this->request->getVar('numerodoc');
+            $persona   = $personaModel->find($id);
 
             if (!$persona) {
                 return $this->response->setJSON([
@@ -47,11 +58,19 @@ class PersonaController extends BaseController
                 ]);
             }
 
+            // Verificar duplicado en actualización (ignorar el mismo ID)
+            if ($numerodoc && $personaModel->where('numerodoc', $numerodoc)->where('idpersona !=', $id)->first()) {
+                return $this->response->setJSON([
+                    'status'  => 'error',
+                    'mensaje' => 'El número de documento ya está registrado en otra persona'
+                ]);
+            }
+
             $datos = [
                 'apellidos' => $this->request->getVar('apellidos'),
                 'nombres'   => $this->request->getVar('nombres'),
                 'tipodoc'   => $this->request->getVar('tipodoc'),
-                'numerodoc' => $this->request->getVar('numerodoc'),
+                'numerodoc' => $numerodoc,
                 'telefono'  => $this->request->getVar('telefono'),
             ];
 
@@ -59,7 +78,7 @@ class PersonaController extends BaseController
             $respuesta = ['status' => 'success', 'mensaje' => 'Persona actualizada correctamente'];
 
         } elseif ($accion === 'borrar') {
-            $id = $this->request->getVar('idpersona');
+            $id      = $this->request->getVar('idpersona');
             $persona = $personaModel->find($id);
 
             if ($persona) {
