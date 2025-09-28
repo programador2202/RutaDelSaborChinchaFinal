@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\Home;
 use CodeIgniter\Router\RouteCollection;
 
 /**
@@ -57,3 +58,5 @@ $routes->get('/recursos', 'RecursoController::index');
 
 // Rutas para mostrar en la página principal
 $routes->get('/mostrar', 'MostrarController::index');
+
+$routes->get('/mapa/restaurantes', 'MapController::restaurantes');

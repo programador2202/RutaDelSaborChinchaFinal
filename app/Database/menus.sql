@@ -70,7 +70,7 @@ ALTER TABLE negocios MODIFY ruc VARCHAR(11) NULL;
 
 SELECT*FROM negocios;
 
--- 8. LOCALES (con foto principal opcional)
+
 CREATE TABLE locales (
     idlocales INT AUTO_INCREMENT PRIMARY KEY,
     idnegocio INT NOT NULL,
@@ -79,13 +79,20 @@ CREATE TABLE locales (
     telefono VARCHAR(20),
     latitud DECIMAL(10,8),
     longitud DECIMAL(11,8),
-    foto VARCHAR(255) NULL,
    FOREIGN KEY (idnegocio) REFERENCES negocios(idnegocio) 
     ON DELETE CASCADE 
     ON UPDATE CASCADE,
     FOREIGN KEY (iddistrito) REFERENCES distritos(iddistrito)
 );
 
+ALTER TABLE locales
+MODIFY latitud DOUBLE,
+MODIFY longitud DOUBLE;
+ALTER TABLE locales 
+DROP COLUMN foto;
+
+
+SELECT*FROM locales;
 -- 9. CARTAS
 CREATE TABLE cartas (
     idcarta INT AUTO_INCREMENT PRIMARY KEY,

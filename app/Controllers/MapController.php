@@ -8,23 +8,24 @@ use CodeIgniter\Controller;
 
 class MapController extends Controller
 {
-    public function index()
-    {
-        $localModel   = new Locales();
-        $negocioModel = new Negocio();
+ public function restaurantes()
+{
+    $cat = $this->request->getGet('cat'); // ?cat=pizza
+    $localModel = new Locales();
 
-        // Restaurantes con coordenadas
-        $restaurantes = $localModel
-            ->select('locales.latitud, locales.longitud, locales.direccion, negocios.nombre as negocio, categorias.categoria as categoria')
-            ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
-            ->join('categorias', 'categorias.idcategoria = negocios.idcategoria')
-            ->where('locales.latitud IS NOT NULL')
-            ->where('locales.longitud IS NOT NULL')
-            ->findAll();
+    $query = $localModel
+        ->select('locales.latitud as lat, locales.longitud as lng, locales.direccion, negocios.nombre as negocio, categorias.categoria as categoria')
+        ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
+        ->join('categorias', 'categorias.idcategoria = negocios.idcategoria')
+        ->where('locales.latitud IS NOT NULL')
+        ->where('locales.longitud IS NOT NULL');
 
-        // Pasamos los datos a la vista como array asociativo
-        return view('PaginaPrincipal/Principal', [
-            'restaurantes' => $restaurantes
-        ]);
+    if ($cat) {
+        $query->where('categorias.categoria', $cat);
     }
+
+    return $this->response->setJSON($query->findAll());
+}
+
+
 }
