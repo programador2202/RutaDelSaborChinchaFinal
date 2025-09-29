@@ -13,6 +13,7 @@ class Cartas extends Model
         'idlocales',
         'idseccion',
         'nombreplato',
-        'precio'
+        'precio',
+        'foto'
     ];
 }

@@ -6,53 +6,26 @@ use App\Models\Negocio;
 
 class BuscarController extends BaseController
 {
-    public function index()
-    {
-        $q = $this->request->getGet('q') ?? '';
+public function index()
+{
+    $q = $this->request->getGet('q') ?? '';
 
-        $negocioModel = new Negocio();
+    $negocioModel = new Negocio();
 
-        $datos = [];
-        if (!empty($q)) {
-            $datos = $negocioModel
-                ->select('
-                    negocios.idnegocio,
-                    negocios.nombre AS negocio,
-                    negocios.logo,
-                    cartas.nombreplato AS plato,
-                    cartas.precio,
-                    locales.direccion
-                ')
-                ->join('locales', 'locales.idnegocio = negocios.idnegocio')
-                ->join('cartas', 'cartas.idlocales = locales.idlocales', 'left')
-                ->groupStart()
-                    ->like('negocios.nombre', $q)
-                    ->orLike('cartas.nombreplato', $q)
-                ->groupEnd()
-                ->findAll();
-        }
+    $resultados = [];
+    $recomendaciones = [];
 
-        return view('PaginaPrincipal/Busqueda', [
-            'q'          => $q,
-            'resultados' => $datos
-        ]);
-    }
-
-    public function sugerencias()
-    {
-        $q = $this->request->getGet('q') ?? '';
-
-        if (strlen($q) < 3) {
-            return $this->response->setJSON([]);
-        }
-
-        $negocioModel = new Negocio();
-
+    if (!empty($q)) {
+        
         $resultados = $negocioModel
             ->select('
                 negocios.idnegocio,
                 negocios.nombre AS negocio,
-                cartas.nombreplato AS plato
+                negocios.logo,
+                cartas.nombreplato AS plato,
+                cartas.precio,
+                cartas.foto,
+                locales.direccion
             ')
             ->join('locales', 'locales.idnegocio = negocios.idnegocio')
             ->join('cartas', 'cartas.idlocales = locales.idlocales', 'left')
@@ -60,29 +33,34 @@ class BuscarController extends BaseController
                 ->like('negocios.nombre', $q)
                 ->orLike('cartas.nombreplato', $q)
             ->groupEnd()
-            ->limit(10)
             ->findAll();
 
-        // Mapeamos para evitar datos innecesarios
-        $sugerencias = [];
-        foreach ($resultados as $item) {
-            if (!empty($item['plato'])) {
-                $sugerencias[] = [
-                    'tipo' => 'plato',
-                    'texto' => $item['plato']
-                ];
-            }
-            if (!empty($item['negocio'])) {
-                $sugerencias[] = [
-                    'tipo' => 'negocio',
-                    'texto' => $item['negocio']
-                ];
-            }
+      
+        if (empty($resultados)) {
+            $recomendaciones = $negocioModel
+                ->select('
+                    negocios.idnegocio,
+                    negocios.nombre AS negocio,
+                    negocios.logo,
+                    cartas.nombreplato AS plato,
+                    cartas.precio,
+                    cartas.foto,
+                    locales.direccion
+                ')
+                ->join('locales', 'locales.idnegocio = negocios.idnegocio')
+                ->join('cartas', 'cartas.idlocales = locales.idlocales', 'inner')
+                ->orderBy('RAND()')      
+                ->limit(3)              
+                ->findAll();
         }
-
-        // Quitamos duplicados
-        $sugerencias = array_unique($sugerencias, SORT_REGULAR);
-
-        return $this->response->setJSON($sugerencias);
     }
+
+    return view('PaginaPrincipal/Busqueda', [
+        'q'                => $q,
+        'resultados'       => $resultados,
+        'recomendaciones'  => $recomendaciones
+    ]);
+}
+
+
 }

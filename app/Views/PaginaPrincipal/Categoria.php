@@ -93,10 +93,10 @@
             <p class="card-text text-muted small">
               <?= esc($negocio['slogan'] ?? 'Sin slogan') ?>
             </p>
-            <a href="<?= base_url('negocio/'.$negocio['idnegocio']) ?>" 
-               class="btn btn-warning mt-auto">
-              Ver más
-            </a>
+           <a href="<?= base_url('negocios/detalle/'.$negocio['idnegocio']) ?>" 
+      class="btn btn-warning mt-auto">Ver más</a>
+
+
           </div>
         </div>
       </div>

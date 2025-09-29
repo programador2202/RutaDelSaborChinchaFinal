@@ -18,6 +18,7 @@
                 <th>Sección</th>
                 <th>Plato</th>
                 <th>Precio</th>
+                <th>Foto</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -32,13 +33,20 @@
                     <td><?= esc($carta['nombreplato']) ?></td>
                     <td>S/ <?= number_format($carta['precio'],2) ?></td>
                     <td>
+                        <?php if(!empty($carta['foto'])): ?>
+                            <img src="<?= base_url($carta['foto']) ?>" alt="foto" width="60" class="rounded">
+                        <?php else: ?>
+                            <span class="text-muted">Sin foto</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
                         <button class="btn btn-warning btn-sm btn-editar" 
                             data-id="<?= $carta['idcarta'] ?>"
                             data-idlocales="<?= $carta['idlocales'] ?>"
                             data-idseccion="<?= $carta['idseccion'] ?>"
                             data-nombreplato="<?= esc($carta['nombreplato']) ?>"
-                            data-descripcion="<?= esc($carta['descripcion'] ?? '') ?>"
-                            data-precio="<?= $carta['precio'] ?>">
+                            data-precio="<?= $carta['precio'] ?>"
+                            data-foto="<?= esc($carta['foto'] ?? '') ?>">
                             <i class="bi bi-pencil-square"></i>
                         </button>
 
@@ -49,7 +57,7 @@
                 </tr>
                 <?php endforeach; ?>
             <?php else: ?>
-                <tr><td colspan="7" class="text-center">No hay cartas registradas</td></tr>
+                <tr><td colspan="8" class="text-center">No hay cartas registradas</td></tr>
             <?php endif; ?>
         </tbody>
     </table>
@@ -59,7 +67,7 @@
 <div class="modal fade" id="modalRegistrar" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="formRegistrarCarta">
+            <form id="formRegistrarCarta" enctype="multipart/form-data">
                 <input type="hidden" name="accion" value="registrar">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title">Registrar Carta</h5>
@@ -87,10 +95,11 @@
                     <label>Plato</label>
                     <input type="text" class="form-control mb-2" name="nombreplato" required>
 
-    
-
                     <label>Precio</label>
-                    <input type="number" step="0.01" class="form-control" name="precio" required>
+                    <input type="number" step="0.01" class="form-control mb-2" name="precio" required>
+
+                    <label>Foto</label>
+                    <input type="file" class="form-control" name="foto" accept="image/*">
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-success">Registrar</button>
@@ -104,7 +113,7 @@
 <div class="modal fade" id="modalEditar" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form id="formEditarCarta">
+            <form id="formEditarCarta" enctype="multipart/form-data">
                 <input type="hidden" name="accion" value="actualizar">
                 <input type="hidden" name="idcarta" id="editId">
                 <div class="modal-header bg-warning text-dark">
@@ -131,9 +140,12 @@
                     <label>Plato</label>
                     <input type="text" class="form-control mb-2" name="nombreplato" id="editNombreplato" required>
 
-
                     <label>Precio</label>
-                    <input type="number" step="0.01" class="form-control" name="precio" id="editPrecio" required>
+                    <input type="number" step="0.01" class="form-control mb-2" name="precio" id="editPrecio" required>
+
+                    <label>Foto (opcional)</label>
+                    <input type="file" class="form-control mb-2" name="foto" accept="image/*">
+                    <div id="previewFoto" class="mt-2"></div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-warning">Actualizar</button>
@@ -174,6 +186,15 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('editSeccion').value = data.idseccion;
             document.getElementById('editNombreplato').value = data.nombreplato;
             document.getElementById('editPrecio').value = data.precio;
+
+            // Mostrar foto actual
+            if(data.foto){
+                document.getElementById('previewFoto').innerHTML = 
+                    `<img src="<?= base_url('uploads/cartas') ?>/${data.foto}" width="80" class="rounded">`;
+            } else {
+                document.getElementById('previewFoto').innerHTML = '<span class="text-muted">Sin foto</span>';
+            }
+
             new bootstrap.Modal(document.getElementById('modalEditar')).show();
         });
     });

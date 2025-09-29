@@ -16,7 +16,7 @@
     <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2">
       <div class="container">
         <!-- Logo -->
-      <a class="navbar-brand d-flex align-items-center" href="#">
+      <a class="navbar-brand d-flex align-items-center" href="<?= base_url('/') ?>">
         <img src="<?= base_url('img/inicio_logo.png') ?>" alt="Logo Ruta del Sabor" class="img-fluid" style="max-height: 50px;">
       </a>
 
@@ -39,16 +39,12 @@
             </li>
 
               <li class="nav-item  mx-2">
-             <a class="nav-link" href="<?= base_url('/mostrar') ?>">Categorías</a>
+             <a class="nav-link" href="<?= base_url('/categorias') ?>">Categorías</a>
             </li>
+            <li class="nav-item mx-2"><a class="nav-link" href="https://www.facebook.com/profile.php?id=61560111157759"><i class="fab fa-facebook fa-lg"></i></a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="https://api.whatsapp.com/send?phone=51983488541"><i class="fab fa-whatsapp fa-lg"></i></a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="quiqueronceros@gmail.com"> <i class="fas fa-envelope fa-lg"></i></a></li>
 
-            <li class="nav-item mx-2"> 
-              <a class="nav-link" href="<?= base_url('/vino') ?>">Vitinícolas</a>
-          </li>
-            <li class="nav-item mx-2"><a class="nav-link" href="#"> Blog</a></li>
-            <li class="nav-item mx-2"><a class="nav-link" href="#"><i class="fab fa-facebook fa-lg"></i></a></li>
-            <li class="nav-item mx-2"><a class="nav-link" href="#"><i class="fab fa-whatsapp fa-lg"></i></a></li>
-            <li class="nav-item mx-2"><a class="nav-link" href="#"><i class="fab fa-tiktok fa-lg"></i></a></li>
             <li class="nav-item mx-2">
                 <a class="nav-link" href="<?= base_url('/index') ?>" title="Panel de Administración">
                     <i class="fas fa-user-circle fa-lg"></i>

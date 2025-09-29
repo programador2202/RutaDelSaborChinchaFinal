@@ -17,11 +17,13 @@ class NegociosController extends BaseController
         $personaModel   = new Personas();
 
         $datos['negocios'] = $negocioModel
-            ->select('negocios.*, categorias.categoria, personas.nombres, personas.apellidos')
-            ->join('categorias', 'categorias.idcategoria = negocios.idcategoria')
-            ->join('personas', 'personas.idpersona = negocios.idrepresentante')
-            ->orderBy('negocios.idnegocio', 'ASC')
-            ->findAll();
+        ->select('negocios.*, categorias.categoria, personas.nombres, personas.apellidos')
+        ->join('categorias', 'categorias.idcategoria = negocios.idcategoria')
+        ->join('personas', 'personas.idpersona = negocios.idrepresentante')
+        ->orderBy('categorias.categoria', 'ASC') 
+        ->orderBy('negocios.idnegocio', 'ASC')
+        ->findAll();
+
 
         $datos['categorias'] = $categoriaModel
             ->select('idcategoria, categoria')
@@ -149,4 +151,6 @@ class NegociosController extends BaseController
 
         return $this->response->setJSON($respuesta);
     }
+
+    
 }

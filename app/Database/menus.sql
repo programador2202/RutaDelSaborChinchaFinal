@@ -88,8 +88,8 @@ CREATE TABLE locales (
 ALTER TABLE locales
 MODIFY latitud DOUBLE,
 MODIFY longitud DOUBLE;
-ALTER TABLE locales 
-DROP COLUMN foto;
+--ALTER TABLE locales 
+--DROP COLUMN foto;
 
 
 SELECT*FROM locales;
@@ -102,6 +102,11 @@ CREATE TABLE cartas (
     precio DECIMAL(10,2),
     FOREIGN KEY (idlocales) REFERENCES locales(idlocales)
 );
+
+ALTER TABLE cartas
+ADD foto VARCHAR(255) NULL;
+
+
 
 -- 10. SECCIONES
 CREATE TABLE secciones (
