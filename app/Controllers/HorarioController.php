@@ -4,77 +4,88 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\Horario;
+use App\Models\Locales;
+use Locale;
 
 class HorarioController extends BaseController
-{
+    {
 public function index()
 {
     $model = new Horario();
+    $modelLocales = new Locales();
 
     $data['horarios'] = $model
-        ->select('horarios.*, locales.direccion, locales.telefono, negocios.nombre AS negocio')
+        ->select('horarios.*, locales.direccion, locales.telefono, negocios.nombre AS negocio, negocios.nombrecomercial AS nombre_local')
         ->join('locales', 'locales.idlocales = horarios.idlocales')
-        ->join('negocios', 'negocios.idnegocio = locales.idnegocio') 
+        ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
         ->orderBy('horarios.diasemana', 'ASC')
         ->findAll();
 
-    $data['header'] = view('admin/dashboard'); 
+    // Consulta todos los locales y negocios para el select
+    $data['locales'] = $modelLocales
+        ->select('locales.*, negocios.nombre AS negocio')
+        ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
+        ->findAll();
+
+    $data['header'] = view('admin/dashboard');
     return view('admin/recursos/Horario', $data);
 }
 
 
-    public function crear()
-    {
-        return view('admin/horarios/Crear');
-    }
+public function ajax(){
 
-    public function guardar()
-    {
-        $model = new Horario();
+    $model = new Horario();
 
-        $data = [
-            'idlocales' => $this->request->getPost('idlocales'),
-            'diasemana' => $this->request->getPost('diasemana'),
-            'inicio'    => $this->request->getPost('inicio'),
-            'fin'       => $this->request->getPost('fin'),
+    $accion = $this->request->getVar('accion');
+    $respuesta = ['status' => 'error', 'mensaje' => 'Acción no definida'];
+
+    if($accion ==='registrar'){
+        $registro = [
+            'idlocales' => $this->request->getVar('idlocales'),
+            'diasemana' => $this->request->getVar('diasemana'),
+            'inicio'    => $this->request->getVar('inicio'),
+            'fin'       => $this->request->getVar('fin'),
         ];
 
-        $model->insert($data);
+        $model->insert($registro);
+        $respuesta = ['status' => 'success', 'mensaje' => 'Horario registrado correctamente'];
 
-        return redirect()->to(base_url('horarios'));
-    }
+    } elseif($accion === 'actualizar'){
+        $id = $this->request->getVar('idhorario');
+        $horario = $model->find($id);
 
-    public function editar($id)
-    {
-        $model = new Horario();
-        $data['horario'] = $model->find($id);
+        if(!$horario){
+            return $this->response->setJSON([
+                'status' => 'error',
+                'mensaje' => 'Horario no existe'
+            ]);
+        }
 
-        return view('admin/horarios/Editar', $data);
-    }
-
-    public function actualizar()
-    {
-        $model = new Horario();
-
-        $id = $this->request->getPost('idhorario');
-
-        $data = [
-            'idlocales' => $this->request->getPost('idlocales'),
-            'diasemana' => $this->request->getPost('diasemana'),
-            'inicio'    => $this->request->getPost('inicio'),
-            'fin'       => $this->request->getPost('fin'),
+        $actualizacion = [
+            'idlocales' => $this->request->getVar('idlocales'),
+            'diasemana' => $this->request->getVar('diasemana'),
+            'inicio'    => $this->request->getVar('inicio'),
+            'fin'       => $this->request->getVar('fin'),
         ];
 
-        $model->update($id, $data);
+        $model->update($id, $actualizacion);
+        $respuesta = ['status' => 'success', 'mensaje' => 'Horario actualizado correctamente'];
 
-        return redirect()->to(base_url('horarios'));
-    }
+    } elseif($accion === 'eliminar'){
+        $id = $this->request->getVar('idhorario');
+        $horario = $model->find($id);
 
-    public function eliminar($id)
-    {
-        $model = new Horario();
+        if(!$horario){
+            return $this->response->setJSON([
+                'status' => 'error',
+                'mensaje' => 'Horario no existe'
+            ]);
+        }
+
         $model->delete($id);
-
-        return redirect()->to(base_url('horarios'));
+        $respuesta = ['status' => 'success', 'mensaje' => 'Horario eliminado correctamente'];
     }
+    return $this->response->setJSON($respuesta);   
+    }
+    
 }
