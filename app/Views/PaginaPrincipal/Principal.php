@@ -34,36 +34,38 @@
       </div>
 
      
-   <!-- Categorías -->
+<!-- Categorías -->
 <div class="col-md-4">
   <h3 class="text-center mb-4"><b>Explora por Categorías</b></h3>
   <div class="list-group shadow-sm">
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('oriental')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Comida Oriental')">
       <i class="fas fa-utensils me-2"></i> Comida Oriental
     </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('hamburguesa')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Hamburguesas')">
       <i class="fas fa-hamburger me-2"></i> Hamburguesas
     </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('marisco')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Mariscos')">
       <i class="fas fa-fish me-2"></i> Mariscos
     </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('polleria')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Pollerías')">
       <i class="fas fa-drumstick-bite me-2"></i> Pollerías
     </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('pizza')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Pizzerías')">
       <i class="fas fa-pizza-slice me-2"></i> Pizzerías
     </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('cafe')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Cafeterías y Pastelerías')">
       <i class="fas fa-coffee me-2"></i> Cafeterías y Pastelerías
     </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('parrilla')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Parrillas')">
       <i class="fas fa-fire me-2"></i> Parrillas
     </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarCategoria('vino')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Vitivinícolas')">
       <i class="fas fa-wine-glass-alt me-2"></i> Vitivinícolas
     </button>
   </div>
 </div>
+
+
 </section>
 
 
@@ -220,96 +222,102 @@
     });
   </script>
 
- <script>
-  // Inicializamos el mapa centrado en Perú
-  var map = L.map('map').setView([-13.4096, -76.1325], 13);
+<script>
+// Inicializamos el mapa centrado en Perú
+var map = L.map('map').setView([-13.4096, -76.1325], 13);
 
-  // Capa base OpenStreetMap
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
+// Capa base OpenStreetMap
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '© OpenStreetMap'
+}).addTo(map);
 
-  // Datos de ejemplo (con campo categoria)
-  var restaurantes = [
-    {id: 1, nombre: "DAITO", categoria:"oriental", distrito: "Sunampe", direccion: "Av. Principal 388 - Carr. de Sunampe", telefono: "940790534", lat: -13.4163, lng: -76.1580},
-    {id: 2, nombre: "Mister Wok", categoria:"oriental", distrito: "Pueblo Nuevo", direccion: "Av. Óscar R. Benavides 598 - Plaza de Armas de Pueblo Nuevo", telefono: "924817518", lat: -13.4054, lng: -76.1302},
-    {id: 3, nombre: "Sacha Nikkei", categoria:"oriental", distrito: "Chincha Alta", direccion: "Los Ángeles 153, Chincha Alta", telefono: "924826030", lat: -13.4168, lng: -76.1345},
-    {id: 4, nombre: "El Gran Combo", categoria:"hamburguesa", distrito: "Chincha Alta", direccion: "Calle Grau N°427 - Chincha Alta - Perú", telefono: "995420277", lat: -13.4204, lng: -76.1327},
-    {id: 5, nombre: "¡Daddy’s Truck’s Burger!", categoria:"hamburguesa", distrito: "Chincha Alta", direccion: "Prolongación Lima, Urb Bancarios E4, Chincha Alta", telefono: "934617457", lat: -13.4279, lng: -76.1411},
-    {id: 6, nombre: "El Punto Marino", categoria:"marisco", distrito: "Chincha Alta", direccion: "Jr. Sebastián Barranca 551 Pueblo Nuevo, Chincha Alta, Peru", telefono: "978085372", lat: -13.4025, lng: -76.1324},
-    {id: 7, nombre: "Viñedos San Carlos", categoria:"vino", distrito: "Sunampe", direccion: "Av. Alfonso Ugarte 300 cercado Sunampe", telefono: "956351703", lat: -13.4283, lng: -76.1624},
-    {id: 8, nombre: "Viñedos Grimaldi", categoria:"vino", distrito: "Sunampe", direccion: "Av. Benavides 1412 Sunampe", telefono: "908913572", lat: -13.4136, lng: -76.1534},
-    {id: 9, nombre: "El Copete", categoria:"vino", distrito: "Chincha Alta", direccion: "Urb. Olivar del Sur Mz. C – Lt. 04", telefono: "964998037", lat: -13.4220, lng: -76.1380} 
-  ];
+var markers = [];
+var userMarker = null;
 
-  var markers = [];
-  var userMarker = null;
+// Función para limpiar marcadores
+function limpiarMarcadores() {
+  markers.forEach(m => map.removeLayer(m));
+  markers = [];
+}
 
-  // Función para pintar marcadores
-  function mostrarRestaurantes(lista) {
-    // Limpiar anteriores
-    markers.forEach(m => map.removeLayer(m));
-    markers = [];
+// Función para pintar marcadores
+function mostrarRestaurantes(lista) {
+  limpiarMarcadores();
 
-    lista.forEach(r => {
-      if (r.lat && r.lng) {
-        let marker = L.marker([r.lat, r.lng]).addTo(map)
-          .bindPopup(`
-            <b>${r.nombre}</b><br>
-            ${r.distrito}<br>
-            ${r.direccion}<br>
-            📞 ${r.telefono}
-          `);
-        markers.push(marker);
-      }
-    });
-
-    // Ajustar el mapa a los restaurantes visibles
-    if (lista.length > 0) {
-      var bounds = L.latLngBounds(lista.map(r => [r.lat, r.lng]));
-      map.fitBounds(bounds, { padding: [50, 50] });
+  lista.forEach(r => {
+    if (r.lat && r.lng) {
+      let marker = L.marker([r.lat, r.lng]).addTo(map)
+        .bindPopup(`
+          <b>${r.negocio}</b><br>
+          ${r.direccion}<br>
+          <small>${r.categoria}</small>
+        `);
+      markers.push(marker);
     }
+  });
+
+  // Ajustar el mapa a los restaurantes visibles
+  if (lista.length > 0) {
+    var bounds = L.latLngBounds(lista.map(r => [r.lat, r.lng]));
+    map.fitBounds(bounds, { padding: [50, 50] });
+  }
+}
+
+// Cargar restaurantes desde el backend (por texto)
+function cargarRestaurantes(texto = '') {
+  let url = '/mapa/restaurantes';
+  if (texto) {
+    url += '?q=' + encodeURIComponent(texto); // ahora filtramos por texto
   }
 
-  // Mostrar todos al inicio
-  mostrarRestaurantes(restaurantes);
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      mostrarRestaurantes(data);
 
-  // Geolocalización del usuario
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      function(position) {
-        const userLat = position.coords.latitude;
-        const userLng = position.coords.longitude;
-
-        if (userMarker) map.removeLayer(userMarker);
-
-        userMarker = L.marker([userLat, userLng], {
-          icon: L.icon({
-            iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-            iconSize: [32, 32]
-          })
-        }).addTo(map).bindPopup("<b>Estás aquí</b>").openPopup();
-
-      },
-      function(error) {
-        console.warn("Error obteniendo ubicación:", error.message);
+      // Centrar también en usuario si existe
+      if (userMarker && data.length > 0) {
+        const userPos = userMarker.getLatLng();
+        const bounds = L.latLngBounds(data.map(r => [r.lat, r.lng]).concat([[userPos.lat, userPos.lng]]));
+        map.fitBounds(bounds, { padding: [50, 50] });
       }
-    );
-  }
+    })
+    .catch(err => console.error("Error cargando restaurantes:", err));
+}
 
-  // Filtro por categoría
-  function filtrarCategoria(cat) {
-    const filtrados = restaurantes.filter(r => r.categoria === cat);
-    mostrarRestaurantes(filtrados);
+// Función llamada por los botones de categoría
+function filtrarTexto(texto) {
+  cargarRestaurantes(texto);
+}
 
-    // Centrar también en usuario si existe
-    if (userMarker) {
-      const userPos = userMarker.getLatLng();
-      const bounds = L.latLngBounds(filtrados.map(r => [r.lat, r.lng]).concat([[userPos.lat, userPos.lng]]));
-      map.fitBounds(bounds, { padding: [50, 50] });
+// Geolocalización del usuario
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+
+      if (userMarker) map.removeLayer(userMarker);
+
+      userMarker = L.marker([userLat, userLng], {
+        icon: L.icon({
+          iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
+          iconSize: [32, 32]
+        })
+      }).addTo(map).bindPopup("<b>Estás aquí</b>").openPopup();
+    },
+    function(error) {
+      console.warn("Error obteniendo ubicación:", error.message);
     }
-  }
+  );
+}
+
+// Cargar todos los restaurantes al cargar la página
+document.addEventListener("DOMContentLoaded", function() {
+  cargarRestaurantes();
+});
 </script>
+
 
 
   <!-- Scroll tarjetas -->
