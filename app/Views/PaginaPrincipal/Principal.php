@@ -8,8 +8,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="<?= base_url('assets/css/index.css') ?>">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
 </head>
 <body>
+ 
 
   <?= $header; ?>
   <main>
@@ -33,7 +35,7 @@
         <div id="map" style="height: 600px; border-radius: 12px; overflow: hidden;"></div>
       </div>
 
-     
+  
 <!-- Categorías -->
 <div class="col-md-4">
   <h3 class="text-center mb-4"><b>Explora por Categorías</b></h3>
@@ -41,7 +43,7 @@
     <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Comida Oriental')">
       <i class="fas fa-utensils me-2"></i> Comida Oriental
     </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Hamburguesas')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Hamburgueserias')">
       <i class="fas fa-hamburger me-2"></i> Hamburguesas
     </button>
     <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Mariscos')">
@@ -59,13 +61,11 @@
     <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Parrillas')">
       <i class="fas fa-fire me-2"></i> Parrillas
     </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Vitivinícolas')">
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Vitinicolas')">
       <i class="fas fa-wine-glass-alt me-2"></i> Vitivinícolas
     </button>
   </div>
 </div>
-
-
 </section>
 
 
@@ -148,31 +148,22 @@
     </section>
   </main>
 
-  <!-- CHAT -->
-  <a href="#" id="chatbot-fab" title="Chat inteligente"><i class="fas fa-robot"></i></a>
-  <div id="chatbot-window" style="display:none; position:fixed; bottom:100px; right:32px; width:320px; background:#fff; border-radius:16px; box-shadow:0 4px 16px rgba(0,0,0,0.2); z-index:10000; overflow:hidden;">
-    <div style="background:#007baf; color:#fff; padding:12px; font-weight:bold;">
-      Chat Inteligente
-      <span style="float:right; cursor:pointer;" onclick="document.getElementById('chatbot-window').style.display='none'">&times;</span>
-    </div>
-    <div style="text-align:center; color:#888; font-size:0.9rem;">¡Hola! ¿En qué puedo ayudarte?</div>
-    <div id="chatbot-messages" style="height:260px; overflow-y:auto; padding:10px; font-size:1rem;"></div>
-    <form id="chatbot-form" style="display:flex; border-top:1px solid #eee;">
-      <input type="text" id="chatbot-input" autocomplete="off" placeholder="Escribe tu consulta..." style="flex:1; border:none; padding:10px;">
-      <button type="submit" style="background:#007baf; color:#fff; border:none; padding:0 16px;">Enviar</button>
-    </form>
-  </div>
+  
+</body>
+</html>
 
+<?= $dinamica; ?>
   <!-- FOOTER -->
   <?= $footer; ?>
-
+  <script src="<?= base_url('assets/js/global.js') ?>"></script>
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-  <!-- Buscador y Autocomplete -->
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="<?= base_url('assets/js/Map.js') ?>"></script>
   <script>
-    const buscador = document.getElementById("buscador");
+    //buscador y atucomplete
+const buscador = document.getElementById("buscador");
     const btnBuscar = document.getElementById("btnBuscar");
     const sugerenciasDiv = document.getElementById("sugerencias");
     const resultadosDiv = document.getElementById("resultados");
@@ -220,142 +211,5 @@
         })
         .catch(err => console.error("Error en sugerencias:", err));
     });
+
   </script>
-
-<script>
-// Inicializamos el mapa centrado en Perú
-var map = L.map('map').setView([-13.4096, -76.1325], 13);
-
-// Capa base OpenStreetMap
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '© OpenStreetMap'
-}).addTo(map);
-
-var markers = [];
-var userMarker = null;
-
-// Función para limpiar marcadores
-function limpiarMarcadores() {
-  markers.forEach(m => map.removeLayer(m));
-  markers = [];
-}
-
-// Función para pintar marcadores
-function mostrarRestaurantes(lista) {
-  limpiarMarcadores();
-
-  lista.forEach(r => {
-    if (r.lat && r.lng) {
-      let marker = L.marker([r.lat, r.lng]).addTo(map)
-        .bindPopup(`
-          <b>${r.negocio}</b><br>
-          ${r.direccion}<br>
-          <small>${r.categoria}</small>
-        `);
-      markers.push(marker);
-    }
-  });
-
-  // Ajustar el mapa a los restaurantes visibles
-  if (lista.length > 0) {
-    var bounds = L.latLngBounds(lista.map(r => [r.lat, r.lng]));
-    map.fitBounds(bounds, { padding: [50, 50] });
-  }
-}
-
-// Cargar restaurantes desde el backend (por texto)
-function cargarRestaurantes(texto = '') {
-  let url = '/mapa/restaurantes';
-  if (texto) {
-    url += '?q=' + encodeURIComponent(texto); // ahora filtramos por texto
-  }
-
-  fetch(url)
-    .then(res => res.json())
-    .then(data => {
-      mostrarRestaurantes(data);
-
-      // Centrar también en usuario si existe
-      if (userMarker && data.length > 0) {
-        const userPos = userMarker.getLatLng();
-        const bounds = L.latLngBounds(data.map(r => [r.lat, r.lng]).concat([[userPos.lat, userPos.lng]]));
-        map.fitBounds(bounds, { padding: [50, 50] });
-      }
-    })
-    .catch(err => console.error("Error cargando restaurantes:", err));
-}
-
-// Función llamada por los botones de categoría
-function filtrarTexto(texto) {
-  cargarRestaurantes(texto);
-}
-
-// Geolocalización del usuario
-if (navigator.geolocation) {
-  navigator.geolocation.getCurrentPosition(
-    function(position) {
-      const userLat = position.coords.latitude;
-      const userLng = position.coords.longitude;
-
-      if (userMarker) map.removeLayer(userMarker);
-
-      userMarker = L.marker([userLat, userLng], {
-        icon: L.icon({
-          iconUrl: "https://cdn-icons-png.flaticon.com/512/684/684908.png",
-          iconSize: [32, 32]
-        })
-      }).addTo(map).bindPopup("<b>Estás aquí</b>").openPopup();
-    },
-    function(error) {
-      console.warn("Error obteniendo ubicación:", error.message);
-    }
-  );
-}
-
-// Cargar todos los restaurantes al cargar la página
-document.addEventListener("DOMContentLoaded", function() {
-  cargarRestaurantes();
-});
-</script>
-
-
-
-  <!-- Scroll tarjetas -->
-  <script>
-    function scrollRestaurantes(direction) {
-      const container = document.getElementById('restaurantesScroll');
-      const cardWidth = container.querySelector('.scroll-card').offsetWidth + 16;
-      container.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
-    }
-  </script>
-
-  <!-- Chat -->
-  <script>
-    document.getElementById('chatbot-fab').onclick = function(e) {
-      e.preventDefault();
-      var win = document.getElementById('chatbot-window');
-      win.style.display = win.style.display === 'none' ? 'block' : 'none';
-    };
-    document.getElementById('chatbot-form').onsubmit = async function(e) {
-      e.preventDefault();
-      const input = document.getElementById('chatbot-input');
-      const msg = input.value.trim();
-      if (!msg) return;
-      addMessage('Tú', msg);
-      input.value = '';
-      const res = await fetch('<?= base_url('controllers/chatbot.php') ?>', {
-        method: 'POST',
-        headers: {'Content-Type':'application/x-www-form-urlencoded'},
-        body: 'msg=' + encodeURIComponent(msg)
-      });
-      const data = await res.text();
-      addMessage('Bot', data);
-    };
-    function addMessage(sender, text) {
-      const box = document.getElementById('chatbot-messages');
-      box.innerHTML += `<div><b>${sender}:</b> ${text}</div>`;
-      box.scrollTop = box.scrollHeight;
-    }
-  </script>
-</body>
-</html>

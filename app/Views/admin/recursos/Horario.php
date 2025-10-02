@@ -5,7 +5,7 @@
 <div class="container mt-4">
     <h3>Gestión de Horarios</h3>
     <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalRegistrar">
-        <i class="bi bi-plus"></i> Nuevo Horario
+        <i class="bi bi-plus-circle"></i> Nuevo Horario
     </button>
     <table class="table table-bordered table-striped">
         <thead class="table-dark">

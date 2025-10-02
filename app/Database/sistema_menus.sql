@@ -4,7 +4,7 @@
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             12.8.0.6908
 -- --------------------------------------------------------
--- DROP DATABASE sistema_menus;
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
@@ -16,23 +16,23 @@
 
 
 -- Volcando estructura de base de datos para sistema_menus
- CREATE DATABASE IF NOT EXISTS `sistema_menus`;
- USE `sistema_menus`;
+CREATE DATABASE IF NOT EXISTS `sistema_menus` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `sistema_menus`;
 
 -- Volcando estructura para tabla sistema_menus.cartas
 CREATE TABLE IF NOT EXISTS `cartas` (
   `idcarta` int NOT NULL AUTO_INCREMENT,
   `idlocales` int NOT NULL,
   `idseccion` int NOT NULL,
-  `nombreplato` varchar(150)  NOT NULL,
+  `nombreplato` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `precio` decimal(10,2) DEFAULT NULL,
-  `foto` varchar(255)  DEFAULT NULL,
+  `foto` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`idcarta`),
   KEY `idlocales` (`idlocales`),
   KEY `fk_cartas_seccion` (`idseccion`),
   CONSTRAINT `cartas_ibfk_1` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`),
   CONSTRAINT `fk_cartas_seccion` FOREIGN KEY (`idseccion`) REFERENCES `secciones` (`idseccion`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.cartas: ~51 rows (aproximadamente)
 INSERT INTO `cartas` (`idcarta`, `idlocales`, `idseccion`, `nombreplato`, `precio`, `foto`) VALUES
@@ -91,9 +91,9 @@ INSERT INTO `cartas` (`idcarta`, `idlocales`, `idseccion`, `nombreplato`, `preci
 -- Volcando estructura para tabla sistema_menus.categorias
 CREATE TABLE IF NOT EXISTS `categorias` (
   `idcategoria` int NOT NULL AUTO_INCREMENT,
-  `categoria` varchar(100)  NOT NULL,
+  `categoria` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`idcategoria`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.categorias: ~12 rows (aproximadamente)
 INSERT INTO `categorias` (`idcategoria`, `categoria`) VALUES
@@ -114,15 +114,15 @@ INSERT INTO `categorias` (`idcategoria`, `categoria`) VALUES
 CREATE TABLE IF NOT EXISTS `comentarios` (
   `idcomentario` int NOT NULL AUTO_INCREMENT,
   `idlocales` int NOT NULL,
-  `tokenusuario` varchar(100)  DEFAULT NULL,
+  `tokenusuario` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `fechahora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `comentario` text,
+  `comentario` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
   `valoracion` int DEFAULT NULL,
   PRIMARY KEY (`idcomentario`),
   KEY `idlocales` (`idlocales`),
   CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`),
   CONSTRAINT `comentarios_chk_1` CHECK (((`valoracion` >= 1) and (`valoracion` <= 5)))
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.comentarios: ~0 rows (aproximadamente)
 
@@ -139,17 +139,17 @@ CREATE TABLE IF NOT EXISTS `contratos` (
   KEY `idnegocio` (`idnegocio`),
   CONSTRAINT `contratos_ibfk_1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`),
   CONSTRAINT `contratos_ibfk_2` FOREIGN KEY (`idnegocio`) REFERENCES `negocios` (`idnegocio`)
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.contratos: ~0 rows (aproximadamente)
 
 -- Volcando estructura para tabla sistema_menus.departamentos
 CREATE TABLE IF NOT EXISTS `departamentos` (
   `iddepartamento` int NOT NULL AUTO_INCREMENT,
-  `departamento` varchar(100)  NOT NULL,
+  `departamento` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`iddepartamento`),
   UNIQUE KEY `departamento` (`departamento`)
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.departamentos: ~25 rows (aproximadamente)
 INSERT INTO `departamentos` (`iddepartamento`, `departamento`) VALUES
@@ -182,12 +182,12 @@ INSERT INTO `departamentos` (`iddepartamento`, `departamento`) VALUES
 -- Volcando estructura para tabla sistema_menus.distritos
 CREATE TABLE IF NOT EXISTS `distritos` (
   `iddistrito` int NOT NULL AUTO_INCREMENT,
-  `distrito` varchar(100)  NOT NULL,
+  `distrito` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `idprovincia` int NOT NULL,
   PRIMARY KEY (`iddistrito`),
   KEY `idprovincia` (`idprovincia`),
   CONSTRAINT `distritos_ibfk_1` FOREIGN KEY (`idprovincia`) REFERENCES `provincias` (`idprovincia`)
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB AUTO_INCREMENT=1868 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.distritos: ~1,867 rows (aproximadamente)
 INSERT INTO `distritos` (`iddistrito`, `distrito`, `idprovincia`) VALUES
@@ -2063,23 +2063,30 @@ INSERT INTO `distritos` (`iddistrito`, `distrito`, `idprovincia`) VALUES
 CREATE TABLE IF NOT EXISTS `horarios` (
   `idhorario` int NOT NULL AUTO_INCREMENT,
   `idlocales` int NOT NULL,
-  `diasemana` enum('lunes','martes','miercoles','jueves','viernes','sabado','domingo') DEFAULT NULL,
+  `diasemana` enum('lunes','martes','miercoles','jueves','viernes','sabado','domingo') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `inicio` time DEFAULT NULL,
   `fin` time DEFAULT NULL,
   PRIMARY KEY (`idhorario`),
   KEY `idlocales` (`idlocales`),
   CONSTRAINT `horarios_ibfk_1` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`)
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.horarios: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.horarios: ~5 rows (aproximadamente)
+INSERT INTO `horarios` (`idhorario`, `idlocales`, `diasemana`, `inicio`, `fin`) VALUES
+	(1, 1, 'martes', '14:00:00', '22:00:00'),
+	(2, 1, 'miercoles', '14:00:00', '22:00:00'),
+	(3, 1, 'jueves', '14:00:00', '22:00:00'),
+	(4, 1, 'viernes', '14:00:00', '22:00:00'),
+	(5, 1, 'sabado', '14:00:00', '22:00:00'),
+	(6, 1, 'domingo', '14:00:00', '22:00:00');
 
 -- Volcando estructura para tabla sistema_menus.locales
 CREATE TABLE IF NOT EXISTS `locales` (
   `idlocales` int NOT NULL AUTO_INCREMENT,
   `idnegocio` int NOT NULL,
   `iddistrito` int NOT NULL,
-  `direccion` varchar(255)  DEFAULT NULL,
-  `telefono` varchar(20)  DEFAULT NULL,
+  `direccion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `telefono` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `latitud` double DEFAULT NULL,
   `longitud` double DEFAULT NULL,
   PRIMARY KEY (`idlocales`),
@@ -2087,7 +2094,7 @@ CREATE TABLE IF NOT EXISTS `locales` (
   KEY `iddistrito` (`iddistrito`),
   CONSTRAINT `locales_ibfk_1` FOREIGN KEY (`idnegocio`) REFERENCES `negocios` (`idnegocio`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `locales_ibfk_2` FOREIGN KEY (`iddistrito`) REFERENCES `distritos` (`iddistrito`)
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.locales: ~9 rows (aproximadamente)
 INSERT INTO `locales` (`idlocales`, `idnegocio`, `iddistrito`, `direccion`, `telefono`, `latitud`, `longitud`) VALUES
@@ -2099,25 +2106,25 @@ INSERT INTO `locales` (`idlocales`, `idnegocio`, `iddistrito`, `direccion`, `tel
 	(6, 9, 1001, 'Jr. Sebastián Barranca 551 Pueblo Nuevo, Chincha Alta, Peru', '978085372', -13.4024741, -76.1323894),
 	(7, 10, 1010, 'Av. Alfonso Ugarte 300 cercado Sunampe', '956351703', -13.4282777, -76.1623518),
 	(8, 11, 1010, 'Av. Benavides 1412 Sunampe', '908913572', -13.4135953, -76.1534393),
-	(9, 12, 1001, 'Urb. Olivar del Sur Mz. C – Lt. 04', '964998037', 13.41528, 76.12417);
+	(9, 12, 1001, 'Urb. Olivar del Sur Mz. C – Lt. 04', '964998037', -13.41528, -76.12417);
 
 -- Volcando estructura para tabla sistema_menus.negocios
 CREATE TABLE IF NOT EXISTS `negocios` (
   `idnegocio` int NOT NULL AUTO_INCREMENT,
   `idcategoria` int NOT NULL,
   `idrepresentante` int NOT NULL,
-  `nombre` varchar(150)  NOT NULL,
-  `nombrecomercial` varchar(150)  DEFAULT NULL,
-  `slogan` varchar(255)  DEFAULT NULL,
-  `ruc` varchar(11)  DEFAULT NULL,
-  `logo` varchar(255)  DEFAULT NULL,
+  `nombre` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nombrecomercial` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `slogan` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `ruc` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `logo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   PRIMARY KEY (`idnegocio`),
   UNIQUE KEY `ruc` (`ruc`),
   KEY `idcategoria` (`idcategoria`),
   KEY `idrepresentante` (`idrepresentante`),
   CONSTRAINT `negocios_ibfk_1` FOREIGN KEY (`idcategoria`) REFERENCES `categorias` (`idcategoria`),
   CONSTRAINT `negocios_ibfk_2` FOREIGN KEY (`idrepresentante`) REFERENCES `personas` (`idpersona`)
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.negocios: ~9 rows (aproximadamente)
 INSERT INTO `negocios` (`idnegocio`, `idcategoria`, `idrepresentante`, `nombre`, `nombrecomercial`, `slogan`, `ruc`, `logo`) VALUES
@@ -2134,29 +2141,30 @@ INSERT INTO `negocios` (`idnegocio`, `idcategoria`, `idrepresentante`, `nombre`,
 -- Volcando estructura para tabla sistema_menus.personas
 CREATE TABLE IF NOT EXISTS `personas` (
   `idpersona` int NOT NULL AUTO_INCREMENT,
-  `apellidos` varchar(100)  NOT NULL,
-  `nombres` varchar(100)  NOT NULL,
-  `tipodoc` varchar(20)  NOT NULL,
-  `numerodoc` varchar(20)  NOT NULL,
-  `telefono` varchar(20)  NOT NULL,
+  `apellidos` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nombres` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `tipodoc` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `numerodoc` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `telefono` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`idpersona`),
   UNIQUE KEY `numerodoc` (`numerodoc`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.personas: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.personas: ~0 rows (aproximadamente)
 INSERT INTO `personas` (`idpersona`, `apellidos`, `nombres`, `tipodoc`, `numerodoc`, `telefono`) VALUES
-	(1, 'Contreras Carrillo', 'Aimar', 'DNI', '73989219', '955365019');
+	(1, 'Contreras Carrillo', 'Aimar', 'DNI', '73989219', '955365019'),
+	(4, 'Flores', 'Lopez', 'DNI', '71548236', '956123456');
 
 -- Volcando estructura para tabla sistema_menus.provincias
 CREATE TABLE IF NOT EXISTS `provincias` (
   `idprovincia` int NOT NULL AUTO_INCREMENT,
-  `provincia` varchar(100)  NOT NULL,
+  `provincia` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `iddepartamento` int NOT NULL,
   PRIMARY KEY (`idprovincia`),
   UNIQUE KEY `provincia` (`provincia`),
   KEY `iddepartamento` (`iddepartamento`),
   CONSTRAINT `provincias_ibfk_1` FOREIGN KEY (`iddepartamento`) REFERENCES `departamentos` (`iddepartamento`)
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB AUTO_INCREMENT=197 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.provincias: ~196 rows (aproximadamente)
 INSERT INTO `provincias` (`idprovincia`, `provincia`, `iddepartamento`) VALUES
@@ -2357,20 +2365,6 @@ INSERT INTO `provincias` (`idprovincia`, `provincia`, `iddepartamento`) VALUES
 	(195, 'Padre Abad ', 25),
 	(196, 'Purús', 25);
 
--- Volcando estructura para tabla sistema_menus.recursos
-CREATE TABLE IF NOT EXISTS `recursos` (
-  `idrecurso` int NOT NULL AUTO_INCREMENT,
-  `idcarta` int NOT NULL,
-  `descripcion` varchar(255)  DEFAULT NULL,
-  `rutarecurso` varchar(255)  DEFAULT NULL,
-  `tiporecurso` enum('imagen','video')  DEFAULT NULL,
-  PRIMARY KEY (`idrecurso`),
-  KEY `idcarta` (`idcarta`),
-  CONSTRAINT `recursos_ibfk_1` FOREIGN KEY (`idcarta`) REFERENCES `cartas` (`idcarta`)
-) ENGINE=InnoDB;
-
--- Volcando datos para la tabla sistema_menus.recursos: ~0 rows (aproximadamente)
-
 -- Volcando estructura para tabla sistema_menus.reservas
 CREATE TABLE IF NOT EXISTS `reservas` (
   `idreserva` int NOT NULL AUTO_INCREMENT,
@@ -2387,16 +2381,16 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`idhorario`) REFERENCES `horarios` (`idhorario`),
   CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`idusuariovalida`) REFERENCES `usuarios` (`idusuario`),
   CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`idpersonasolicitud`) REFERENCES `personas` (`idpersona`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.reservas: ~0 rows (aproximadamente)
 
 -- Volcando estructura para tabla sistema_menus.secciones
 CREATE TABLE IF NOT EXISTS `secciones` (
   `idseccion` int NOT NULL AUTO_INCREMENT,
-  `seccion` varchar(100)  NOT NULL,
+  `seccion` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`idseccion`)
-) ENGINE=InnoDB ;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.secciones: ~9 rows (aproximadamente)
 INSERT INTO `secciones` (`idseccion`, `seccion`) VALUES
@@ -2413,19 +2407,20 @@ INSERT INTO `secciones` (`idseccion`, `seccion`) VALUES
 -- Volcando estructura para tabla sistema_menus.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `idusuario` int NOT NULL AUTO_INCREMENT,
-  `nombreusuario` varchar(50)  NOT NULL,
-  `claveacceso` varchar(255)  NOT NULL,
-  `nivelacceso` enum('admin','representante','cliente') DEFAULT 'cliente',
+  `nombreusuario` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `claveacceso` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `nivelacceso` enum('admin','representante','cliente') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'cliente',
   `idpersona` int NOT NULL,
   PRIMARY KEY (`idusuario`),
   UNIQUE KEY `nombreusuario` (`nombreusuario`),
   KEY `idpersona` (`idpersona`),
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`idpersona`) REFERENCES `personas` (`idpersona`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.usuarios: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.usuarios: ~0 rows (aproximadamente)
 INSERT INTO `usuarios` (`idusuario`, `nombreusuario`, `claveacceso`, `nivelacceso`, `idpersona`) VALUES
-	(1, 'admin1', '123456', 'admin', 1);
+	(1, 'admin1', '123456', 'admin', 1),
+	(3, 'flores2025', '159874263', '', 4);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

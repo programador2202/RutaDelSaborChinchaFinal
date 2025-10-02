@@ -10,7 +10,6 @@ $routes->get('/', 'Home::index');
 $routes->get('/nosotros', 'Home::nosotros');
 $routes->get('/categorias', 'Home::categorias');
 $routes->get('/index', 'Home::admin');
-$routes->get('/vino', 'Home::vitinicolas');
 $routes->get('/blog','Home::blog');
 $routes->get('negocios/detalle/(:num)', 'DetalleController::detalle/$1');
 
@@ -42,5 +41,7 @@ $routes->post('cartas/ajax', 'CartaController::ajax');
 // Rutas para horarios
 $routes->get('/horarios', 'HorarioController::index');
 $routes->post('Horario/ajax', 'HorarioController::ajax');
-// Rutas para recursos
-$routes->get('/recursos', 'RecursoController::index');
+//ruta para chatbox
+$routes->post('/chatbot', 'ChatController::index');
+
+

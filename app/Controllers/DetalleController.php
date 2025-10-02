@@ -43,7 +43,8 @@ class DetalleController extends BaseController
         $data = [
             'negocio' => $negocio,
             'header'  => view('Layouts/header'),
-            'footer'  => view('Layouts/footer')
+            'footer'  => view('Layouts/footer'),
+            'dinamica'=> view('Layouts/dinamica')
         ];
 
         return view('PaginaPrincipal/Recursos', $data);

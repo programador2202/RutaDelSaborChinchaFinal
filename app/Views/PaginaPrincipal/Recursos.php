@@ -37,6 +37,7 @@
 
  <!-- Platos -->
 <!-- Platos -->
+<!-- Platos -->
 <h2 class="text-danger mb-3">Platos</h2>
 <?php if(!empty($negocio['cartas'])): ?>
     <div class="row g-3">
@@ -58,10 +59,18 @@
                         <?php if(!empty($plato['descripcion'])): ?>
                             <p class="card-text text-muted small"><?= esc($plato['descripcion']) ?></p>
                         <?php endif; ?>
-                        <div class="mt-auto">
-                            <span class="badge bg-danger fs-6">
-                                $<?= number_format($plato['precio'], 2) ?>
-                            </span>
+
+                        <!-- Precio y botón agregar -->
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <span class="badge bg-danger fs-6">$<?= number_format($plato['precio'], 2) ?></span>
+                            <button class="btn btn-success btn-sm" 
+                                onclick='agregarAlCarrito({
+                                    nombre: "<?= esc($plato['nombreplato']) ?>",
+                                    precio: <?= esc($plato['precio']) ?>,
+                                    cantidad: 1
+                                })'>
+                                <i class="fas fa-cart-plus"></i> Agregar
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -71,6 +80,7 @@
 <?php else: ?>
     <p class="text-muted">No hay platos disponibles</p>
 <?php endif; ?>
+
 
 
 </div>
@@ -98,5 +108,8 @@
 <br>
 <br>
 <br>
+
+<?= $dinamica; ?>
+<script src="<?= base_url('assets/js/global.js') ?>"></script>
 
 <?= $footer; ?>

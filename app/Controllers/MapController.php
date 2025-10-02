@@ -9,7 +9,7 @@ class MapController extends Controller
 {
     public function restaurantes()
     {
-        $cat = $this->request->getGet('cat'); 
+        $cat = trim($this->request->getGet('cat')); 
         $localModel = new Locales();
 
         $query = $localModel
@@ -20,11 +20,10 @@ class MapController extends Controller
             ->where('locales.longitud IS NOT NULL');
 
         if ($cat) {
-            // Filtrar por texto de la categoría, coincidencia exacta
-            $query->where('categorias.categoria', $cat);
-            // Si quieres coincidencia parcial usar: ->like('categorias.categoria', $cat);
+            $query->like('categorias.categoria', $cat);
         }
 
-        return $this->response->setJSON($query->findAll());
+        $result = $query->findAll();
+        return $this->response->setJSON($result);
     }
 }
