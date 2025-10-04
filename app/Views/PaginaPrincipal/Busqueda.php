@@ -20,6 +20,7 @@
                         <?php endif; ?>
                         <small class="text-secondary">📍 <?= esc($row['direccion']); ?></small><br>
                     </div>
+                    
 
                     <!-- Botón correcto -->
                     <button class="btn btn-sm btn-success mt-2 align-self-start"

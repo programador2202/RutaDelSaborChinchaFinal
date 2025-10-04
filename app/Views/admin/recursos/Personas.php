@@ -3,45 +3,88 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.27/dist/sweetalert2.min.css" rel="stylesheet">
 
-<div class="container mt-4">
-    <h2>Gestión de Personas</h2>
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalRegistrar">
-        <i class="bi bi-person-plus"></i> Nueva Persona
-    </button>
+<style>
+  .card-custom {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  }
+  .card-header {
+    background: linear-gradient(45deg, #0d6efd, #0a58ca);
+    color: #fff;
+    border-radius: 12px 12px 0 0;
+    padding: 15px 20px;
+  }
+  .table thead th {
+    background: #f1f3f5;
+    color: #212529;
+    text-align: center;
+    font-weight: 600;
+  }
+  .table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+  .btn-action {
+    border-radius: 50px;
+    padding: 6px 10px;
+    margin: 0 2px;
+    font-size: 14px;
+  }
+  .btn-warning {
+    background-color: #ffc107;
+    border: none;
+  }
+  .btn-warning:hover {
+    background-color: #e0a800;
+  }
+  .btn-danger {
+    background-color: #dc3545;
+    border: none;
+  }
+  .btn-danger:hover {
+    background-color: #b02a37;
+  }
+</style>
 
-    <table class="table table-bordered table-striped align-middle">
-        <thead class="table-dark">
+<div class="container mt-4">
+  <div class="card card-custom">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0"><i class="bi bi-people-fill me-2"></i> Gestión de Personas</h5>
+      <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modalRegistrar">
+        <i class="bi bi-person-plus"></i> Nueva Persona
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
             <tr>
-                <th>ID</th>
-                <th>Apellidos</th>
-                <th>Nombres</th>
-                <th>Tipo Doc</th>
-                <th>Número Doc</th>
-                <th>Teléfono</th>
-                <th class="text-center">Acciones</th>
+              <th>ID</th>
+              <th>Apellidos</th>
+              <th>Nombres</th>
+              <th>Tipo Doc</th>
+              <th>Número Doc</th>
+              <th>Teléfono</th>
+              <th>Acciones</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             <?php foreach($personas as $p): ?>
             <tr>
-                <td><?= $p['idpersona'] ?></td>
-                <td><?= $p['apellidos'] ?></td>
-                <td><?= $p['nombres'] ?></td>
-                <td><?= $p['tipodoc'] ?></td>
-                <td><?= $p['numerodoc'] ?></td>
-                <td><?= $p['telefono'] ?></td>
-
-
+              <td class="text-center"><span class="badge bg-secondary"><?= $p['idpersona'] ?></span></td>
+              <td><?= $p['apellidos'] ?></td>
+              <td><?= $p['nombres'] ?></td>
+              <td class="text-center"><span class="badge bg-dark"><?= $p['tipodoc'] ?></span></td>
+              <td><?= $p['numerodoc'] ?></td>
+              <td><?= $p['telefono'] ?></td>
+              <td class="text-center">
+                <button class="btn btn-warning btn-sm btn-action" data-bs-toggle="modal" data-bs-target="#modalEditar<?= $p['idpersona'] ?>">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button class="btn btn-danger btn-sm btn-action btn-borrar" data-id="<?= $p['idpersona'] ?>">
+                  <i class="bi bi-trash"></i>
+                </button>
               </td>
-
-                <td class="text-center">
-                    <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditar<?= $p['idpersona'] ?>">
-                        <i class="bi bi-pencil-square"></i>
-                    </button>
-                    <button class="btn btn-danger btn-sm btn-borrar" data-id="<?= $p['idpersona'] ?>">
-                        <i class="bi bi-trash"></i>
-                    </button>
-                </td>
             </tr>
 
             <!-- Modal editar -->
@@ -89,9 +132,13 @@
               </div>
             </div>
             <?php endforeach; ?>
-        </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 <!-- Modal Registrar -->
 <div class="modal fade" id="modalRegistrar" tabindex="-1" aria-hidden="true">

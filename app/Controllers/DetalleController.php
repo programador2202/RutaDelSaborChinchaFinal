@@ -14,6 +14,8 @@ class DetalleController extends BaseController
         $cartasModel  = new Cartas();
 
         // Traer datos del negocio con joins
+        $diaSemana = date('N');
+
         $negocio = $negocioModel
             ->select('
                 negocios.*,
@@ -23,13 +25,28 @@ class DetalleController extends BaseController
                 locales.direccion,
                 locales.telefono,
                 locales.latitud,
-                locales.longitud
+                locales.longitud,
+                horarios.inicio,
+                horarios.fin
             ')
             ->join('categorias', 'categorias.idcategoria = negocios.idcategoria')
             ->join('personas', 'personas.idpersona = negocios.idrepresentante')
             ->join('locales', 'locales.idnegocio = negocios.idnegocio')
+            ->join('horarios', 'horarios.idlocales = locales.idlocales AND horarios.diasemana = '.$diaSemana, 'left')
             ->where('negocios.idnegocio', $idnegocio)
             ->first();
+
+            $estado = 'Cerrado';
+            $horaActual = date('H:i:s');
+
+            if (!empty($negocio['inicio']) && !empty($negocio['fin'])) {
+                if ($horaActual >= $negocio['inicio'] && $horaActual <= $negocio['fin']) {
+                    $estado = 'Abierto';
+                }
+            }
+
+            $negocio['estado'] = $estado;
+
 
      
         $negocio['cartas'] = $cartasModel
@@ -46,6 +63,8 @@ class DetalleController extends BaseController
             'footer'  => view('Layouts/footer'),
             'dinamica'=> view('Layouts/dinamica')
         ];
+
+        
 
         return view('PaginaPrincipal/Recursos', $data);
     }

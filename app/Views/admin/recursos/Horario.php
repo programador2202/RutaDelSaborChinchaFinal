@@ -2,59 +2,127 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
+<style>
+  .card-custom {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  }
+  .card-header {
+    background: linear-gradient(45deg, #0d6efd, #0a58ca);
+    color: #fff;
+    border-radius: 12px 12px 0 0;
+    padding: 15px 30px;
+  }
+  .table thead th {
+    background: #f1f3f5;
+    color: #212529;
+    text-align: center;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+  .table td, .table th {
+    vertical-align: middle;
+  }
+  .btn-action {
+    border-radius: 50px;
+    padding: 6px 10px;
+    margin: 0 2px;
+    font-size: 14px;
+  }
+  .btn-warning {
+    background-color: #ffc107;
+    border: none;
+  }
+  .btn-warning:hover {
+    background-color: #e0a800;
+  }
+  .btn-danger {
+    background-color: #dc3545;
+    border: none;
+  }
+  .btn-danger:hover {
+    background-color: #b02a37;
+  }
+  .col-texto {
+    max-width: 200px;       
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+</style>
+
 <div class="container mt-4">
-    <h3>Gestión de Horarios</h3>
-    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#modalRegistrar">
+  <div class="card card-custom">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0"><i class="bi bi-calendar-week me-2"></i> Gestión de Horarios</h5>
+      <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modalRegistrar">
         <i class="bi bi-plus-circle"></i> Nuevo Horario
-    </button>
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead>
             <tr>
-                <th>Negocio</th>
-                <th>Dirección</th>
-                <th>Teléfono</th>
-                <th>Día</th>
-                <th>Inicio</th>
-                <th>Fin</th>
-                <th>Acciones</th>
+              <th>Negocio</th>
+              <th>Dirección</th>
+              <th>Teléfono</th>
+              <th>Día</th>
+              <th>Inicio</th>
+              <th>Fin</th>
+              <th>Acciones</th>
             </tr>
-        </thead>
-        <tbody>
-        <?php foreach ($horarios as $h): ?>
-            <tr>
-                <td><?= $h['negocio'] ?></td>
-                <td><?= $h['direccion'] ?></td>
-                <td><?= $h['telefono'] ?></td>
-                <td><?= $h['diasemana'] ?></td>
-                <td><?= $h['inicio'] ?></td>
-                <td><?= $h['fin'] ?></td>
-                <td>
-                    <a href="#" 
-                       class="btn btn-warning btn-sm btn-editar" 
+          </thead>
+          <tbody>
+            <?php if (!empty($horarios)): ?>
+              <?php foreach ($horarios as $h): ?>
+                <tr id="row<?= $h['idhorario'] ?>">
+                  <td><?= esc($h['negocio']) ?></td>
+                  <td class="col-texto"><?= esc($h['direccion']) ?></td>
+                  <td><?= esc($h['telefono']) ?></td>
+                  <td><span class="badge bg-info text-dark"><?= esc($h['diasemana']) ?></span></td>
+                  <td><?= esc($h['inicio']) ?></td>
+                  <td><?= esc($h['fin']) ?></td>
+                  <td class="text-center">
+                    <button class="btn btn-warning btn-sm btn-action btn-editar" 
                        data-id="<?= $h['idhorario'] ?>"
                        data-dia="<?= $h['diasemana'] ?>"
                        data-inicio="<?= $h['inicio'] ?>"
                        data-fin="<?= $h['fin'] ?>"
                        data-local="<?= $h['idlocales'] ?>">
-                        <i class="bi bi-pencil"></i>
-                    </a>
-                    <a href="#" 
-                       class="btn btn-danger btn-sm btn-eliminar"
+                      <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm btn-action btn-eliminar"
                        data-id="<?= $h['idhorario'] ?>">
-                        <i class="bi bi-trash"></i>
-                    </a>
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              <?php endforeach ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="7" class="text-center">
+                  <div class="alert alert-info mb-0">No hay horarios registrados</div>
                 </td>
-            </tr>
-        <?php endforeach ?>
-        </tbody>
-    </table>
+              </tr>
+            <?php endif; ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 <!-- Modal Registrar -->
 <div class="modal fade" id="modalRegistrar" tabindex="-1" aria-labelledby="modalRegistrarLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header  bg-primary text-white">
                 <h5 class="modal-title" id="modalRegistrarLabel">Registrar Nuevo Horario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
@@ -103,8 +171,8 @@
 <div class="modal fade" id="modalEditar" tabindex="-1" aria-labelledby="modalEditarLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarLabel">Editar Horario</h5>
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title" id="modalEditarLabel"><i class="bi bi-pencil-square"></i>Editar Horario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

@@ -28,8 +28,6 @@ class MostrarController extends BaseController
 
         // Todas las categorías
         $data['categorias'] = $categoriaModel->orderBy('categoria', 'ASC')->findAll();
-
-        // Ejemplo: últimas 6 cartas (platos) destacadas
         $data['cartas'] = $cartaModel
             ->select('cartas.*, secciones.seccion, locales.direccion')
             ->join('secciones', 'secciones.idseccion = cartas.idseccion')

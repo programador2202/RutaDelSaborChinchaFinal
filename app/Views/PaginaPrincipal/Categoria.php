@@ -8,17 +8,17 @@
   /* Card hover */
 
   .swiper-slide {
-  display: flex;          /* hace que ocupe toda la altura */
-  height: auto;           /* evita que Swiper fuerce tamaños */
+  display: flex;         
+  height: auto;           
 }
 
 .card-business {
-  height: 100%;           /* todas las cards igual de altas */
+  height: 100%;           
   display: flex;
-  flex-direction: column; /* cuerpo flexible */
+  flex-direction: column; 
 }
 .card-business .card-body {
-  flex-grow: 1;           /* hace que el body se expanda */
+  flex-grow: 1;           
   display: flex;
   flex-direction: column;
 }
@@ -38,9 +38,9 @@
     padding-bottom: 5px;   
     font-weight: bold;
     font-size: 1.5rem;
-    color: #000000ff;        /* texto rojo */
-    border-bottom: 3px solid #dc3545; /* línea debajo del título */
-    border-radius: 2px;    /* bordes ligeramente redondeados */
+    color: #000000ff;        
+    border-bottom: 3px solid #dc3545; 
+    border-radius: 2px; 
 }
 
 /* Botones de navegación de Swiper */

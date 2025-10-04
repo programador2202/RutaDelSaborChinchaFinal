@@ -24,8 +24,13 @@
             <?php if(!empty($negocio['telefono'])): ?>
                 <p><strong>Teléfono:</strong> <a href="tel:<?= esc($negocio['telefono']) ?>" class="text-decoration-none"><?= esc($negocio['telefono']) ?></a></p>
             <?php endif; ?>
+            
+            
         </div>
+        
+        
     </div>
+    
 
     <!-- Mapa -->
     <?php if(!empty($negocio['latitud']) && !empty($negocio['longitud'])): ?>
@@ -35,8 +40,6 @@
         </div>
     <?php endif; ?>
 
- <!-- Platos -->
-<!-- Platos -->
 <!-- Platos -->
 <h2 class="text-danger mb-3">Platos</h2>
 <?php if(!empty($negocio['cartas'])): ?>
