@@ -70,7 +70,7 @@
 
 
     <!-- Destacados -->
-    <section class="py-5 bg-white">
+   <section class="py-5 bg-white">
       <div class="container">
         <h2 class="text-center mb-4 text-black"><b>Destacado Del Mes</b></h2>
         <div class="scroll-wrapper">

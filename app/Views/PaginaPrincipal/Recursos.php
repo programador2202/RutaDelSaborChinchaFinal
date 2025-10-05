@@ -113,6 +113,8 @@
 <br>
 
 <?= $dinamica; ?>
-<script src="<?= base_url('assets/js/global.js') ?>"></script>
+<script src="<?= base_url('assets/js/global.js') ?>">
+</script>
+
 
 <?= $footer; ?>

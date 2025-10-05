@@ -44,4 +44,8 @@ $routes->post('Horario/ajax', 'HorarioController::ajax');
 //ruta para chatbox
 $routes->post('/chatbot', 'ChatController::index');
 
+//ruta para contratos 
+$routes->get('/contratos', 'ContratoController::index');
+$routes->post('contrato/ajax','ContratoController::ajax');
+
 

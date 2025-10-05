@@ -5,7 +5,6 @@
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
 <style>
-  /* Card hover */
 
   .swiper-slide {
   display: flex;         

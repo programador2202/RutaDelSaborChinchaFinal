@@ -126,3 +126,5 @@ document.getElementById('chatbot-form').addEventListener('submit', function(e) {
         cont.scrollTop = cont.scrollHeight;
     }, 500);
 });
+
+ 
