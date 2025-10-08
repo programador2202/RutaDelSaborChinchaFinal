@@ -43,7 +43,11 @@
             </li>
             <li class="nav-item mx-2"><a class="nav-link" href="https://www.facebook.com/profile.php?id=61560111157759"><i class="fab fa-facebook fa-lg"></i></a></li>
             <li class="nav-item mx-2"><a class="nav-link" href="https://api.whatsapp.com/send?phone=51983488541"><i class="fab fa-whatsapp fa-lg"></i></a></li>
-            <li class="nav-item mx-2"><a class="nav-link" href="quiqueronceros@gmail.com"> <i class="fas fa-envelope fa-lg"></i></a></li>
+           <li class="nav-item mx-2">
+            <a class="nav-link" href="mailto:quiqueronceros@gmail.com" target="_blank">
+              <i class="fas fa-envelope fa-lg"></i>
+            </a>
+          </li>
 
             <li class="nav-item mx-2">
                 <a class="nav-link" href="<?= base_url('/index') ?>" title="Panel de Administración">

@@ -231,94 +231,107 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', () => {
+  const AJAX_URL = "<?= base_url('cartas/ajax') ?>"; 
 
-    // Registrar carta
-    document.getElementById('formRegistrarCarta').addEventListener('submit', function(e){
-        e.preventDefault();
-        fetch("<?= base_url('cartas/ajax') ?>", {
-            method: 'POST',
-            body: new FormData(this)
-        }).then(res => res.json())
-          .then(data => {
-              Swal.fire({
-                  icon: data.status==='success'?'success':'error',
-                  title: data.message,
-                  timer: 1500,
-                  showConfirmButton:false
-              }).then(()=>{ if(data.status==='success') location.reload(); });
-          });
+  const showAlert = (icon, title, timer = 1500) =>
+    Swal.fire({ icon, title, timer, showConfirmButton: false, timerProgressBar: true });
+
+  const sendRequest = async (formData) => {
+    try {
+      const res = await fetch(AJAX_URL, { method: 'POST', body: formData });
+      return await res.json();
+    } catch (err) {
+      console.error('Fetch error:', err);
+      showAlert('error', 'Error de conexión');
+      return null;
+    }
+  };
+
+  // Registrar carta
+  document.getElementById('formRegistrarCarta')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    formData.append('accion', 'registrar');
+
+    Swal.fire({ title: 'Registrando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    const data = await sendRequest(formData);
+    Swal.close();
+
+    if (!data) return;
+    showAlert(data.status === 'success' ? 'success' : 'error', data.message)
+      .then(() => { if (data.status === 'success') location.reload(); });
+  });
+
+  // Editar carta (abrir modal con datos)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-editar');
+    if (!btn) return;
+    const data = btn.dataset;
+
+    document.getElementById('editId').value = data.id;
+    document.getElementById('editLocal').value = data.idlocales;
+    document.getElementById('editSeccion').value = data.idseccion;
+    document.getElementById('editNombreplato').value = data.nombreplato;
+    document.getElementById('editPrecio').value = data.precio;
+
+    if (data.foto) {
+      document.getElementById('previewFoto').innerHTML =
+        `<img src="<?= base_url('uploads/cartas') ?>/${data.foto}" width="80" class="rounded">`;
+    } else {
+      document.getElementById('previewFoto').innerHTML = '<span class="text-muted">Sin foto</span>';
+    }
+
+    new bootstrap.Modal(document.getElementById('modalEditar')).show();
+  });
+
+  // Actualizar carta
+  document.getElementById('formEditarCarta')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    formData.append('accion', 'actualizar');
+
+    Swal.fire({ title: 'Actualizando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    const data = await sendRequest(formData);
+    Swal.close();
+
+    if (!data) return;
+    showAlert(data.status === 'success' ? 'success' : 'error', data.message)
+      .then(() => { if (data.status === 'success') location.reload(); });
+  });
+
+  // Eliminar carta
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.btn-eliminar');
+    if (!btn) return;
+
+    const confirm = await Swal.fire({
+      title: '¿Está seguro de eliminar esta carta?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33'
     });
 
-    // Editar carta (abrir modal con datos)
-    document.querySelectorAll('.btn-editar').forEach(btn=>{
-        btn.addEventListener('click', function(){
-            const data = btn.dataset;
-            document.getElementById('editId').value = data.id;
-            document.getElementById('editLocal').value = data.idlocales;
-            document.getElementById('editSeccion').value = data.idseccion;
-            document.getElementById('editNombreplato').value = data.nombreplato;
-            document.getElementById('editPrecio').value = data.precio;
+    if (!confirm.isConfirmed) return;
 
-            // Mostrar foto actual
-            if(data.foto){
-                document.getElementById('previewFoto').innerHTML = 
-                    `<img src="<?= base_url('uploads/cartas') ?>/${data.foto}" width="80" class="rounded">`;
-            } else {
-                document.getElementById('previewFoto').innerHTML = '<span class="text-muted">Sin foto</span>';
-            }
+    const fd = new FormData();
+    fd.append('accion', 'eliminar');
+    fd.append('idcarta', btn.dataset.id);
 
-            new bootstrap.Modal(document.getElementById('modalEditar')).show();
-        });
-    });
+    Swal.fire({ title: 'Eliminando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    const data = await sendRequest(fd);
+    Swal.close();
 
-    // Actualizar carta
-    document.getElementById('formEditarCarta').addEventListener('submit', function(e){
-        e.preventDefault();
-        fetch("<?= base_url('cartas/ajax') ?>", {
-            method:'POST',
-            body: new FormData(this)
-        }).then(res=>res.json())
-          .then(data=>{
-              Swal.fire({
-                  icon: data.status==='success'?'success':'error',
-                  title: data.message,
-                  timer:1500,
-                  showConfirmButton:false
-              }).then(()=>{ if(data.status==='success') location.reload(); });
-          });
-    });
-
-    // Eliminar carta
-    document.querySelectorAll('.btn-eliminar').forEach(btn=>{
-        btn.addEventListener('click', function(){
-            Swal.fire({
-                title: '¿Está seguro de eliminar esta carta?',
-                icon:'warning',
-                showCancelButton:true,
-                confirmButtonColor:'#d33',
-                cancelButtonColor:'#3085d6',
-                confirmButtonText:'Sí, eliminar',
-                cancelButtonText:'Cancelar'
-            }).then(result=>{
-                if(result.isConfirmed){
-                    let formData = new FormData();
-                    formData.append('accion','eliminar');
-                    formData.append('idcarta', btn.dataset.id);
-                    fetch("<?= base_url('cartas/ajax') ?>", { method:'POST', body:formData })
-                        .then(res=>res.json())
-                        .then(data=>{
-                            Swal.fire({
-                                icon:data.status==='success'?'success':'error',
-                                title:data.message,
-                                timer:1500,
-                                showConfirmButton:false
-                            }).then(()=>{ if(data.status==='success') location.reload(); });
-                        });
-                }
-            });
-        });
-    });
+    if (!data) return;
+    showAlert(data.status === 'success' ? 'success' : 'error', data.message)
+      .then(() => { if (data.status === 'success') location.reload(); });
+  });
 
 });
 </script>
+

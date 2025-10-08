@@ -1,120 +1,223 @@
 <?= $header; ?>
 
+
+<style>
+.hover-scale:hover { transform: scale(1.02); transition: 0.3s; }
+.rating { direction: rtl; display: inline-flex; }
+.rating input { display: none; }
+.rating label { font-size: 2rem; color: #ccc; cursor: pointer; }
+.rating input:checked ~ label,
+.rating label:hover,
+.rating label:hover ~ label { color: gold; }
+
+/* Estilo de comentarios (tipo Google Play) */
+.list-group-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #fff;
+}
+.list-group-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+.text-warning.small {
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+</style>
+
+
 <div class="container mt-5">
-    <!-- Información general del restaurante -->
-    <div class="row mb-4 align-items-center bg-light p-4 rounded shadow-sm">
-        <div class="col-md-4 text-center mb-3 mb-md-0">
-            <img src="<?= !empty($negocio['logo']) ? base_url($negocio['logo']) : base_url('assets/img/negocios/default.png') ?>" 
-            class="img-fluid rounded shadow-sm bg-white" 
-            alt="Logo de <?= esc($negocio['nombre']) ?>" 
-            style="max-height:350px; width:100%; object-fit:contain; padding:10px;">
 
+    <!-- Información del negocio -->
+    <div class="card shadow-lg border-0 mb-5">
+        <div class="row g-0 align-items-center">
+            <div class="col-md-4 text-center bg-light p-4">
+                <img src="<?= !empty($negocio['logo']) ? base_url($negocio['logo']) : base_url('assets/img/negocios/default.png') ?>" 
+                     class="img-fluid rounded-3 shadow-sm" 
+                     alt="Logo de <?= esc($negocio['nombre']) ?>" 
+                     style="max-height:220px; object-fit:contain;">
+            </div>
+            <div class="col-md-8 p-4">
+                <h1 class="fw-bold text-danger mb-2"><?= esc($negocio['nombre']) ?></h1>
+                <?php if (!empty($negocio['slogan'])): ?>
+                    <p class="text-secondary fst-italic"><?= esc($negocio['slogan']) ?></p>
+                <?php endif; ?>
 
+                <div class="mt-3">
+                    <p><i class="bi bi-tag-fill text-danger"></i> <strong>Categoría:</strong> <?= esc($negocio['categoria']) ?></p>
+                    <?php if (!empty($negocio['direccion'])): ?>
+                        <p><i class="bi bi-geo-alt-fill text-danger"></i> <strong>Dirección:</strong> <?= esc($negocio['direccion']) ?></p>
+                    <?php endif; ?>
+                    <?php if (!empty($negocio['telefono'])): ?>
+                        <p><i class="bi bi-telephone-fill text-danger"></i>
+                            <a href="tel:<?= esc($negocio['telefono']) ?>" class="text-decoration-none">
+                                <?= esc($negocio['telefono']) ?>
+                            </a>
+                        </p>
+                    <?php endif; ?>
+                    <p><i class="bi bi-clock-fill text-danger"></i>
+                        <strong>Estado:</strong>
+                        <span class="<?= $negocio['estado'] == 'Abierto' ? 'text-success' : 'text-secondary' ?>">
+                            <?= esc($negocio['estado']) ?>
+                        </span>
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="col-md-8">
-            <h1 class="fw-bold text-danger"><?= esc($negocio['nombre']) ?></h1>
-            <?php if(!empty($negocio['slogan'])): ?>
-                <p class="text-muted fs-5"><?= esc($negocio['slogan']) ?></p>
-            <?php endif; ?>
-            <p><strong>Categoría:</strong> <?= esc($negocio['categoria']) ?></p>
-           <!--<p><strong>Representante:</strong>' . esc($negocio['nombres'] . ' ' . $negocio['apellidos']) . '</p>';-->
-            <?php if(!empty($negocio['direccion'])): ?>
-                <p><strong>Dirección:</strong> <?= esc($negocio['direccion']) ?></p>
-            <?php endif; ?>
-            <?php if(!empty($negocio['telefono'])): ?>
-                <p><strong>Teléfono:</strong> <a href="tel:<?= esc($negocio['telefono']) ?>" class="text-decoration-none"><?= esc($negocio['telefono']) ?></a></p>
-            <?php endif; ?>
-            
-            
-        </div>
-        
-        
     </div>
-    
 
     <!-- Mapa -->
-    <?php if(!empty($negocio['latitud']) && !empty($negocio['longitud'])): ?>
-        <div class="my-4">
-            <h4 class="text-danger mb-3">Ubicación</h4>
-            <div id="map" style="width:100%; height:350px; border-radius:8px;"></div>
+    <?php if (!empty($negocio['latitud']) && !empty($negocio['longitud'])): ?>
+        <div class="card border-0 shadow-sm mb-5">
+            <div class="card-header bg-danger text-white fw-bold">Ubicación</div>
+            <div class="card-body p-0">
+                <div id="map" style="width:100%; height:350px; border-radius:0 0 12px 12px;"></div>
+            </div>
         </div>
     <?php endif; ?>
 
-<!-- Platos -->
-<h2 class="text-danger mb-3">Platos</h2>
-<?php if(!empty($negocio['cartas'])): ?>
-    <div class="row g-3">
-        <?php foreach($negocio['cartas'] as $plato): ?>
-            <div class="col-md-4 col-sm-6">
-                <div class="card h-100 shadow-sm">
-                    
-                    <!-- Imagen dentro de un ratio fijo -->
-                    <div class="ratio ratio-4x3">
-                        <img src="<?= !empty($plato['foto']) ? base_url($plato['foto']) : base_url('assets/img/platos/default.png') ?>" 
-                             class="w-90 h-100 rounded-top" 
-                             alt="<?= esc($plato['nombreplato']) ?>" 
-                             style="object-fit: cover;">
-                    </div>
+    <!-- Platos -->
+    <h2 class="fw-bold text-danger mb-4">Platos destacados</h2>
+    <?php if (!empty($negocio['cartas'])): ?>
+        <div class="row g-4">
+            <?php foreach ($negocio['cartas'] as $plato): ?>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card h-100 border-0 shadow-sm hover-scale">
+                        <div class="ratio ratio-4x3">
+                            <img src="<?= !empty($plato['foto']) ? base_url($plato['foto']) : base_url('assets/img/platos/default.png') ?>"
+                                 class="rounded-top" alt="<?= esc($plato['nombreplato']) ?>"
+                                 style="object-fit:cover;">
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-dark"><?= esc($plato['nombreplato']) ?></h5>
+                            <?php if (!empty($plato['descripcion'])): ?>
+                                <p class="card-text text-muted small"><?= esc($plato['descripcion']) ?></p>
+                            <?php endif; ?>
 
-                    <!-- Contenido del card -->
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title"><?= esc($plato['nombreplato']) ?></h5>
-                        <?php if(!empty($plato['descripcion'])): ?>
-                            <p class="card-text text-muted small"><?= esc($plato['descripcion']) ?></p>
-                        <?php endif; ?>
-
-                        <!-- Precio y botón agregar -->
-                        <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <span class="badge bg-danger fs-6">$<?= number_format($plato['precio'], 2) ?></span>
-                            <button class="btn btn-success btn-sm" 
-                                onclick='agregarAlCarrito({
-                                    nombre: "<?= esc($plato['nombreplato']) ?>",
-                                    precio: <?= esc($plato['precio']) ?>,
-                                    cantidad: 1
-                                })'>
-                                <i class="fas fa-cart-plus"></i> Agregar
-                            </button>
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <span class="fw-bold text-danger fs-6">S/<?= number_format($plato['precio'], 2) ?></span>
+                                <button class="btn btn-outline-success btn-sm rounded-pill px-3"
+                                        onclick='agregarAlCarrito({
+                                            nombre: "<?= esc($plato['nombreplato']) ?>",
+                                            precio: <?= esc($plato['precio']) ?>,
+                                            cantidad: 1
+                                        })'>
+                                    <i class="fas fa-cart-plus"></i> Agregar
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
+            <?php endforeach; ?>
+        </div>
+    <?php else: ?>
+        <p class="text-muted">No hay platos disponibles</p>
+    <?php endif; ?>
+
+    <!-- Comentarios -->
+    <hr class="my-5">
+    <div class="mb-5">
+        <h3 class="fw-bold text-danger mb-3">Opiniones de clientes</h3>
+
+        <?php if (isset($promedio) && $promedio > 0): ?>
+            <div class="text-center mb-4">
+                <h2 class="fw-bold"><?= number_format($promedio, 1) ?>/5</h2>
+                <div class="text-warning fs-4">
+                    <?= str_repeat('★', round($promedio)) . str_repeat('☆', 5 - round($promedio)) ?>
+                </div>
+                <small class="text-muted">(<?= count($comentarios) ?> opiniones)</small>
             </div>
-        <?php endforeach; ?>
+        <?php endif; ?>
+        
+
+        <!-- Formulario de comentario -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <form id="formComentario" method="post" action="<?= base_url('comentarios/guardar') ?>">
+                    <input type="hidden" name="idlocales" value="<?= $negocio['idlocales'] ?>">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tu valoración</label>
+                        <div class="rating">
+                            <?php for ($i = 5; $i >= 1; $i--): ?>
+                                <input type="radio" name="valoracion" value="<?= $i ?>" id="star<?= $i ?>">
+                                <label for="star<?= $i ?>">★</label>
+                            <?php endfor; ?>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <textarea name="comentario" class="form-control rounded-3 shadow-sm" rows="3" placeholder="Escribe tu opinión..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-danger rounded-pill px-4">
+                        <i class="fas fa-paper-plane"></i> Publicar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Listado de comentarios (estilo Google Play) -->
+        <?php if (!empty($comentarios)): ?>
+            <div class="list-group">
+                <?php foreach ($comentarios as $c): ?>
+                    <div class="list-group-item border-0 shadow-sm mb-3 rounded-4 p-4">
+                        <div class="d-flex align-items-start">
+                            <img src="<?= base_url('/img/inicioSesion.png') ?>"
+                                 class="rounded-circle me-3 border"
+                                 width="55" height="55"
+                                 alt="avatar">
+
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="fw-bold mb-0 text-dark">
+                                        <?= esc($c['tokenusuario'] ?? 'Usuario de Google') ?>
+                                    </h6>
+                                    <small class="text-muted">
+                                        <?= date('d/m/Y', strtotime($c['fechahora'])) ?>
+                                    </small>
+                                </div>
+
+                                <div class="text-warning small mb-1">
+                                    <?= str_repeat('★', $c['valoracion']) . str_repeat('☆', 5 - $c['valoracion']) ?>
+                                </div>
+
+                                <p class="mb-0 text-secondary" style="font-size: 0.95rem;">
+                                    <?= esc($c['comentario']) ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="text-center text-muted py-4">
+                <i class="bi bi-chat-left-text fs-2"></i>
+                <p class="mt-2">Aún no hay opiniones. ¡Sé el primero en opinar!</p>
+            </div>
+        <?php endif; ?>
     </div>
-<?php else: ?>
-    <p class="text-muted">No hay platos disponibles</p>
-<?php endif; ?>
-
-
-
 </div>
 
-<?php if(!empty($negocio['latitud']) && !empty($negocio['longitud'])): ?>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script>
-    const map = L.map('map').setView([<?= esc($negocio['latitud']) ?>, <?= esc($negocio['longitud']) ?>], 16);
 
-    // Mapa base OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    // Marcador del restaurante
-    L.marker([<?= esc($negocio['latitud']) ?>, <?= esc($negocio['longitud']) ?>])
-        .addTo(map)
-        .bindPopup("<b><?= esc($negocio['nombre']) ?></b>")
-        .openPopup();
-</script>
+<!-- Mapa con Leaflet -->
+<?php if (!empty($negocio['latitud']) && !empty($negocio['longitud'])): ?>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([<?= esc($negocio['latitud']) ?>, <?= esc($negocio['longitud']) ?>], 16);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+        L.marker([<?= esc($negocio['latitud']) ?>, <?= esc($negocio['longitud']) ?>])
+            .addTo(map)
+            .bindPopup("<b><?= esc($negocio['nombre']) ?></b>")
+            .openPopup();
+    </script>
 <?php endif; ?>
 
-<br>
-<br>
-<br>
-<br>
 
+<br><br>
 <?= $dinamica; ?>
-<script src="<?= base_url('assets/js/global.js') ?>">
-</script>
-
-
+<script src="<?= base_url('assets/js/global.js') ?>"></script>
 <?= $footer; ?>

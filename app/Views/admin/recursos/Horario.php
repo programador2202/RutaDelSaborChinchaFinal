@@ -223,108 +223,83 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-const enviarDatos = async (formData) => {
+document.addEventListener('DOMContentLoaded', () => {
+  const AJAX_URL = "<?= base_url('Horario/ajax') ?>";
+
+  const showAlert = (icon, title, timer = 1500) =>
+    Swal.fire({ icon, title, timer, showConfirmButton: false, timerProgressBar: true });
+
+  const sendRequest = async (formData) => {
     try {
-        const res = await fetch("<?= base_url('Horario/ajax') ?>", {
-            method: 'POST',
-            body: formData
-        });
-        return await res.json();
+      const res = await fetch(AJAX_URL, { method: 'POST', body: formData });
+      return await res.json();
     } catch (err) {
-        console.error('Error en la petición:', err);
-        showAlert('error', 'Error de conexión');
-        return null;
+      console.error('Fetch error:', err);
+      showAlert('error', 'Error de conexión');
+      return null;
     }
-};
+  };
 
-const showAlert = (icon, title, timer = 1500) => {
-    return Swal.fire({
-        icon,
-        title,
-        timer,
-        showConfirmButton: false,
-        timerProgressBar: true
-    });
-};
-
-// Formularios: registrar y actualizar
-document.querySelectorAll('form').forEach(form => {
+  // Formularios: registrar y actualizar
+  document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(form);
+      e.preventDefault();
+      const formData = new FormData(form);
 
-        Swal.fire({
-            title: "Procesando...",
-            text: "Por favor espere",
-            allowOutsideClick: false,
-            didOpen: () => Swal.showLoading()
-        });
+      Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      const data = await sendRequest(formData);
+      Swal.close();
 
-        const data = await enviarDatos(formData);
-        if (data) {
-            Swal.close();
-            showAlert(data.status === 'success' ? 'success' : 'error', data.mensaje)
-                .then(() => {
-                    if (data.status === 'success') {
-                        location.reload();
-                    }
-                });
-        }
+      if (!data) return;
+      showAlert(data.status === 'success' ? 'success' : 'error', data.mensaje)
+        .then(() => { if (data.status === 'success') location.reload(); });
     });
-});
+  });
 
-// Editar botón
-document.querySelectorAll('.btn-editar').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById('idhorario').value = btn.getAttribute('data-id');
-        document.getElementById('diasemana_editar').value = btn.getAttribute('data-dia');
-        document.getElementById('inicio_editar').value = btn.getAttribute('data-inicio');
-        document.getElementById('fin_editar').value = btn.getAttribute('data-fin');
-        document.getElementById('idlocales_editar').value = btn.getAttribute('data-local');
-        var modalEditar = new bootstrap.Modal(document.getElementById('modalEditar'));
-        modalEditar.show();
+  // Editar horario
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-editar');
+    if (!btn) return;
+
+    document.getElementById('idhorario').value = btn.getAttribute('data-id');
+    document.getElementById('diasemana_editar').value = btn.getAttribute('data-dia');
+    document.getElementById('inicio_editar').value = btn.getAttribute('data-inicio');
+    document.getElementById('fin_editar').value = btn.getAttribute('data-fin');
+    document.getElementById('idlocales_editar').value = btn.getAttribute('data-local');
+
+    new bootstrap.Modal(document.getElementById('modalEditar')).show();
+  });
+
+  // Eliminar horario
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.btn-eliminar');
+    if (!btn) return;
+
+    const idhorario = btn.getAttribute('data-id');
+    const confirm = await Swal.fire({
+      title: '¿Eliminar este horario?',
+      text: "Esta acción no se puede deshacer",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33'
     });
-});
 
-// Eliminar botón
-document.querySelectorAll('.btn-eliminar').forEach(button => {
-    button.addEventListener('click', async (e) => {
-        e.preventDefault();
-        const idhorario = button.getAttribute('data-id');
+    if (!confirm.isConfirmed) return;
 
-        const result = await Swal.fire({
-            title: '¿Eliminar este horario?',
-            text: "Esta acción no se puede deshacer",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
-        });
+    const fd = new FormData();
+    fd.append('accion', 'eliminar');
+    fd.append('idhorario', idhorario);
 
-        if (result.isConfirmed) {
-            const formData = new FormData();
-            formData.append('accion', 'eliminar');
-            formData.append('idhorario', idhorario);
+    Swal.fire({ title: 'Eliminando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    const data = await sendRequest(fd);
+    Swal.close();
 
-            Swal.fire({
-                title: "Procesando...",
-                text: "Por favor espere",
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
-            });
+    if (!data) return;
+    showAlert(data.status === 'success' ? 'success' : 'error', data.mensaje)
+      .then(() => { if (data.status === 'success') location.reload(); });
+  });
 
-            const data = await enviarDatos(formData);
-            if (data) {
-                Swal.close();
-                showAlert(data.status === 'success' ? 'success' : 'error', data.mensaje)
-                    .then(() => {
-                        if (data.status === 'success') {
-                            location.reload();
-                        }
-                    });
-            }
-        }
-    });
 });
 </script>

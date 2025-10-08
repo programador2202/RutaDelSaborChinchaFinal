@@ -224,76 +224,83 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // 🔹 Función genérica para mostrar alertas
-  const showAlert = (icon, title, timer = 1500) => {
-    return Swal.fire({
-      icon,
-      title,
-      timer,
-      showConfirmButton: false,
-      timerProgressBar: true
-    });
-  };
+  const AJAX_URL = "<?= base_url('usuarios/ajax') ?>";
 
-  // Función helper para peticiones fetch con SweetAlert
-  const enviarPeticion = async (url, formData, successCallback = null) => {
+  // Función genérica de alertas
+  const showAlert = (icon, title, timer = 1500) =>
+    Swal.fire({ icon, title, timer, showConfirmButton: false, timerProgressBar: true });
+
+  // Función para enviar datos al backend
+  const sendRequest = async (formData) => {
     try {
-      const res = await fetch(url, { method: "POST", body: formData });
-      const data = await res.json();
-
-      showAlert(data.status === "success" ? "success" : "error", data.mensaje)
-        .then(() => {
-          if (data.status === "success" && typeof successCallback === "function") {
-            successCallback();
-          }
-        });
-
+      const res = await fetch(AJAX_URL, { method: 'POST', body: formData });
+      return await res.json();
     } catch (err) {
-      console.error("Error en la petición:", err);
-      showAlert("error", "No se pudo procesar la solicitud");
+      console.error('Fetch error:', err);
+      showAlert('error', 'Error de conexión');
+      return null;
     }
   };
 
-  // Manejo de registrar / actualizar usuario
+  // Registrar / Actualizar usuario
   document.querySelectorAll(".form-usuario").forEach(form => {
-    form.addEventListener("submit", e => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(form);
-      
-            // Mostrar loading mientras se procesa
-            Swal.fire({
-                title: "Procesando...",
-                text: "Por favor espera",
-                allowOutsideClick: false,
-                didOpen: () => Swal.showLoading()
-            });
-            
-      enviarPeticion("<?= base_url('usuarios/ajax') ?>", formData, () => location.reload());
+
+      Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      const data = await sendRequest(formData);
+      Swal.close();
+
+      if (!data) return;
+      showAlert(data.status === 'success' ? 'success' : 'error', data.mensaje)
+        .then(() => { if (data.status === 'success') location.reload(); });
     });
   });
 
-  //Manejo de borrar usuario
-  document.querySelectorAll(".btn-borrar").forEach(btn => {
-    btn.addEventListener("click", () => {
-      Swal.fire({
-        title: "¿Seguro de eliminar este usuario?",
-        text: "Esta acción no se puede deshacer",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar"
-      }).then(result => {
-        if (result.isConfirmed) {
-          const formData = new FormData();
-          formData.append("accion", "borrar");
-          formData.append("idusuario", btn.dataset.id);
+  // Editar usuario (abrir modal con datos)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-editar');
+    if (!btn) return;
 
-          enviarPeticion("<?= base_url('usuarios/ajax') ?>", formData, () => location.reload());
-        }
-      });
+    const data = btn.dataset;
+    document.querySelector('#formEditarUsuario [name="idusuario"]').value = data.id;
+    document.querySelector('#formEditarUsuario [name="nombre"]').value = data.nombre;
+    document.querySelector('#formEditarUsuario [name="apellido"]').value = data.apellido;
+    document.querySelector('#formEditarUsuario [name="email"]').value = data.email;
+    document.querySelector('#formEditarUsuario [name="rol"]').value = data.rol;
+
+    new bootstrap.Modal(document.getElementById('modalEditarUsuario')).show();
+  });
+
+  // Eliminar usuario
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.btn-borrar');
+    if (!btn) return;
+
+    const confirm = await Swal.fire({
+      title: '¿Seguro de eliminar este usuario?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33'
     });
+
+    if (!confirm.isConfirmed) return;
+
+    const fd = new FormData();
+    fd.append('accion', 'borrar');
+    fd.append('idusuario', btn.dataset.id);
+
+    Swal.fire({ title: 'Eliminando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    const data = await sendRequest(fd);
+    Swal.close();
+
+    if (!data) return;
+    showAlert(data.status === 'success' ? 'success' : 'error', data.mensaje)
+      .then(() => { if (data.status === 'success') location.reload(); });
   });
 
 });

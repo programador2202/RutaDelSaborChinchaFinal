@@ -5,6 +5,7 @@
 -- HeidiSQL Versión:             12.8.0.6908
 -- --------------------------------------------------------
 
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
@@ -123,6 +124,8 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`),
   CONSTRAINT `comentarios_chk_1` CHECK (((`valoracion` >= 1) and (`valoracion` <= 5)))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 
 -- Volcando datos para la tabla sistema_menus.comentarios: ~0 rows (aproximadamente)
 

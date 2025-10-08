@@ -80,7 +80,7 @@
             <?php foreach ($locales as $l): ?>
               <tr data-id="<?= $l['idlocales'] ?>">
                 <td class="text-center"><span class="badge bg-secondary"><?= $l['idlocales'] ?></span></td>
-                <td><span class="badge bg-info text-dark"><?= $l['negocio'] ?></span></td>
+                <td><?= $l['negocio'] ?></td>
                 <td><?= $l['distrito'] ?></td>
                 <td class="direccion-col"><?= $l['direccion'] ?></td>
                 <td><?= $l['telefono'] ?></td>

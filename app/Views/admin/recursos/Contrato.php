@@ -69,7 +69,7 @@
             <?php if(!empty($contratos)): ?>
               <?php foreach ($contratos as $c): ?>
                 <tr id="row<?= $c['idcontrato'] ?>">
-                  <td class="text-center"><?= $c['idcontrato'] ?></td>
+                  <td class="text-center"><span class="badge bg-secondary"><?= $c['idcontrato'] ?></td>
                   <td><?= esc($c['usuario']) ?></td>
                   <td><?= esc($c['negocio']) ?></td>
                   <td class="text-center"><?= esc($c['fechainicio']) ?></td>
@@ -283,13 +283,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-
   document.getElementById('btnEditar')?.addEventListener('click', async () => {
     const form = document.getElementById('formEditar');
     const formData = new FormData(form);
     formData.append('accion', 'actualizar');
 
-    Swal.fire({ title: 'Actualizando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
     const data = await sendRequest(formData);
     Swal.close();
 
@@ -297,6 +296,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showAlert(data.status === 'success' ? 'success' : 'error', data.message)
       .then(() => { if (data.status === 'success') location.reload(); });
   });
+
 
   document.addEventListener('click', async (e) => {
     const btn = e.target.closest('.btnEliminar');

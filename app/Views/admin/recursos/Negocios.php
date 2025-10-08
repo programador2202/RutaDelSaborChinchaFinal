@@ -91,7 +91,7 @@
           </thead>
           <tbody>
             <?php foreach ($negocios as $n): ?>
-            <tr id="row<?= $n['idnegocio'] ?>">
+            <tr id="row <?= $n['idnegocio'] ?>">
               <td class="text-center"><span class="badge bg-secondary"><?= $n['idnegocio'] ?></span></td>
               <td><?= $n['nombre'] ?></td>
               <td><?= $n['nombrecomercial'] ?></td>
@@ -255,78 +255,81 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('DOMContentLoaded', () => {
+  const AJAX_URL = "<?= base_url('negocios/ajax') ?>";
 
-  // 🔹 Función genérica para mostrar alertas
-  const showAlert = (icon, title, timer = 1500) => {
-    return Swal.fire({
-      icon,
-      title,
-      timer,
-      showConfirmButton: false,
-      timerProgressBar: true
-    });
-  };
+  const showAlert = (icon, title, timer = 1500) =>
+    Swal.fire({ icon, title, timer, showConfirmButton: false, timerProgressBar: true });
 
-  // 🔹 Función helper para peticiones fetch con SweetAlert
-  const enviarPeticion = async (url, formData, successCallback = null) => {
+  const sendRequest = async (formData) => {
     try {
-      const res = await fetch(url, { method: "POST", body: formData });
-      const data = await res.json();
-
-      showAlert(data.status === "success" ? "success" : "error", data.mensaje)
-        .then(() => {
-          if (data.status === "success" && typeof successCallback === "function") {
-            successCallback();
-          }
-        });
-
+      const res = await fetch(AJAX_URL, { method: 'POST', body: formData });
+      return await res.json();
     } catch (err) {
-      console.error("Error en la petición:", err);
-      showAlert("error", "No se pudo procesar la solicitud");
+      console.error('Fetch error:', err);
+      showAlert('error', 'Error de conexión');
+      return null;
     }
   };
 
-  // 🔹 Manejo de formularios (Registrar y Editar negocio)
-document.querySelectorAll("#formRegistrar, .formEditar").forEach(form => {
-  form.addEventListener("submit", e => {
-    e.preventDefault();
-    const formData = new FormData(form);
+  // Registrar y editar negocio
+  document.querySelectorAll('#formRegistrar, .formEditar').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
 
-    // Mostrar loading mientras se procesa
-    Swal.fire({
-      title: "Procesando...",
-      text: "Por favor espera",
-      allowOutsideClick: false,
-      didOpen: () => Swal.showLoading()
+      Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+      const data = await sendRequest(formData);
+      Swal.close();
+
+      if (!data) return;
+      showAlert(data.status === 'success' ? 'success' : 'error', data.mensaje)
+        .then(() => { if (data.status === 'success') location.reload(); });
     });
-
-    enviarPeticion("<?= base_url('negocios/ajax') ?>", formData, () => location.reload());
   });
-});
 
-  // 🔹 Manejo de borrar negocio
-  document.querySelectorAll(".btnEliminar").forEach(btn => {
-    btn.addEventListener("click", () => {
-      Swal.fire({
-        title: "¿Seguro de eliminar este negocio?",
-        text: "Esta acción no se puede deshacer",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Sí, eliminar",
-        cancelButtonText: "Cancelar"
-      }).then(result => {
-        if (result.isConfirmed) {
-          const formData = new FormData();
-          formData.append("accion", "borrar");
-          formData.append("idnegocio", btn.dataset.id);
+  // Editar negocio (llenar formulario modal)
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btnEditar');
+    if (!btn) return;
 
-          enviarPeticion("<?= base_url('negocios/ajax') ?>", formData, () => location.reload());
-        }
-      });
+    const data = btn.dataset;
+    document.querySelector('.formEditar [name="idnegocio"]').value = data.id;
+    document.querySelector('.formEditar [name="nombre"]').value = data.nombre;
+    document.querySelector('.formEditar [name="direccion"]').value = data.direccion;
+    document.querySelector('.formEditar [name="telefono"]').value = data.telefono;
+
+    new bootstrap.Modal(document.getElementById('modalEditar')).show();
+  });
+
+  // Eliminar negocio
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('.btnEliminar');
+    if (!btn) return;
+
+    const confirm = await Swal.fire({
+      title: '¿Seguro de eliminar este negocio?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33'
     });
+
+    if (!confirm.isConfirmed) return;
+
+    const fd = new FormData();
+    fd.append('accion', 'borrar');
+    fd.append('idnegocio', btn.dataset.id);
+
+    Swal.fire({ title: 'Eliminando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    const data = await sendRequest(fd);
+    Swal.close();
+
+    if (!data) return;
+    showAlert(data.status === 'success' ? 'success' : 'error', data.mensaje)
+      .then(() => { if (data.status === 'success') location.reload(); });
   });
 
 });

@@ -12,6 +12,8 @@ $routes->get('/categorias', 'Home::categorias');
 $routes->get('/index', 'Home::admin');
 $routes->get('/blog','Home::blog');
 $routes->get('negocios/detalle/(:num)', 'DetalleController::detalle/$1');
+$routes->post('comentarios/guardar', 'ComentarioController::guardar');
+
 
 
 //buscador de index
