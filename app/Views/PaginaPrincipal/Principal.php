@@ -64,6 +64,10 @@
     <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Vitinicolas')">
       <i class="fas fa-wine-glass-alt me-2"></i> Vitivinícolas
     </button>
+    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Gourmet')">
+  <i class="fas fa-cheese me-2"></i> Gourmet
+</button>
+
   </div>
 </div>
 </section>

@@ -46,6 +46,38 @@ class NegociosController extends BaseController
         $accion       = $this->request->getVar('accion');
         $respuesta    = ['status' => 'error', 'mensaje' => 'Acción no definida'];
 
+
+
+        $idnegocio = $this->request->getVar('idnegocio');
+
+        //validacion de datos antes de registrar o actualizar un negocio
+        if (in_array($accion, ['registrar', 'actualizar'])) {
+            $validation = \Config\Services::validation();
+            $validation->setRules([
+                'idcategoria'     => 'required|integer',
+                'idrepresentante' => 'required|integer',
+                'nombre'          => 'required|string|max_length[100]',
+                'nombrecomercial' => 'required|string|max_length[100]',
+                'slogan'          => 'permit_empty|string|max_length[150]',
+                'ruc'             => 'required|regex_match[/^[11]{11}$/]',
+                'logo'            => 'permit_empty|is_image[logo]|max_size[logo,2048]|ext_in[logo,png,jpg,jpeg,gif]'
+            ]);
+           //si es registrar, se requiere que el ruc sea unico
+              if($accion === 'registrar'){
+                $validation->setRules([
+                    'ruc' => 'is_unique[negocios.ruc]'
+                ]);
+              }
+
+
+            // si es actualizar el ruc debe ser unico execpto el mismo negocio
+            if($accion === 'actualizar' && $idnegocio){
+                $rules['ruc'] = 'is_unique[negocios.ruc,idnegocio,'.$idnegocio.']';
+        }
+    }
+       
+
+
         // Carpeta de imágenes
         $carpetaLogo = FCPATH . 'uploads/negocios/logo/';
         if (!is_dir($carpetaLogo)) mkdir($carpetaLogo, 0777, true);
@@ -81,8 +113,22 @@ class NegociosController extends BaseController
                 ];
 
             } elseif ($accion === 'actualizar') {
+                $ruc = $this->request->getVar('ruc');
                 $id = $this->request->getVar('idnegocio');
                 $negocio = $negocioModel->find($id);
+
+                $negocioExistente = $negocioModel
+                ->where('ruc', $ruc)
+                ->where('idnegocio !=', $id)
+                ->first();
+
+                if ($negocioExistente) {
+                    return $this->response->setJSON([
+                        'status'  => 'error',
+                        'mensaje' => 'El RUC ya está registrado en otro negocio'
+                    ]);
+                }
+
 
                 if (!$negocio) {
                     throw PageNotFoundException::forPageNotFound("Negocio no existe");

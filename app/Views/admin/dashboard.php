@@ -88,7 +88,7 @@
       <li><a class="nav-link" href="<?= base_url('/cartas') ?>"><i class="fas fa-utensils me-2"></i>Cartas</a></li>
       <li><a class="nav-link" href="<?= base_url('/horarios') ?>"><i class="fas fa-clock me-2"></i>Horario</a></li>
       <li><a class="nav-link" href="<?= base_url('/contratos') ?>"><i class="fas fa-file-contract me-2"></i>Contratos</a></li>
-      <li><a class="nav-link" href="#"><i class="fas fa-comments me-2"></i>Comentarios</a></li>
+      <li><a class="nav-link" href="<?= base_url('/comentarios') ?>"><i class="fas fa-comments me-2"></i>Comentarios</a></li>
       <li><a class="nav-link" href="#"><i class="fas fa-calendar-check me-2"></i>Reservas</a></li>
     </ul>
     <hr>

@@ -7,6 +7,20 @@ use App\Models\Comentario;
 
 class ComentarioController extends BaseController
 {
+
+    public function index()
+    {
+        $comentarioModel = new Comentario();
+        $comentarios = $comentarioModel->findAll();
+        
+
+        $data = [
+            'comentarios' => $comentarios,
+            'header'      => view('admin/dashboard')
+        ];
+
+        return view('admin/recursos/Comentarios', $data);
+    }
     public function guardar()
     {
         $comentarioModel = new Comentario();

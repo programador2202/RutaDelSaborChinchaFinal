@@ -12,7 +12,6 @@ $routes->get('/categorias', 'Home::categorias');
 $routes->get('/index', 'Home::admin');
 $routes->get('/blog','Home::blog');
 $routes->get('negocios/detalle/(:num)', 'DetalleController::detalle/$1');
-$routes->post('comentarios/guardar', 'ComentarioController::guardar');
 
 
 
@@ -49,5 +48,9 @@ $routes->post('/chatbot', 'ChatController::index');
 //ruta para contratos 
 $routes->get('/contratos', 'ContratoController::index');
 $routes->post('contrato/ajax','ContratoController::ajax');
+
+//ruta para comentarios
+$routes->get('/comentarios', 'ComentarioController::index');
+$routes->post('comentarios/guardar', 'ComentarioController::guardar');
 
 

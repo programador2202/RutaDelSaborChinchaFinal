@@ -144,7 +144,7 @@
                         </div>
                         <div class="col-md-6">
                           <label>RUC:</label>
-                          <input type="text" name="ruc" class="form-control" value="<?= $n['ruc'] ?>">
+                          <input type="number" name="ruc" class="form-control" value="<?= $n['ruc'] ?>" maxlength="11" required>
                         </div>
                         <div class="col-md-6">
                           <label>Categoría:</label>
@@ -217,7 +217,7 @@
           <input type="text" name="slogan" class="form-control mb-2">
 
           <label>RUC:</label>
-          <input type="text" name="ruc" class="form-control mb-2">
+          <input type="number" name="ruc" class="form-control mb-2" maxlength="11" required>
 
           <label>Categoría:</label>
           <select name="idcategoria" class="form-control mb-2" required>
@@ -253,6 +253,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
