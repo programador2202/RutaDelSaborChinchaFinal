@@ -157,7 +157,7 @@
             </div>
         </div>
 
-        <!-- Listado de comentarios (estilo Google Play) -->
+        <!-- Listado de comentarios  -->
         <?php if (!empty($comentarios)): ?>
             <div class="list-group">
                 <?php foreach ($comentarios as $c): ?>
