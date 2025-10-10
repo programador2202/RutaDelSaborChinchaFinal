@@ -70,11 +70,11 @@
               <?php foreach ($contratos as $c): ?>
                 <tr id="row<?= $c['idcontrato'] ?>">
                   <td class="text-center"><span class="badge bg-secondary"><?= $c['idcontrato'] ?></td>
-                  <td><?= esc($c['usuario']) ?></td>
+                  <td class="text-center"><?= esc($c['usuario']) ?></td>
                   <td><?= esc($c['negocio']) ?></td>
                   <td class="text-center"><?= esc($c['fechainicio']) ?></td>
                   <td class="text-center"><?= esc($c['fechafin']) ?></td>
-                  <td class="text-end"><?= number_format($c['inversion'], 2, '.', ',') ?></td>
+                  <td class="text-center"><?= number_format($c['inversion'], 2, '.', ',') ?></td>
                   <td class="text-center">
                     <button class="btn btn-warning btn-action btnEditar" data-id="<?= $c['idcontrato'] ?>">
                       <i class="bi bi-pencil"></i>
@@ -144,9 +144,6 @@
         </div>
 
           <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-x-circle"></i> Cancelar
-        </button>
         <button type="button" id="btnRegistrar" class="btn btn-primary">
           <i class="bi bi-save"></i> Registrar
         </button>
@@ -163,7 +160,7 @@
       <form id="formEditar">
         <input type="hidden" name="idcontrato" id="edit_idcontrato">
 
-        <div class="modal-header bg-warning text-white">
+        <div class="modal-header bg-warning text-black">
           <h5 class="modal-title">Editar Contrato</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
@@ -207,10 +204,7 @@
         </div>
 
         <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-x-circle"></i> Cancelar
-        </button>
-        <button type="button" id="btnEditar" class="btn btn-warning text-white">
+        <button type="button" id="btnEditar" class="btn btn-primary text-white">
           <i class="bi bi-arrow-repeat"></i> Actualizar
         </button>
       </div>

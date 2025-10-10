@@ -59,21 +59,31 @@ class NegociosController extends BaseController
                 'nombre'          => 'required|string|max_length[100]',
                 'nombrecomercial' => 'required|string|max_length[100]',
                 'slogan'          => 'permit_empty|string|max_length[150]',
-                'ruc'             => 'required|regex_match[/^[11]{11}$/]',
+                'ruc'             => 'required|regex_match[/^\d{11}$/]',
                 'logo'            => 'permit_empty|is_image[logo]|max_size[logo,2048]|ext_in[logo,png,jpg,jpeg,gif]'
             ]);
            //si es registrar, se requiere que el ruc sea unico
-              if($accion === 'registrar'){
-                $validation->setRules([
-                    'ruc' => 'is_unique[negocios.ruc]'
-                ]);
-              }
+             if ($accion === 'registrar') {
+                    $validation->setRule('ruc', 'RUC', 'required|regex_match[/^\d{11}$/]|is_unique[negocios.ruc]');
+                }
 
 
             // si es actualizar el ruc debe ser unico execpto el mismo negocio
-            if($accion === 'actualizar' && $idnegocio){
-                $rules['ruc'] = 'is_unique[negocios.ruc,idnegocio,'.$idnegocio.']';
-        }
+           if ($accion === 'actualizar' && $idnegocio) {
+                $validation->setRule('ruc', 'RUC', 'required|regex_match[/^\d{11}$/]|is_unique[negocios.ruc,idnegocio,' . $idnegocio . ']');
+            }
+
+            //recorrido de la validacion
+
+            if (!$validation->withRequest($this->request)->run()) {
+            return $this->response->setJSON([
+                'status'  => 'error',
+                'mensaje' => 'El ruc debe tener 11 Digitos, revise y vuelta a Intentarlo',
+                'errores' => $validation->getErrors()
+            ]);
+}
+
+
     }
        
 

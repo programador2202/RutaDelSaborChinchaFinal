@@ -127,7 +127,7 @@ if (navigator.  geolocation) {
     cargarRestaurantes();
 }
 
-// --------------------- CARGA INICIAL ---------------------
+// CARGA INICIAL 
 document.addEventListener("DOMContentLoaded", function() {
     cargarRestaurantes();
 });
