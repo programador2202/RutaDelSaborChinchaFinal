@@ -1,5 +1,9 @@
-<?= $header; ?>
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
+<?= $header; ?>
 
 <style>
 .hover-scale:hover { transform: scale(1.02); transition: 0.3s; }
@@ -23,8 +27,9 @@
     font-size: 1.1rem;
     letter-spacing: 1px;
 }
-</style>
 
+
+</style>
 
 <div class="container mt-5">
 
@@ -76,45 +81,77 @@
         </div>
     <?php endif; ?>
 
-    <!-- Platos -->
-    <h2 class="fw-bold text-danger mb-4">Platos destacados</h2>
-    <?php if (!empty($negocio['cartas'])): ?>
-        <div class="row g-4">
-            <?php foreach ($negocio['cartas'] as $plato): ?>
-                <div class="col-md-4 col-sm-6">
-                    <div class="card h-100 border-0 shadow-sm hover-scale">
-                        <div class="ratio ratio-4x3">
-                            <img src="<?= !empty($plato['foto']) ? base_url($plato['foto']) : base_url('assets/img/platos/default.png') ?>"
-                                 class="rounded-top" alt="<?= esc($plato['nombreplato']) ?>"
-                                 style="object-fit:cover;">
-                        </div>
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title text-dark"><?= esc($plato['nombreplato']) ?></h5>
-                            <?php if (!empty($plato['descripcion'])): ?>
-                                <p class="card-text text-muted small"><?= esc($plato['descripcion']) ?></p>
-                            <?php endif; ?>
+    <!-- CARTA AGRUPADA POR SECCIONES -->
 
-                            <div class="mt-auto d-flex justify-content-between align-items-center">
-                                <span class="fw-bold text-danger fs-6">S/<?= number_format($plato['precio'], 2) ?></span>
-                                <button class="btn btn-outline-success btn-sm rounded-pill px-3"
-                                        onclick='agregarAlCarrito({
-                                            nombre: "<?= esc($plato['nombreplato']) ?>",
-                                            precio: <?= esc($plato['precio']) ?>,
-                                            cantidad: 1
-                                        })'>
-                                    <i class="fas fa-cart-plus"></i> Agregar
-                                </button>
+       <!-- CARTA AGRUPADA POR SECCIONES -->
+    <h2 class="fw-bold text-danger mb-4">Nuestra Carta</h2>
+
+    <?php if (!empty($negocio['cartas'])): ?>
+        <?php
+        // Agrupar platos por sección
+        $cartasPorSeccion = [];
+        foreach ($negocio['cartas'] as $plato) {
+            $cartasPorSeccion[$plato['nombre_seccion']][] = $plato;
+        }
+        ?>
+
+        <?php foreach ($cartasPorSeccion as $nombreSeccion => $platos): ?>
+            <!-- Título de sección -->
+            <h3 class="mt-5 mb-3 text-danger fw-bold border-bottom border-2 pb-2">
+                <?= esc($nombreSeccion) ?>
+            </h3>
+
+            <!-- Grid de platos -->
+            <div class="row g-4">
+                <?php foreach ($platos as $plato): ?>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="card h-100 border-0 shadow-sm hover-scale">
+                            <!-- Imagen del plato -->
+                            <img src="<?= !empty($plato['foto']) 
+                                ? base_url($plato['foto']) 
+                                : base_url('assets/img/platos/default.png') ?>" 
+                                class="card-img-top rounded-top" 
+                                alt="<?= esc($plato['nombreplato']) ?>" 
+                                style="height: 280px; object-fit: cover;">
+
+                            <!-- Contenido -->
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title text-dark fw-semibold mb-2">
+                                    <?= esc($plato['nombreplato']) ?>
+                                </h5>
+                                <?php if (!empty($plato['descripcion'])): ?>
+                                    <p class="card-text text-muted small mb-3">
+                                        <?= esc($plato['descripcion']) ?>
+                                    </p>
+                                <?php endif; ?>
+
+                                <!-- Precio y botón -->
+                                <div class="mt-auto d-flex justify-content-between align-items-center">
+                                    <span class="fw-bold text-danger fs-6">
+                                        S/<?= number_format($plato['precio'], 2) ?>
+                                    </span>
+                                    <button class="btn btn-outline-success btn-sm rounded-pill px-3"
+                                            onclick='agregarAlCarrito({
+                                                nombre: "<?= esc($plato['nombreplato']) ?>",
+                                                precio: <?= esc($plato['precio']) ?>,
+                                                cantidad: 1
+                                            })'>
+                                        <i class="fas fa-cart-plus"></i> Agregar
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-        </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endforeach; ?>
     <?php else: ?>
         <p class="text-muted">No hay platos disponibles</p>
     <?php endif; ?>
 
-    <!-- Comentarios -->
+
+    <!--COMENTARIOS -->
+
     <hr class="my-5">
     <div class="mb-5">
         <h3 class="fw-bold text-danger mb-3">Opiniones de clientes</h3>
@@ -129,7 +166,6 @@
             </div>
         <?php endif; ?>
         
-
         <!-- Formulario de comentario -->
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body">
@@ -157,7 +193,7 @@
             </div>
         </div>
 
-        <!-- Listado de comentarios  -->
+        <!-- Listado de comentarios -->
         <?php if (!empty($comentarios)): ?>
             <div class="list-group">
                 <?php foreach ($comentarios as $c): ?>
@@ -167,7 +203,6 @@
                                  class="rounded-circle me-3 border"
                                  width="55" height="55"
                                  alt="avatar">
-
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <h6 class="fw-bold mb-0 text-dark">
@@ -199,7 +234,6 @@
     </div>
 </div>
 
-
 <!-- Mapa con Leaflet -->
 <?php if (!empty($negocio['latitud']) && !empty($negocio['longitud'])): ?>
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -215,7 +249,6 @@
             .openPopup();
     </script>
 <?php endif; ?>
-
 
 <br><br>
 <?= $dinamica; ?>

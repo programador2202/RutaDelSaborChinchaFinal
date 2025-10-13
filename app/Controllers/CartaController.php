@@ -30,7 +30,9 @@ class CartaController extends BaseController
             ->join('locales', 'locales.idlocales = cartas.idlocales')
             ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
             ->join('secciones', 'secciones.idseccion = cartas.idseccion')
+            ->orderBy('secciones.seccion', 'ASC')
             ->orderBy('cartas.idcarta', 'ASC')
+
             ->findAll();
 
         $datos['locales'] = $localModel

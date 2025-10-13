@@ -12,16 +12,22 @@ $routes->get('/categorias', 'Home::categorias');
 $routes->get('/index', 'Home::admin');
 $routes->get('/blog','Home::blog');
 $routes->get('negocios/detalle/(:num)', 'DetalleController::detalle/$1');
+$routes->post('comentarios/guardar', 'ComentarioController::guardar');
 
 
 
 //buscador de index
 $routes->get('/buscar', 'BuscarController::index'); 
 $routes->get('/buscar/sugerencias', 'BuscarController::sugerencias'); 
+$routes->get('/buscar/mapaBusquedaPorPlato', 'BuscarController::mapaBusquedaPorPlato');
+
+
+
 
 //ruta de mapa
 $routes->get('/mapa', 'MapController::index');
 $routes->get('/mapa/restaurantes', 'MapController::restaurantes');
+
 
 
 // Rutas para el CRUD de Personas
@@ -49,8 +55,5 @@ $routes->post('/chatbot', 'ChatController::index');
 $routes->get('/contratos', 'ContratoController::index');
 $routes->post('contrato/ajax','ContratoController::ajax');
 
-//ruta para comentarios
-$routes->get('/comentarios', 'ComentarioController::index');
-$routes->post('comentarios/guardar', 'ComentarioController::guardar');
 
 

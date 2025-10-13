@@ -165,55 +165,61 @@
   <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="<?= base_url('assets/js/Map.js') ?>"></script>
+  
   <script>
-    //buscador y atucomplete
 const buscador = document.getElementById("buscador");
-    const btnBuscar = document.getElementById("btnBuscar");
-    const sugerenciasDiv = document.getElementById("sugerencias");
-    const resultadosDiv = document.getElementById("resultados");
+const btnBuscar = document.getElementById("btnBuscar");
+const sugerenciasDiv = document.getElementById("sugerencias");
+const resultadosDiv = document.getElementById("resultados");
 
-    // Buscar
-    btnBuscar.addEventListener("click", function() {
-      const query = buscador.value.trim();
-      if (!query) return;
-      fetch("<?= base_url('/buscar') ?>?q=" + encodeURIComponent(query))
-        .then(res => res.text())
-        .then(html => {
-          resultadosDiv.innerHTML = html;
-          sugerenciasDiv.innerHTML = "";
-        })
-        .catch(err => console.error("Error en búsqueda:", err));
-    });
+// Buscar
+btnBuscar.addEventListener("click", function() {
+  const query = buscador.value.trim();
+  if (!query) return;
+  fetch("<?= base_url('/buscar') ?>?q=" + encodeURIComponent(query))
+    .then(res => {
+      if (!res.ok) throw new Error('Respuesta no OK: ' + res.status);
+      return res.text();
+    })
+    .then(html => {
+      resultadosDiv.innerHTML = html;
+      sugerenciasDiv.innerHTML = "";
+      // actualizar mapa con la búsqueda
+      if (window.cargarRestaurantesPorPlato) {
+        window.cargarRestaurantesPorPlato(query);
+      }
+    })
+    .catch(err => console.error("Error en búsqueda:", err));
+});
 
-    // Autocomplete
-    buscador.addEventListener("input", function() {
-      const query = buscador.value.trim();
-      if (query.length < 3) {
-        sugerenciasDiv.innerHTML = "";
+// Autocomplete
+buscador.addEventListener("input", function() {
+  const query = buscador.value.trim();
+  if (query.length < 3) {
+    sugerenciasDiv.innerHTML = "";
+    return;
+  }
+  fetch("<?= base_url('/buscar/sugerencias') ?>?q=" + encodeURIComponent(query))
+    .then(res => res.json())
+    .then(data => {
+      sugerenciasDiv.innerHTML = "";
+      if (data.length === 0) {
+        sugerenciasDiv.innerHTML = "<div class='list-group-item'>Sin resultados</div>";
         return;
       }
-      fetch("<?= base_url('/buscar/sugerencias') ?>?q=" + encodeURIComponent(query))
-        .then(res => res.json())
-        .then(data => {
+      data.forEach(item => {
+        const option = document.createElement("button");
+        option.type = "button";
+        option.className = "list-group-item list-group-item-action";
+        option.textContent = item.texto;
+        option.addEventListener("click", function() {
+          buscador.value = item.texto;
           sugerenciasDiv.innerHTML = "";
-          if (data.length === 0) {
-            sugerenciasDiv.innerHTML = "<div class='list-group-item'>Sin resultados</div>";
-            return;
-          }
-          data.forEach(item => {
-            const option = document.createElement("button");
-            option.type = "button";
-            option.className = "list-group-item list-group-item-action";
-            option.textContent = item.texto;
-            option.addEventListener("click", function() {
-              buscador.value = item.texto;
-              sugerenciasDiv.innerHTML = "";
-              btnBuscar.click();
-            });
-            sugerenciasDiv.appendChild(option);
-          });
-        })
-        .catch(err => console.error("Error en sugerencias:", err));
-    });
-
-  </script>
+          btnBuscar.click();
+        });
+        sugerenciasDiv.appendChild(option);
+      });
+    })
+    .catch(err => console.error("Error en sugerencias:", err));
+});
+</script>
