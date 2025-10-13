@@ -7,7 +7,7 @@
   .card-custom {
     border: none;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
   }
   .card-header {
     background: linear-gradient(45deg, #0d6efd, #0a58ca);
@@ -27,12 +27,7 @@
   }
   .table td, .table th {
     vertical-align: middle;
-  }
-  .btn-action {
-    border-radius: 50px;
-    padding: 6px 10px;
-    margin: 0 2px;
-    font-size: 14px;
+    text-align: center;
   }
   .col-texto {
     max-width: 200px;       
@@ -42,39 +37,46 @@
   }
 </style>
 
-
 <div class="container mt-4">
   <div class="card card-custom">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <h5 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Comentarios de Usuarios</h5>
+      <h5 class="mb-0"><i class="bi bi-chat-dots me-2"></i>Comentarios de Usuarios</h5>
     </div>
+
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-hover align-middle">
           <thead>
             <tr>
               <th>ID</th>
-              <th>local</th>
-              <th>tokenusuario</th>
+              <th>Local</th>
+              <th>Usuario</th>
               <th>Comentario</th>
-              <th>Valoracion</th>  
+              <th>Valoración</th>
             </tr>
           </thead>
           <tbody>
-            <?php if(!empty($comentarios)): ?>
-              <?php foreach($comentarios as $c): ?>
+            <?php if (!empty($comentarios)): ?>
+              <?php foreach ($comentarios as $c): ?>
                 <tr>
-                  <td class="text-center"><?= $c['idcomentario'] ?></td>
-                  <td class="text-center"><?= $c['idlocales'] ?></td>
-                  <td class="text-center"><?= $c['tokenusuario'] ?></td>
-                  <td class="text-center" title="<?= $c['comentario'] ?>"><?= $c['comentario'] ?></td>
-                  <td class="text-center"><?= $c['valoracion'] ?></td>
+                  <td><?= esc($c['idcomentario']) ?></td>
+                  <td><?= esc($c['idlocales']) ?></td>
+                  <td><?= esc($c['tokenusuario']) ?></td>
+                  <td class="col-texto" title="<?= esc($c['comentario']) ?>">
+                    <?= esc($c['comentario']) ?>
+                  </td>
+                  <td>
+                    <?php for ($i = 1; $i <= 5; $i++): ?>
+                      <i class="bi <?= $i <= $c['valoracion'] ? 'bi-star-fill text-warning' : 'bi-star text-secondary' ?>"></i>
+                    <?php endfor; ?>
+                  </td>
                 </tr>
               <?php endforeach; ?>
-              <?php else: ?>
-                <tr>
-                  <td colspan="5" class="text-center">No hay comentarios disponibles.</td></tr>
-                  <?php endif; ?>
+            <?php else: ?>
+              <tr>
+                <td colspan="5" class="text-center text-muted py-3">No hay comentarios disponibles.</td>
+              </tr>
+            <?php endif; ?>
           </tbody>
         </table>
       </div>

@@ -12,9 +12,19 @@ $routes->get('/categorias', 'Home::categorias');
 $routes->get('/index', 'Home::admin');
 $routes->get('/blog','Home::blog');
 $routes->get('negocios/detalle/(:num)', 'DetalleController::detalle/$1');
-$routes->post('comentarios/guardar', 'ComentarioController::guardar');
+$routes->get('comentarios', 'ComentarioController::index');
+
+$routes->group('', ['filter' => 'auth'], function($routes) {
+    $routes->post('comentarios/guardar', 'ComentarioController::guardar');
+});
 
 
+
+$routes->get('login', 'LoginController::login');
+$routes->post('loginPost', 'LoginController::loginPost');
+$routes->get('register', 'LoginController::register');
+$routes->post('registerPost', 'LoginController::registerPost');
+$routes->get('logout', 'LoginqController::logout');
 
 //buscador de index
 $routes->get('/buscar', 'BuscarController::index'); 
@@ -27,6 +37,8 @@ $routes->get('/buscar/mapaBusquedaPorPlato', 'BuscarController::mapaBusquedaPorP
 //ruta de mapa
 $routes->get('/mapa', 'MapController::index');
 $routes->get('/mapa/restaurantes', 'MapController::restaurantes');
+$routes->get('mapa/buscar', 'MapController::buscar');
+
 
 
 
@@ -54,6 +66,7 @@ $routes->post('/chatbot', 'ChatController::index');
 //ruta para contratos 
 $routes->get('/contratos', 'ContratoController::index');
 $routes->post('contrato/ajax','ContratoController::ajax');
+
 
 
 

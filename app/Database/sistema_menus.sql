@@ -2425,6 +2425,21 @@ INSERT INTO `usuarios` (`idusuario`, `nombreusuario`, `claveacceso`, `nivelacces
 	(1, 'admin1', '123456', 'admin', 1),
 	(3, 'flores2025', '159874263', '', 4);
 
+
+CREATE TABLE IF NOT EXISTS `usuarios_google_personal` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `google_id` VARCHAR(100) NOT NULL,
+  `nombre` VARCHAR(100) NOT NULL,
+  `apellido` VARCHAR(100) DEFAULT NULL,
+  `email` VARCHAR(150) NOT NULL,
+  `foto` VARCHAR(255) DEFAULT NULL,
+  `token` TEXT DEFAULT NULL,
+  `fecha_registro` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `google_id` (`google_id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

@@ -153,12 +153,14 @@
   </main>
 
   
-</body>
-</html>
-
 <?= $dinamica; ?>
   <!-- FOOTER -->
   <?= $footer; ?>
+  
+</body>
+</html>
+
+
   <script src="<?= base_url('assets/js/global.js') ?>"></script>
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
