@@ -140,7 +140,7 @@
                                     </button>
                                 </div>
                             </div>
-                        </div>G
+                        </div>
                     </div>
                 <?php endforeach; ?>
             </div>

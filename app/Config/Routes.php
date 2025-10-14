@@ -13,6 +13,8 @@ $routes->get('/index', 'Home::admin');
 $routes->get('/blog','Home::blog');
 $routes->get('negocios/detalle/(:num)', 'DetalleController::detalle/$1');
 $routes->get('comentarios', 'ComentarioController::index');
+$routes->get('dashboard', 'DashboardController::index');
+
 
 $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->post('comentarios/guardar', 'ComentarioController::guardar');

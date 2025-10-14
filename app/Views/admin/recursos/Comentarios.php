@@ -58,21 +58,20 @@
           <tbody>
             <?php if (!empty($comentarios)): ?>
               <?php foreach ($comentarios as $c): ?>
-                <tr>
-                 <td><?= esc($c['idcomentario']) ?></td>
-                 <td><?= esc($c['idlocales']) ?></td>
-                  <td><?= esc($c['nombre']) . ' ' . esc($c['apellido']) ?></td>
-                  <td class="col-texto" title="<?= esc($c['comentario']) ?>">
-                  <?= esc($c['comentario']) ?>
-                  </td>
-
-                  </td>
-                  <td>
-                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                      <i class="bi <?= $i <= $c['valoracion'] ? 'bi-star-fill text-warning' : 'bi-star text-secondary' ?>"></i>
-                    <?php endfor; ?>
-                  </td>
+               <tr>
+                    <td><?= esc($c['idcomentario']) ?></td>
+                    <td><?= esc($c['nombre_local']) ?></td>
+                    <td><?= esc($c['nombre_usuario']) . ' ' . esc($c['apellido']) ?></td>
+                    <td class="col-texto" title="<?= esc($c['comentario']) ?>">
+                        <?= esc($c['comentario']) ?>
+                    </td>
+                    <td>
+                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                            <i class="bi <?= $i <= $c['valoracion'] ? 'bi-star-fill text-warning' : 'bi-star text-secondary' ?>"></i>
+                        <?php endfor; ?>
+                    </td>
                 </tr>
+
               <?php endforeach; ?>
             <?php else: ?>
               <tr>

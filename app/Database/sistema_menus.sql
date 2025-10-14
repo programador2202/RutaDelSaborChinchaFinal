@@ -1,3 +1,4 @@
+-- Active: 1726418525214@@127.0.0.1@3306@sistema_menus
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
 -- Versión del servidor:         8.4.3 - MySQL Community Server - GPL
@@ -2426,19 +2427,29 @@ INSERT INTO `usuarios` (`idusuario`, `nombreusuario`, `claveacceso`, `nivelacces
 	(3, 'flores2025', '159874263', '', 4);
 
 
-CREATE TABLE IF NOT EXISTS `usuarios_google_personal` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `google_id` VARCHAR(100) NOT NULL,
-  `nombre` VARCHAR(100) NOT NULL,
-  `apellido` VARCHAR(100) DEFAULT NULL,
-  `email` VARCHAR(150) NOT NULL,
-  `foto` VARCHAR(255) DEFAULT NULL,
-  `token` TEXT DEFAULT NULL,
-  `fecha_registro` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `google_id` (`google_id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE comentarios (
+    idcomentario INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    idlocales INT NOT NULL,
+    tokenusuario INT UNSIGNED NOT NULL,
+    comentario TEXT NOT NULL,
+    valoracion TINYINT NOT NULL, -- asumiendo valoración de 1 a 5
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tokenusuario) REFERENCES usuarios_login(id) ON DELETE CASCADE,
+    FOREIGN KEY (idlocales) REFERENCES locales(idlocales) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE usuarios_login (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

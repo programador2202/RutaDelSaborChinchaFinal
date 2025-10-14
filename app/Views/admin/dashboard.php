@@ -79,7 +79,7 @@
     <h4 class="mb-4 text-center">Ruta del Sabor Chincha</h4>
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a class="nav-link active" href="datos.php"><i class="fas fa-home me-2"></i>Inicio</a>
+        <a class="nav-link active" href="<?= base_url('/dashboard') ?>"><i class="fas fa-home me-2"></i>Inicio</a>
       </li>
       <li><a class="nav-link" href="<?= base_url('/ListaPersona') ?>"><i class="fas fa-user-friends me-2"></i>Personas</a></li>
       <li><a class="nav-link" href="<?= base_url('/ListaUsuarios') ?>"><i class="fas fa-users-cog me-2"></i>Usuarios</a></li>
