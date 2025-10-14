@@ -60,34 +60,41 @@ class DetalleController extends BaseController
             ->findAll();
 
         //Comentarios del negocio
-       $comentarioModel->join('locales', 'locales.idlocales = comentarios.idlocales')
-        ->where('locales.idnegocio', $idnegocio)
-        ->orderBy('comentarios.fechahora', 'DESC');
+      // Cargar modelo
+        $comentarioModel = new Comentario();
 
-        $comentarios = $comentarioModel->paginate(5); // 🔹 5 por página
+// Usar método personalizado para obtener comentarios con datos de usuario
+        $comentariosConUsuarios = $comentarioModel->select('comentarios.*, usuarios_login.nombre, usuarios_login.apellido')
+            ->join('usuarios_login', 'usuarios_login.id = comentarios.tokenusuario')
+            ->join('locales', 'locales.idlocales = comentarios.idlocales')
+            ->where('locales.idnegocio', $idnegocio)
+            ->orderBy('comentarios.fechahora', 'DESC')
+            ->paginate(5); // 🔹 5 por página
+
         $pager = $comentarioModel->pager;
 
-        //Calcular promedio de valoraciones
+        // Calcular promedio de valoraciones
         $promedio = 0;
-        if (!empty($comentarios)) {
+        if (!empty($comentariosConUsuarios)) {
             $suma = 0;
-            foreach ($comentarios as $c) {
-                $suma += (int)$c['valoracion'];
+            foreach ($comentariosConUsuarios as $comentario) {
+                $suma += (int)$comentario['valoracion'];
             }
-            $promedio = $suma / count($comentarios);
+            $promedio = $suma / count($comentariosConUsuarios);
         }
 
         // Datos a enviar a la vista
         $data = [
-            'negocio'    => $negocio,
-            'comentarios'=> $comentarios,
-            'pager' =>$pager,
-            'promedio'   => $promedio,
-            'header'     => view('Layouts/header'),
-            'footer'     => view('Layouts/footer'),
-            'dinamica'   => view('Layouts/dinamica'),
+            'negocio'     => $negocio,
+            'comentarios' => $comentariosConUsuarios,
+            'pager'       => $pager,
+            'promedio'    => $promedio,
+            'header'      => view('Layouts/header'),
+            'footer'      => view('Layouts/footer'),
+            'dinamica'    => view('Layouts/dinamica'),
         ];
 
         return view('PaginaPrincipal/Recursos', $data);
+
+         }
     }
-}

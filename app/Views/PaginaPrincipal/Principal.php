@@ -160,6 +160,10 @@
 </body>
 </html>
 
+<script>
+  window.isLoggedIn = <?= session()->get('logged_in') ? 'true' : 'false' ?>;
+  window.loginUrl = "<?= base_url('login') ?>";  // Guarda la URL del login para usar en JS
+</script>
 
   <script src="<?= base_url('assets/js/global.js') ?>"></script>
   <!-- Scripts -->

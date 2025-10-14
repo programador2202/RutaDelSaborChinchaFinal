@@ -59,11 +59,13 @@
             <?php if (!empty($comentarios)): ?>
               <?php foreach ($comentarios as $c): ?>
                 <tr>
-                  <td><?= esc($c['idcomentario']) ?></td>
-                  <td><?= esc($c['idlocales']) ?></td>
-                  <td><?= esc($c['tokenusuario']) ?></td>
+                 <td><?= esc($c['idcomentario']) ?></td>
+                 <td><?= esc($c['idlocales']) ?></td>
+                  <td><?= esc($c['nombre']) . ' ' . esc($c['apellido']) ?></td>
                   <td class="col-texto" title="<?= esc($c['comentario']) ?>">
-                    <?= esc($c['comentario']) ?>
+                  <?= esc($c['comentario']) ?>
+                  </td>
+
                   </td>
                   <td>
                     <?php for ($i = 1; $i <= 5; $i++): ?>

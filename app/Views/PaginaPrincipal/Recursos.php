@@ -1,9 +1,9 @@
+<?= $header; ?>
+
 <!-- Swiper CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-<?= $header; ?>
 
 <style>
 .hover-scale:hover { transform: scale(1.02); transition: 0.3s; }
@@ -205,9 +205,9 @@
                                  alt="avatar">
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <h6 class="fw-bold mb-0 text-dark">
-                                        <?= esc($c['tokenusuario'] ?? 'Usuario de Google') ?>
-                                    </h6>
+                                            <h6 class="fw-bold mb-0 text-dark">
+                                            <?= esc($c['nombre'] ?? 'Usuario') . ' ' . esc($c['apellido'] ?? '') ?>
+                                        </h6>
                                     <small class="text-muted">
                                         <?= date('d/m/Y', strtotime($c['fechahora'])) ?>
                                     </small>
@@ -252,5 +252,11 @@
 
 <br><br>
 <?= $dinamica; ?>
+
+<script>
+  window.isLoggedIn = <?= session()->get('logged_in') ? 'true' : 'false' ?>;
+  window.loginUrl = "<?= base_url('login') ?>";  // Guarda la URL del login para usar en JS
+</script>
+
 <script src="<?= base_url('assets/js/global.js') ?>"></script>
 <?= $footer; ?>

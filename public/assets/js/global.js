@@ -30,6 +30,11 @@ function actualizarBadge() {
 }
 
 function agregarAlCarrito(plato) {
+    if (!window.isLoggedIn) {
+        window.location.href = window.loginUrl;  
+        return;
+    }
+
     let existente = carrito.find(p => p.nombre === plato.nombre);
     if (existente) {
         existente.cantidad += plato.cantidad || 1;
@@ -39,6 +44,7 @@ function agregarAlCarrito(plato) {
     renderCarrito();
     mostrarNotificacion(`${plato.nombre} agregado al carrito`);
 }
+
 
 function renderCarrito() {
     const cont = document.getElementById('carrito-items');

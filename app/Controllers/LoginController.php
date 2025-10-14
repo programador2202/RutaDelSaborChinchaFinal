@@ -7,14 +7,12 @@ use CodeIgniter\Controller;
 
 class LoginController extends Controller
 {
-    // 👉 Mostrar formulario de login
     public function login()
     {
         helper(['form']);
         return view('login/Login');
     }
 
-    // 👉 Procesar inicio de sesión
     public function loginPost()
     {
         $session = session();
@@ -29,27 +27,33 @@ class LoginController extends Controller
             $session->set([
                 'user_id'   => $user['id'],
                 'nombre'    => $user['nombre'],
+                'apellido'  => $user['apellido'],
                 'email'     => $user['email'],
                 'logged_in' => true
             ]);
 
-            return redirect()->to('/dashboard');
-        } else {
-            return redirect()
-                ->back()
-                ->withInput()
-                ->with('error', 'Correo o contraseña incorrectos.');
+            $redirectUrl = $session->get('redirect_url');
+
+            if ($redirectUrl) {
+                $session->remove('redirect_url');
+                return redirect()->to($redirectUrl);
+            }
+
+            return redirect()->to(base_url('/categorias'));
         }
+
+        return redirect()
+            ->back()
+            ->withInput()
+            ->with('error', 'Correo o contraseña incorrectos.');
     }
 
-    // 👉 Mostrar formulario de registro
     public function register()
     {
         helper(['form']);
         return view('login/Registro');
     }
 
-    // 👉 Procesar registro
     public function registerPost()
     {
         helper(['form']);
@@ -58,15 +62,13 @@ class LoginController extends Controller
         $email = $this->request->getPost('email');
         $existingUser = $model->where('email', $email)->first();
 
-        // Verificar si ya existe
         if ($existingUser) {
             return redirect()
                 ->back()
                 ->withInput()
-                ->with('error', 'El correo ya está registrado.');
+                ->with('error', '❌ El correo ya está registrado.');
         }
 
-        // Insertar nuevo usuario
         $data = [
             'nombre'    => $this->request->getPost('nombre'),
             'apellido'  => $this->request->getPost('apellido'),
@@ -86,10 +88,17 @@ class LoginController extends Controller
         }
     }
 
-    // 👉 Cerrar sesión
     public function logout()
     {
-        session()->destroy();
-        return redirect()->to('login');
+        $session = session();
+        $redirectUrl = $session->get('redirect_url');
+        $session->destroy();
+
+        if ($redirectUrl) {
+            $session->remove('redirect_url');
+            return redirect()->to($redirectUrl);
+        }
+
+        return redirect()->to('/');
     }
 }

@@ -10,7 +10,7 @@ class ComentarioController extends BaseController
     public function index()
     {
         $comentarioModel = new Comentario();
-        $comentarios = $comentarioModel->findAll();
+        $comentarios = $comentarioModel->obtenerComentariosConUsuario();
 
         $data = [
             'comentarios' => $comentarios,
@@ -20,31 +20,42 @@ class ComentarioController extends BaseController
         return view('admin/recursos/Comentarios', $data);
     }
 
-    public function guardar()
-    {
-        // 🔒 Validar sesión antes de permitir enviar comentario
-        if (!session()->get('logged_in')) {
-            return redirect()->to('/login')->with('error', 'Debes iniciar sesión para comentar.');
-        }
+   public function guardar()
+{
+    $session = session();
 
-        $comentarioModel = new Comentario();
-
-        $data = [
-            'idlocales'    => $this->request->getPost('idlocales'),
-            'tokenusuario' => session()->get('tokenusuario'), 
-            'comentario'   => $this->request->getPost('comentario'),
-            'valoracion'   => $this->request->getPost('valoracion'),
-        ];
-
-        // Validación simple
-        if (empty($data['comentario']) || empty($data['valoracion'])) {
-            return redirect()->back()->with('error', 'Por favor, completa todos los campos.');
-        }
-
-        if ($comentarioModel->insert($data)) {
-            return redirect()->back()->with('success', 'Tu comentario fue publicado correctamente.');
-        } else {
-            return redirect()->back()->with('error', 'Ocurrió un error al guardar tu comentario.');
-        }
+    // Validar sesión (usamos 'logged_in' y 'user_id', igual que en login)
+    if (!$session->get('logged_in') || !$session->has('user_id')) {
+        // Puedes guardar la URL actual para redirigir después del login (opcional)
+        $session->set('redirect_url', current_url());
+        return redirect()->to('/login')->with('error', 'Debes iniciar sesión para comentar.');
     }
+
+    $comentarioModel = new Comentario();
+
+    // Obtener datos del formulario
+    $idLocal = $this->request->getPost('idlocales');
+    $comentarioTexto = $this->request->getPost('comentario');
+    $valoracion = $this->request->getPost('valoracion');
+    $usuarioId = $session->get('user_id');
+
+    // Validación simple
+    if (empty($comentarioTexto) || empty($valoracion) || empty($idLocal)) {
+        return redirect()->back()->with('error', 'Por favor, completa todos los campos.');
+    }
+
+    $data = [
+        'idlocales'    => $idLocal,
+        'tokenusuario' => $usuarioId,
+        'comentario'   => $comentarioTexto,
+        'valoracion'   => $valoracion,
+    ];
+
+    if ($comentarioModel->insert($data)) {
+        return redirect()->back()->with('success', 'Tu comentario fue publicado correctamente.');
+    } else {
+        return redirect()->back()->with('error', 'Ocurrió un error al guardar tu comentario.');
+    }
+}
+
 }

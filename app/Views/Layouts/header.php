@@ -7,18 +7,17 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="<?= base_url('assets/css/navbar.css') ?>">
-
 </head>
 
 <body>
-  <!----MENU PRINCIPAL--->
+  <!-- MENÚ PRINCIPAL -->
   <header>
     <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2">
       <div class="container">
         <!-- Logo -->
-      <a class="navbar-brand d-flex align-items-center" href="<?= base_url('/') ?>">
-        <img src="<?= base_url('img/inicio_logo.png') ?>" alt="Logo Ruta del Sabor" class="img-fluid" style="max-height: 50px;">
-      </a>
+        <a class="navbar-brand d-flex align-items-center" href="<?= base_url('/') ?>">
+          <img src="<?= base_url('img/inicio_logo.png') ?>" alt="Logo Ruta del Sabor" class="img-fluid" style="max-height: 50px;">
+        </a>
 
         <!-- Botón hamburguesa -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
@@ -30,31 +29,39 @@
         <!-- Menú -->
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li class="nav-item mx-2">
-              <a class="nav-link" href="<?= base_url('/') ?>">Inicio</a>
-            </li>
-      
-              <li class="nav-item mx-2">
-              <a class="nav-link" href="<?= base_url('/nosotros') ?>">Nosotros</a>
-            </li>
 
-              <li class="nav-item  mx-2">
-             <a class="nav-link" href="<?= base_url('/categorias') ?>">Categorías</a>
-            </li>
-            <li class="nav-item mx-2"><a class="nav-link" href="https://www.facebook.com/profile.php?id=61560111157759"><i class="fab fa-facebook fa-lg"></i></a></li>
-            <li class="nav-item mx-2"><a class="nav-link" href="https://api.whatsapp.com/send?phone=51983488541"><i class="fab fa-whatsapp fa-lg"></i></a></li>
-           <li class="nav-item mx-2">
-            <a class="nav-link" href="mailto:quiqueronceros@gmail.com" target="_blank">
-              <i class="fas fa-envelope fa-lg"></i>
-            </a>
-          </li>
+            <!-- Enlaces normales -->
+            <li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/') ?>">Inicio</a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/nosotros') ?>">Nosotros</a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/categorias') ?>">Categorías</a></li>
 
-            <li class="nav-item mx-2">
-                <a class="nav-link" href="<?= base_url('/index') ?>" title="Panel de Administración">
-                    <i class="fas fa-user-circle fa-lg"></i>
-                    <span class="visually-hidden">Acceso Administrador</span>
+            <!-- Íconos redes -->
+            <li class="nav-item mx-2"><a class="nav-link" href="https://www.facebook.com/profile.php?id=61560111157759" target="_blank"><i class="fab fa-facebook fa-lg"></i></a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="https://api.whatsapp.com/send?phone=51983488541" target="_blank"><i class="fab fa-whatsapp fa-lg"></i></a></li>
+            <li class="nav-item mx-2"><a class="nav-link" href="mailto:quiqueronceros@gmail.com" target="_blank"><i class="fas fa-envelope fa-lg"></i></a></li>
+
+            <!-- Usuario logueado o invitado -->
+            <?php if (session()->get('nombre')): ?>
+              <li class="nav-item dropdown mx-2">
+                <a class="nav-link dropdown-toggle fw-semibold text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="fas fa-user-circle me-1"></i>
+                  <?= esc(session()->get('nombre')) . ' ' . esc(session()->get('apellido')) ?>
                 </a>
-            </li>
+                <ul class="dropdown-menu dropdown-menu-end">
+                  <li>
+                    <a class="dropdown-item text-danger" href="<?= base_url('/logout') ?>">
+                      <i class="fas fa-sign-out-alt me-2"></i> Cerrar sesión
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            <?php else: ?>
+              <li class="nav-item mx-2 d-flex align-items-center">
+                <span class="navbar-text fw-semibold text-dark text-truncate" style="max-width: 150px;">
+                  <i class="fas fa-user-circle me-1"></i> Invitado
+                </span>
+              </li>
+            <?php endif; ?>
 
           </ul>
         </div>
@@ -62,19 +69,17 @@
     </nav>
   </header>
 
+  <!-- Bootstrap Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-
-  
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
+  <!-- Colapsar menú móvil al hacer clic -->
   <script>
     const navLinks = document.querySelectorAll('.nav-link');
     const navCollapse = document.getElementById('navbarSupportedContent');
 
     navLinks.forEach(link => {
       link.addEventListener('click', () => {
-        if (window.innerWidth < 992) { 
+        if (window.innerWidth < 992) {
           const collapse = new bootstrap.Collapse(navCollapse, { toggle: false });
           collapse.hide();
         }

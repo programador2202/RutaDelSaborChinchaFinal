@@ -24,7 +24,8 @@ $routes->get('login', 'LoginController::login');
 $routes->post('loginPost', 'LoginController::loginPost');
 $routes->get('register', 'LoginController::register');
 $routes->post('registerPost', 'LoginController::registerPost');
-$routes->get('logout', 'LoginqController::logout');
+$routes->get('/logout', 'LoginController::logout');
+
 
 //buscador de index
 $routes->get('/buscar', 'BuscarController::index'); 

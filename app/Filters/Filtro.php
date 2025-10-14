@@ -21,6 +21,6 @@ class Filtro implements FilterInterface
 
     public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
     {
-        // No necesitamos hacer nada después
+      
     }
 }
