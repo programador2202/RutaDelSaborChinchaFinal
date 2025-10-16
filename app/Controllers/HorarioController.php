@@ -9,6 +9,10 @@ use Locale;
 
 class HorarioController extends BaseController
     {
+         public function __construct()
+    {
+        date_default_timezone_set('America/Lima'); // Establece la zona horaria a Lima, Perú
+    }
 public function index()
 {
     $model = new Horario();

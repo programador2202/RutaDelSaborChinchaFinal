@@ -112,20 +112,6 @@ INSERT INTO `categorias` (`idcategoria`, `categoria`) VALUES
 	(11, 'Pizza'),
 	(12, 'Huariques y Otros');
 
--- Volcando estructura para tabla sistema_menus.comentarios
-CREATE TABLE IF NOT EXISTS `comentarios` (
-  `idcomentario` int NOT NULL AUTO_INCREMENT,
-  `idlocales` int NOT NULL,
-  `tokenusuario` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `fechahora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `comentario` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci,
-  `valoracion` int DEFAULT NULL,
-  PRIMARY KEY (`idcomentario`),
-  KEY `idlocales` (`idlocales`),
-  CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`),
-  CONSTRAINT `comentarios_chk_1` CHECK (((`valoracion` >= 1) and (`valoracion` <= 5)))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 
 -- Volcando datos para la tabla sistema_menus.comentarios: ~0 rows (aproximadamente)
@@ -2428,16 +2414,8 @@ INSERT INTO `usuarios` (`idusuario`, `nombreusuario`, `claveacceso`, `nivelacces
 
 
 
-CREATE TABLE comentarios (
-    idcomentario INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    idlocales INT NOT NULL,
-    tokenusuario INT UNSIGNED NOT NULL,
-    comentario TEXT NOT NULL,
-    valoracion TINYINT NOT NULL, -- asumiendo valoración de 1 a 5
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (tokenusuario) REFERENCES usuarios_login(id) ON DELETE CASCADE,
-    FOREIGN KEY (idlocales) REFERENCES locales(idlocales) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
 
 
 CREATE TABLE usuarios_login (
@@ -2450,9 +2428,81 @@ CREATE TABLE usuarios_login (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+CREATE TABLE comentarios (
+    idcomentario INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    idlocales INT NOT NULL,
+    tokenusuario INT UNSIGNED NOT NULL,
+    comentario TEXT NOT NULL,
+    valoracion TINYINT NOT NULL, -- asumiendo valoración de 1 a 5
+    fechahora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tokenusuario) REFERENCES usuarios_login(id) ON DELETE CASCADE,
+    FOREIGN KEY (idlocales) REFERENCES locales(idlocales) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+DESCRIBE comentarios;
+
+
+
+SELECT 
+    negocios.idnegocio,
+    negocios.nombre AS negocio,
+    negocios.logo,
+    cartas.nombreplato AS plato,
+    cartas.precio,
+    cartas.foto,
+    locales.direccion,
+    locales.latitud AS lat,
+    locales.longitud AS lng
+FROM negocios
+INNER JOIN locales ON locales.idnegocio = negocios.idnegocio
+INNER JOIN cartas ON cartas.idlocales = locales.idlocales;
+
+
+
+SELECT DISTINCT
+    negocios.nombre AS texto,
+    cartas.nombreplato AS plato,
+    locales.latitud AS lat,
+    locales.longitud AS lng
+FROM negocios
+INNER JOIN locales ON locales.idnegocio = negocios.idnegocio
+INNER JOIN cartas ON cartas.idlocales = locales.idlocales;
+
+
+SELECT texto, latitud, longitud FROM (
+  SELECT 
+    negocios.nombre AS texto,
+    locales.latitud,
+    locales.longitud
+  FROM negocios
+  JOIN locales ON locales.idnegocio = negocios.idnegocio
+  WHERE negocios.nombre LIKE '%Daito%'
+  GROUP BY negocios.nombre, locales.latitud, locales.longitud
+
+  UNION
+
+  SELECT 
+    cartas.nombreplato AS texto,
+    locales.latitud,
+    locales.longitud
+  FROM negocios
+  JOIN locales ON locales.idnegocio = negocios.idnegocio
+  JOIN cartas ON cartas.idlocales = locales.idlocales
+  WHERE cartas.nombreplato LIKE '%Rollos de Sushi Especiales%'
+  GROUP BY cartas.nombreplato, locales.latitud, locales.longitud
+) AS sugerencias_combinadas
+LIMIT 10;
+
+
+
+
+

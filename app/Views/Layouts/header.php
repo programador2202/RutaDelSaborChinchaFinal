@@ -15,7 +15,7 @@
     <nav class="navbar navbar-expand-lg bg-white shadow-sm py-2">
       <div class="container">
         <!-- Logo -->
-        <a class="navbar-brand d-flex align-items-center" href="<?= base_url('/') ?>">
+        <a class="navbar-brand d-flex align-items-center" href="<?= base_url('/index') ?>">
           <img src="<?= base_url('img/inicio_logo.png') ?>" alt="Logo Ruta del Sabor" class="img-fluid" style="max-height: 50px;">
         </a>
 

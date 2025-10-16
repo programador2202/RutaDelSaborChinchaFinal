@@ -75,11 +75,13 @@
 <body>
   <!-- Sidebar -->
   <div id="sidebar" class="sidebar d-flex flex-column p-3">
+
+  
     
     <h4 class="mb-4 text-center">Ruta del Sabor Chincha</h4>
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a class="nav-link active" href="<?= base_url('/dashboard') ?>"><i class="fas fa-home me-2"></i>Inicio</a>
+        <a class="nav-link active" href="<?= base_url('/datos/dashboard') ?>"><i class="fas fa-home me-2"></i>Inicio</a>
       </li>
       <li><a class="nav-link" href="<?= base_url('/ListaPersona') ?>"><i class="fas fa-user-friends me-2"></i>Personas</a></li>
       <li><a class="nav-link" href="<?= base_url('/ListaUsuarios') ?>"><i class="fas fa-users-cog me-2"></i>Usuarios</a></li>
@@ -92,31 +94,23 @@
       <li><a class="nav-link" href="#"><i class="fas fa-calendar-check me-2"></i>Reservas</a></li>
     </ul>
     <hr>
-    <div class="dropdown">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-        <img src="https://i.pravatar.cc/40" alt="" class="rounded-circle me-2">
-        <strong>Admin</strong>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-        <li><a class="dropdown-item" href="#">Perfil</a></li>
-        <li><a class="dropdown-item" href="#">Configuración</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#">Cerrar sesión</a></li>
-      </ul>
-    </div>
   </div>
 
   <!-- Contenido -->
-  <div class="content">
-    <!-- Navbar superior -->
-    <nav class="navbar navbar-expand-lg px-3">
-      <button class="btn btn-outline-dark d-lg-none" id="toggleSidebar">
-        <i class="fas fa-bars"></i>
-      </button>
-      <div class="ms-auto">
-        <span class="me-3">👋 Hola, Admin</span>
-      </div>
-    </nav>
+<div class="content">
+  <!-- Navbar superior -->
+  <nav class="navbar navbar-expand-lg px-3">
+    <button class="btn btn-outline-dark d-lg-none" id="toggleSidebar">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="ms-auto d-flex align-items-center">
+      <span class="me-3"><b>Bienvenido</b>, <?= session()->get('nombre_completo') ?></span>
+      <a href="<?= base_url('/index') ?>" class="btn btn-outline-danger btn-sm">Cerrar sesión</a>
+    </div>
+  </nav>
+
+ 
+
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -14,6 +14,7 @@ class Home extends BaseController
 
         //return view('welcome_message'); //welcome_message HTML predeterminado
         return view('PaginaPrincipal/Principal', $datos); //HTML personalizado
+        
 
     }
 
@@ -58,6 +59,8 @@ class Home extends BaseController
     {
        
         $datos['footer'] = view('Layouts/footer');
+
+        
 
         //return view('welcome_message'); //welcome_message HTML predeterminado
         return view('admin/dashboard', $datos); //HTML personalizado

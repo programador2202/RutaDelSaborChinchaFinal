@@ -119,6 +119,7 @@
                       <select name="nivelacceso" class="form-select mb-2">
                         <option value="admin" <?= $u['nivelacceso']=='admin'?'selected':'' ?>>Admin</option>
                         <option value="usuario" <?= $u['nivelacceso']=='usuario'?'selected':'' ?>>Usuario</option>
+                        <option value="moderador" <?= $u['nivelacceso']=='cliente'?'selected':'' ?>>Cliente</option>
                       </select>
 
                       <label>Persona:</label>
@@ -170,6 +171,7 @@
           <select name="nivelacceso" class="form-control mb-2">
             <option value="admin">Admin</option>
             <option value="usuario">Usuario</option>
+            <option value="cliente">Cliente</option>
           </select>
 
           <label>Persona:</label>

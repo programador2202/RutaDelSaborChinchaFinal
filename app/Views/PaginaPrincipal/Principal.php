@@ -203,6 +203,7 @@ buscador.addEventListener("input", function() {
   const query = buscador.value.trim();
   if (query.length < 3) {
     sugerenciasDiv.innerHTML = "";
+    limpiarMarcadores(); // Limpia el mapa si la búsqueda es muy corta
     return;
   }
   fetch("<?= base_url('/buscar/sugerencias') ?>?q=" + encodeURIComponent(query))
@@ -211,6 +212,7 @@ buscador.addEventListener("input", function() {
       sugerenciasDiv.innerHTML = "";
       if (data.length === 0) {
         sugerenciasDiv.innerHTML = "<div class='list-group-item'>Sin resultados</div>";
+        limpiarMarcadores();
         return;
       }
       data.forEach(item => {
@@ -221,11 +223,40 @@ buscador.addEventListener("input", function() {
         option.addEventListener("click", function() {
           buscador.value = item.texto;
           sugerenciasDiv.innerHTML = "";
-          btnBuscar.click();
+
+          // Cargar en el mapa los restaurantes/platos según la sugerencia
+          cargarRestaurantesPorPlato(item.texto);
+
+          // Si tienes un botón buscar para enviar formulario o recargar resultados, también puedes activarlo:
+          // btnBuscar.click();
         });
         sugerenciasDiv.appendChild(option);
       });
     })
     .catch(err => console.error("Error en sugerencias:", err));
 });
+
+
+
+window.cargarRestaurantesPorPlato = function(plato = '') {
+    let url = "<?= base_url('/buscar/mapaBusquedaPorPlato') ?>";
+    if (plato) {
+        url += '?q=' + encodeURIComponent(plato);
+    } else {
+        limpiarMarcadores();
+        return;
+    }
+
+    fetch(url)
+        .then(res => {
+            if (!res.ok) throw new Error("Error en la respuesta del servidor");
+            return res.json();
+        })
+        .then(data => {
+            mostrarRestaurantes(data);
+        })
+        .catch(err => console.error("Error cargando restaurantes por plato:", err));
+};
+
+
 </script>

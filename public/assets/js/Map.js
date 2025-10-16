@@ -56,31 +56,6 @@ function cargarRestaurantes(cat = '') {
         .catch(err => console.error("Error cargando restaurantes:", err));
 }
 
-// Cargar restaurantes según plato buscado
-window.cargarRestaurantesPorPlato = function(plato = '') {
-    // Construir la URL correctamente con base_url de CodeIgniter
-   let url = "<?= base_url('/buscar/mapaBusquedaPorPlato') ?>";
-    if (plato) {
-        url += '?q=' + encodeURIComponent(plato);
-    } else {
-        // Si no hay plato, opcionalmente podemos limpiar los marcadores
-        limpiarMarcadores();
-        return;
-    }
-
-    fetch(url)
-        .then(res => {
-            if (!res.ok) throw new Error("Error en la respuesta del servidor");
-            return res.json();
-        })
-        .then(data => {
-            // Mostrar en el mapa
-            mostrarRestaurantes(data);
-        })
-        .catch(err => console.error("Error cargando restaurantes por plato:", err));
-};
-
-
 // Mostrar ruta desde usuario hasta restaurante
 function mostrarRuta(destLat, destLng) {
     if (!userMarker) {

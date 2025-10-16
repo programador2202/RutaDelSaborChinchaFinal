@@ -72,34 +72,83 @@ class BuscarController extends BaseController
      */
   public function mapaBusquedaPorPlato()
 {
-    $plato = trim($this->request->getGet('q') ?? '');
+    $query = trim($this->request->getGet('q') ?? '');
     $negocioModel = new Negocio();
 
-    if (empty($plato)) {
-        return $this->response->setJSON([]);
+    $negocioModel
+        ->select('
+            negocios.idnegocio,
+            negocios.nombre AS negocio,
+            negocios.logo,
+            cartas.nombreplato AS plato,
+            cartas.precio,
+            cartas.foto,
+            locales.direccion,
+            locales.latitud AS lat,
+            locales.longitud AS lng
+        ')
+        ->join('locales', 'locales.idnegocio = negocios.idnegocio')
+        ->join('cartas', 'cartas.idlocales = locales.idlocales');
+
+    if (!empty($query)) {
+        $negocioModel->groupStart()
+            ->like('cartas.nombreplato', $query)
+            ->orLike('negocios.nombre', $query)
+        ->groupEnd();
     }
 
-    // Buscar restaurantes que tengan al menos un plato que coincida
-        $resultados = $negocioModel
-            ->select('
-                negocios.idnegocio,
-                negocios.nombre AS negocio,
-                negocios.logo,
-                cartas.nombreplato AS plato,
-                cartas.precio,
-                cartas.foto,
-                locales.direccion,
-                locales.latitud AS lat,
-                locales.longitud AS lng
-            ')
-            ->join('locales', 'locales.idnegocio = negocios.idnegocio')
-            ->join('cartas', 'cartas.idlocales = locales.idlocales')
-            ->like('cartas.nombreplato', $plato)
-            ->groupBy('negocios.idnegocio')
-            ->findAll();
-
+    $resultados = $negocioModel->findAll();
 
     return $this->response->setJSON($resultados);
 }
 
+public function sugerencias()
+{
+    $q = trim($this->request->getGet('q') ?? '');
+
+    if (strlen($q) < 3) {
+        return $this->response->setJSON([]);
+    }
+
+    $db = \Config\Database::connect();
+
+    $sql = "
+        SELECT texto, latitud, longitud FROM (
+          SELECT 
+            negocios.nombre AS texto,
+            locales.latitud,
+            locales.longitud
+          FROM negocios
+          JOIN locales ON locales.idnegocio = negocios.idnegocio
+          WHERE negocios.nombre LIKE ?
+          GROUP BY negocios.nombre, locales.latitud, locales.longitud
+
+          UNION
+
+          SELECT 
+            cartas.nombreplato AS texto,
+            locales.latitud,
+            locales.longitud
+          FROM negocios
+          JOIN locales ON locales.idnegocio = negocios.idnegocio
+          JOIN cartas ON cartas.idlocales = locales.idlocales
+          WHERE cartas.nombreplato LIKE ?
+          GROUP BY cartas.nombreplato, locales.latitud, locales.longitud
+        ) AS sugerencias_combinadas
+        LIMIT 10
+    ";
+
+    $likeQuery = '%' . $q . '%';
+
+    $query = $db->query($sql, [$likeQuery, $likeQuery]);
+    $resultados = $query->getResultArray();
+
+    return $this->response->setJSON($resultados);
 }
+
+
+
+
+
+
+    }

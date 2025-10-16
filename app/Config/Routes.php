@@ -9,19 +9,27 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 $routes->get('/nosotros', 'Home::nosotros');
 $routes->get('/categorias', 'Home::categorias');
-$routes->get('/index', 'Home::admin');
+$routes->get('/dashboard', 'Home::admin');
 $routes->get('/blog','Home::blog');
 $routes->get('negocios/detalle/(:num)', 'DetalleController::detalle/$1');
 $routes->get('comentarios', 'ComentarioController::index');
-$routes->get('dashboard', 'DashboardController::index');
+$routes->get('/datos/dashboard', 'DashboardController::index');
 
 
 $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->post('comentarios/guardar', 'ComentarioController::guardar');
 });
 
+//login de administadores
+$routes->get('/index', 'AdminLogin::index');
+$routes->post('admin/loginPost', 'AdminLogin::loginPost');
+$routes->get('admin/logout', 'AdminLogin::logout');
 
 
+
+
+
+//login de usuarios 
 $routes->get('login', 'LoginController::login');
 $routes->post('loginPost', 'LoginController::loginPost');
 $routes->get('register', 'LoginController::register');
@@ -69,6 +77,7 @@ $routes->post('/chatbot', 'ChatController::index');
 //ruta para contratos 
 $routes->get('/contratos', 'ContratoController::index');
 $routes->post('contrato/ajax','ContratoController::ajax');
+
 
 
 
