@@ -7,6 +7,52 @@ use CodeIgniter\Controller;
 
 class LoginController extends Controller
 {
+ 
+    public function index(){
+        $usuarioLogin = new Login();
+        $datos['usuarios_login'] = $usuarioLogin->findAll();
+
+         $datos['header'] = view('admin/dashboard');
+            return view('admin/recursos/ListarUsuarios', $datos);
+    }
+
+    
+public function ajax()
+{
+    $model = new Login();
+    $accion = $this->request->getPost('accion');
+
+    switch ($accion) {
+
+        case 'actualizar':
+            $id = $this->request->getPost('id');
+            $data = [
+                'nombre' => $this->request->getPost('nombre'),
+                'apellido' => $this->request->getPost('apellido'),
+                'email' => $this->request->getPost('email')
+            ];
+
+            $password = $this->request->getPost('password');
+            if ($password) {
+                $data['password'] = password_hash($password, PASSWORD_DEFAULT);
+            }
+
+            $model->update($id, $data);
+            return $this->response->setJSON(['status' => 'success', 'mensaje' => '✅ Usuario actualizado correctamente']);
+        
+
+        case 'borrar':
+            $id = $this->request->getPost('id');
+            $model->delete($id);
+            return $this->response->setJSON(['status' => 'success', 'mensaje' => '🗑️ Usuario eliminado correctamente']);
+        
+
+        default:
+            return $this->response->setJSON(['status' => 'error', 'mensaje' => 'Acción no válida']);
+    }
+}
+
+
     public function login()
     {
         helper(['form']);

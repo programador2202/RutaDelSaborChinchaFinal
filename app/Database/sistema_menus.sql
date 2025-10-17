@@ -1,11 +1,9 @@
--- Active: 1726418525214@@127.0.0.1@3306@sistema_menus
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
 -- Versión del servidor:         8.4.3 - MySQL Community Server - GPL
 -- SO del servidor:              Win64
 -- HeidiSQL Versión:             12.8.0.6908
 -- --------------------------------------------------------
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
@@ -112,7 +110,20 @@ INSERT INTO `categorias` (`idcategoria`, `categoria`) VALUES
 	(11, 'Pizza'),
 	(12, 'Huariques y Otros');
 
-
+-- Volcando estructura para tabla sistema_menus.comentarios
+CREATE TABLE IF NOT EXISTS `comentarios` (
+  `idcomentario` int unsigned NOT NULL AUTO_INCREMENT,
+  `idlocales` int NOT NULL,
+  `tokenusuario` int unsigned NOT NULL,
+  `comentario` text NOT NULL,
+  `valoracion` tinyint NOT NULL,
+  `fechahora` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idcomentario`),
+  KEY `tokenusuario` (`tokenusuario`),
+  KEY `idlocales` (`idlocales`),
+  CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`tokenusuario`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Volcando datos para la tabla sistema_menus.comentarios: ~0 rows (aproximadamente)
 
@@ -129,9 +140,11 @@ CREATE TABLE IF NOT EXISTS `contratos` (
   KEY `idnegocio` (`idnegocio`),
   CONSTRAINT `contratos_ibfk_1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`),
   CONSTRAINT `contratos_ibfk_2` FOREIGN KEY (`idnegocio`) REFERENCES `negocios` (`idnegocio`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.contratos: ~0 rows (aproximadamente)
+INSERT INTO `contratos` (`idcontrato`, `idusuario`, `idnegocio`, `fechainicio`, `fechafin`, `inversion`) VALUES
+	(1, 1, 1, '2024-12-02', '2025-10-17', 150.00);
 
 -- Volcando estructura para tabla sistema_menus.departamentos
 CREATE TABLE IF NOT EXISTS `departamentos` (
@@ -2061,7 +2074,7 @@ CREATE TABLE IF NOT EXISTS `horarios` (
   CONSTRAINT `horarios_ibfk_1` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.horarios: ~5 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.horarios: ~6 rows (aproximadamente)
 INSERT INTO `horarios` (`idhorario`, `idlocales`, `diasemana`, `inicio`, `fin`) VALUES
 	(1, 1, 'martes', '14:00:00', '22:00:00'),
 	(2, 1, 'miercoles', '14:00:00', '22:00:00'),
@@ -2140,7 +2153,7 @@ CREATE TABLE IF NOT EXISTS `personas` (
   UNIQUE KEY `numerodoc` (`numerodoc`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.personas: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.personas: ~2 rows (aproximadamente)
 INSERT INTO `personas` (`idpersona`, `apellidos`, `nombres`, `tipodoc`, `numerodoc`, `telefono`) VALUES
 	(1, 'Contreras Carrillo', 'Aimar', 'DNI', '73989219', '955365019'),
 	(4, 'Flores', 'Lopez', 'DNI', '71548236', '956123456');
@@ -2355,25 +2368,9 @@ INSERT INTO `provincias` (`idprovincia`, `provincia`, `iddepartamento`) VALUES
 	(195, 'Padre Abad ', 25),
 	(196, 'Purús', 25);
 
--- Volcando estructura para tabla sistema_menus.reservas
-CREATE TABLE IF NOT EXISTS `reservas` (
-  `idreserva` int NOT NULL AUTO_INCREMENT,
-  `idhorario` int NOT NULL,
-  `fechahora` datetime NOT NULL,
-  `cantidadpersonas` int DEFAULT NULL,
-  `confirmacion` tinyint(1) DEFAULT '0',
-  `idusuariovalida` int DEFAULT NULL,
-  `idpersonasolicitud` int NOT NULL,
-  PRIMARY KEY (`idreserva`),
-  KEY `idhorario` (`idhorario`),
-  KEY `idusuariovalida` (`idusuariovalida`),
-  KEY `idpersonasolicitud` (`idpersonasolicitud`),
-  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`idhorario`) REFERENCES `horarios` (`idhorario`),
-  CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`idusuariovalida`) REFERENCES `usuarios` (`idusuario`),
-  CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`idpersonasolicitud`) REFERENCES `personas` (`idpersona`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- Volcando datos para la tabla sistema_menus.reservas: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.reservas: ~1 rows (aproximadamente)
+INSERT INTO `reservas` (`idreserva`, `idusuario`, `idlocal`, `fecha_reserva`, `hora_reserva`, `cantidad_personas`, `mensaje`, `estado`, `fecha_registro`) VALUES
+	(1, 1, 2, '2025-10-20', '19:30:00', 4, 'Mesa cerca de la ventana, por favor.', 'pendiente', '2025-10-17 04:23:38');
 
 -- Volcando estructura para tabla sistema_menus.secciones
 CREATE TABLE IF NOT EXISTS `secciones` (
@@ -2407,102 +2404,30 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`idpersona`) REFERENCES `personas` (`idpersona`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.usuarios: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.usuarios: ~2 rows (aproximadamente)
 INSERT INTO `usuarios` (`idusuario`, `nombreusuario`, `claveacceso`, `nivelacceso`, `idpersona`) VALUES
-	(1, 'admin1', '123456', 'admin', 1),
+	(1, 'rutadelsabor@gmail.com', '123456', 'admin', 1),
 	(3, 'flores2025', '159874263', '', 4);
 
 
-
-
-
-
-
-CREATE TABLE usuarios_login (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    apellido VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
-CREATE TABLE comentarios (
-    idcomentario INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    idlocales INT NOT NULL,
-    tokenusuario INT UNSIGNED NOT NULL,
-    comentario TEXT NOT NULL,
-    valoracion TINYINT NOT NULL, -- asumiendo valoración de 1 a 5
-    fechahora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (tokenusuario) REFERENCES usuarios_login(id) ON DELETE CASCADE,
-    FOREIGN KEY (idlocales) REFERENCES locales(idlocales) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
-
-
-
+CREATE TABLE IF NOT EXISTS `reservas` (
+  `idreserva` int NOT NULL AUTO_INCREMENT,
+  `idusuario` int NOT NULL,
+  `idlocal` int NOT NULL,
+  `fecha_reserva` date NOT NULL,
+  `hora_reserva` time NOT NULL,
+  `cantidad_personas` int DEFAULT '1',
+  `mensaje` text COLLATE utf8mb4_general_ci,
+  `estado` enum('pendiente','confirmada','cancelada','completada') COLLATE utf8mb4_general_ci DEFAULT 'pendiente',
+  `fecha_registro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idreserva`),
+  KEY `idusuario` (`idusuario`),
+  KEY `idlocal` (`idlocal`),
+  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`idlocal`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
-DESCRIBE comentarios;
-
-
-
-SELECT 
-    negocios.idnegocio,
-    negocios.nombre AS negocio,
-    negocios.logo,
-    cartas.nombreplato AS plato,
-    cartas.precio,
-    cartas.foto,
-    locales.direccion,
-    locales.latitud AS lat,
-    locales.longitud AS lng
-FROM negocios
-INNER JOIN locales ON locales.idnegocio = negocios.idnegocio
-INNER JOIN cartas ON cartas.idlocales = locales.idlocales;
-
-
-
-SELECT DISTINCT
-    negocios.nombre AS texto,
-    cartas.nombreplato AS plato,
-    locales.latitud AS lat,
-    locales.longitud AS lng
-FROM negocios
-INNER JOIN locales ON locales.idnegocio = negocios.idnegocio
-INNER JOIN cartas ON cartas.idlocales = locales.idlocales;
-
-
-SELECT texto, latitud, longitud FROM (
-  SELECT 
-    negocios.nombre AS texto,
-    locales.latitud,
-    locales.longitud
-  FROM negocios
-  JOIN locales ON locales.idnegocio = negocios.idnegocio
-  WHERE negocios.nombre LIKE '%Daito%'
-  GROUP BY negocios.nombre, locales.latitud, locales.longitud
-
-  UNION
-
-  SELECT 
-    cartas.nombreplato AS texto,
-    locales.latitud,
-    locales.longitud
-  FROM negocios
-  JOIN locales ON locales.idnegocio = negocios.idnegocio
-  JOIN cartas ON cartas.idlocales = locales.idlocales
-  WHERE cartas.nombreplato LIKE '%Rollos de Sushi Especiales%'
-  GROUP BY cartas.nombreplato, locales.latitud, locales.longitud
-) AS sugerencias_combinadas
-LIMIT 10;
-
-
-
-
-

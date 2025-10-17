@@ -85,6 +85,7 @@
       </li>
       <li><a class="nav-link" href="<?= base_url('/ListaPersona') ?>"><i class="fas fa-user-friends me-2"></i>Personas</a></li>
       <li><a class="nav-link" href="<?= base_url('/ListaUsuarios') ?>"><i class="fas fa-users-cog me-2"></i>Usuarios</a></li>
+      <li><a class="nav-link" href="<?= base_url('/usuarios') ?>"><i class="fas fa-users-cog me-2"></i>Visitantes</a></li>
       <li><a class="nav-link" href="<?= base_url('negocios') ?>"><i class="fas fa-store me-2"></i>Negocios</a></li>
       <li><a class="nav-link" href="<?= base_url('/locales') ?>"><i class="fas fa-map-marker-alt me-2"></i>Locales</a></li>
       <li><a class="nav-link" href="<?= base_url('/cartas') ?>"><i class="fas fa-utensils me-2"></i>Cartas</a></li>

@@ -25,6 +25,11 @@ $routes->get('/index', 'AdminLogin::index');
 $routes->post('admin/loginPost', 'AdminLogin::loginPost');
 $routes->get('admin/logout', 'AdminLogin::logout');
 
+//listar usuarios
+$routes->get('/usuarios', 'LoginController::index');
+$routes->post('/usuarios/ajax', 'LoginController::ajax');
+
+
 
 
 
