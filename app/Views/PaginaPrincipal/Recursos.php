@@ -81,7 +81,7 @@
         </div>
     <?php endif; ?>
 
-    <!-- CARTA AGRUPADA POR SECCIONES -->
+
 
        <!-- CARTA AGRUPADA POR SECCIONES -->
     <h2 class="fw-bold text-danger mb-4">Nuestra Carta</h2>
@@ -255,7 +255,7 @@
 
 <script>
   window.isLoggedIn = <?= session()->get('logged_in') ? 'true' : 'false' ?>;
-  window.loginUrl = "<?= base_url('login') ?>";  // Guarda la URL del login para usar en JS
+  window.loginUrl = "<?= base_url('login') ?>";
 </script>
 
 <script src="<?= base_url('assets/js/global.js') ?>"></script>

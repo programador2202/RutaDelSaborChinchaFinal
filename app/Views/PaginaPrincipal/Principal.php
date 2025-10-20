@@ -4,19 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ruta del Sabor Chincha</title>
+
+  <!--  Bootstrap y librerías externas -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link rel="stylesheet" href="<?= base_url('assets/css/index.css') ?>">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
+  <!-- Estilos propios -->
+  <link rel="stylesheet" href="<?= base_url('assets/css/index.css') ?>">
 </head>
 <body>
- 
 
+  <!--  HEADER -->
   <?= $header; ?>
+
   <main>
-    <!-- Buscador -->
-   <div class="container my-5">
+    <!--  BUSCADOR -->
+    <div class="container my-5">
       <h3 class="text-center mb-3"><b>Encuentra tu restaurante favorito</b></h3>
       <div class="input-group shadow position-relative">
         <input type="text" class="form-control" placeholder="Buscar por nombre o plato..." id="buscador" autocomplete="off">
@@ -26,122 +31,94 @@
       <div class="mt-4" id="resultados"></div>
     </div>
 
-  <!-- Mapa y Categorías -->
-<section id="explora" class="py-5 bg-light">
-  <div class="container">
-    <div class="row">
-      <!-- Mapa -->
-      <div class="col-md-8 mb-4">
-        <div id="map" style="height: 600px; border-radius: 12px; overflow: hidden;"></div>
-      </div>
-
-  
-<!-- Categorías -->
-<div class="col-md-4">
-  <h3 class="text-center mb-4"><b>Explora por Categorías</b></h3>
-  <div class="list-group shadow-sm">
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Comida Oriental')">
-      <i class="fas fa-utensils me-2"></i> Comida Oriental
-    </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Hamburgueserias')">
-      <i class="fas fa-hamburger me-2"></i> Hamburguesas
-    </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Mariscos')">
-      <i class="fas fa-fish me-2"></i> Mariscos
-    </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Pollerías')">
-      <i class="fas fa-drumstick-bite me-2"></i> Pollerías
-    </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Pizzerías')">
-      <i class="fas fa-pizza-slice me-2"></i> Pizzerías
-    </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Cafeterías y Pastelerías')">
-      <i class="fas fa-coffee me-2"></i> Cafeterías y Pastelerías
-    </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Parrillas')">
-      <i class="fas fa-fire me-2"></i> Parrillas
-    </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Vitinicolas')">
-      <i class="fas fa-wine-glass-alt me-2"></i> Vitivinícolas
-    </button>
-    <button class="list-group-item list-group-item-action d-flex align-items-center" onclick="filtrarTexto('Gourmet')">
-  <i class="fas fa-cheese me-2"></i> Gourmet
-</button>
-
-  </div>
-</div>
-</section>
-
-
-    <!-- Destacados -->
-   <section class="py-5 bg-white">
+    <!-- MAPA Y CATEGORÍAS -->
+    <section id="explora" class="py-5 bg-light">
       <div class="container">
-        <h2 class="text-center mb-4 text-black"><b>Destacado Del Mes</b></h2>
-        <div class="scroll-wrapper">
-          <button class="scroll-btn left" onclick="scrollRestaurantes(-1)">&#10094;</button>
-          <button class="scroll-btn right" onclick="scrollRestaurantes(1)">&#10095;</button>
-          <div class="scroll-container" id="restaurantesScroll">
-            <!-- Card ejemplo -->
-            <div class="card scroll-card">
-              <img src="<?= base_url('img/causa_agresiva (2).jpg') ?>" class="card-img-top">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><b>El Punto Marino</b></h5>
-                <p class="card-text">¡Explora el Encanto del Mar en el Punto Marino!</p>
-                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
-              </div>
-            </div>
+        <div class="row">
+          <!-- Mapa -->
+          <div class="col-md-8 mb-4">
+            <div id="map" style="height: 600px; border-radius: 12px; overflow: hidden;"></div>
+          </div>
 
-             <div class="card scroll-card">
-              <img src="<?= base_url('img/Chijaukay.jpg') ?>" class="card-img-top">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><b>Mister Wok</b></h5>
-                <p class="card-text">¿Antojo de comida china? Descubre el auténtico sabor del chifa en Mister Wok</p>
-                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
-              </div>
-            </div>
-             <div class="card scroll-card">
-              <img src="<?= base_url('img/el_gran_combo restaurante_chincha_c (3).jpg') ?>" class="card-img-top">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><b>El Gran Combo</b></h5>
-                <p class="card-text">Somos el lugar ideal para disfrutar de una experiencia gastronómica que celebra las ricas tradiciones culinarias.</p>
-                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
-              </div>
-            </div>
-             <div class="card scroll-card">
-              <img src="<?= base_url('img/3.jpg') ?>" class="card-img-top">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><b>¡Daddy’s Truck’s Burger!</b></h5>
-                <p class="card-text">Daddy’s Trucks Burger es un restaurante único en Chincha que se distingue por ofrecer una experiencia de comida rápida diferente</p>
-                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
-              </div>
-            </div>
-             <div class="card scroll-card">
-              <img src="<?= base_url('img/daito (5).jpg') ?>" class="card-img-top">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><b>DAITO</b></h5>
-                <p class="card-text">En Daito, nos enorgullecemos de ser un restaurante dedicado a presentar la exquisita cocina Nikkei,
-                  mezcla de sabores que refleja la rica herencia cultural de Perú y Japón.</p>
-                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
-              </div>
-            </div>
-            <div class="card scroll-card">
-              <img src="<?= base_url('img/vitivinicola_chincha_san_carlos (1).jpg') ?>" class="card-img-top">
-              <div class="card-body d-flex flex-column">
-                <h5 class="card-title"><b>Viñedos San Carlos</b></h5>
-                <p class="card-text">Somos una bodega ubicada en el pintoresco valle de Sunampe, Chincha, Perú. 
-                Viñedos San Carlos se destaca por su dedicación a la calidad, la innovación y el respeto por el medio ambiente.</p>
-                <a href="<?= base_url('views/restaurantes/ElPuntoMarino.php') ?>" class="btn btn-warning mt-auto"><b>Visitar</b></a>
-              </div>
+          <!-- Categorías -->
+          <div class="col-md-4">
+            <h3 class="text-center mb-4"><b>Explora por Categorías</b></h3>
+            <div class="list-group shadow-sm">
+              <?php
+              $categorias = [
+                ['icon' => 'utensils', 'texto' => 'Comida Oriental'],
+                ['icon' => 'hamburger', 'texto' => 'Hamburgueserías'],
+                ['icon' => 'fish', 'texto' => 'Mariscos'],
+                ['icon' => 'drumstick-bite', 'texto' => 'Pollerías'],
+                ['icon' => 'pizza-slice', 'texto' => 'Pizzerías'],
+                ['icon' => 'coffee', 'texto' => 'Cafeterías y Pastelerías'],
+                ['icon' => 'fire', 'texto' => 'Parrillas'],
+                ['icon' => 'wine-glass-alt', 'texto' => 'Vitinicolas'],
+                ['icon' => 'cheese', 'texto' => 'Gourmet']
+              ];
+
+              foreach ($categorias as $cat): ?>
+                <button class="list-group-item list-group-item-action d-flex align-items-center"
+                        onclick="filtrarTexto('<?= $cat['texto'] ?>')">
+                  <i class="fas fa-<?= $cat['icon'] ?> me-2"></i> <?= $cat['texto'] ?>
+                </button>
+              <?php endforeach; ?>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Formulario -->
+    <!-- DESTACADOS -->
+    <section class="py-5 bg-white">
+      <div class="container">
+        <h2 class="text-center mb-4 text-black"><b>Destacado del Mes</b></h2>
+
+        <div class="scroll-wrapper position-relative">
+          <button class="scroll-btn left" onclick="scrollRestaurantes(-1)">&#10094;</button>
+          <button class="scroll-btn right" onclick="scrollRestaurantes(1)">&#10095;</button>
+
+          <div class="scroll-container" id="restaurantesScroll">
+            <?php if (!empty($negociosDestacados)): ?>
+              <?php foreach ($negociosDestacados as $negocio): ?>
+                <div class="card scroll-card">
+                  <img 
+                    src="<?= !empty($negocio['logo']) 
+                            ? base_url($negocio['logo']) 
+                            : base_url('img/default-logo.jpg') ?>" 
+                    class="card-img-top"
+                    alt="<?= esc($negocio['negocio']) ?>"
+                  >
+
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title"><b><?= esc($negocio['negocio']) ?></b></h5>
+                    <p class="card-text mb-2">
+                      Valoración: 
+                      <span class="text-warning">
+                        <?= number_format($negocio['promedio_valoracion'], 1) ?> ⭐
+                      </span><br>
+                      Comentarios: <?= $negocio['cantidad_comentarios'] ?>
+                    </p>
+                    <a href="<?= base_url('negocios/detalle/' . $negocio['idnegocio']) ?>" 
+                       class="btn btn-warning mt-auto">
+                      <b>Visitar</b>
+                    </a>
+                  </div>
+                </div>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <p class="text-center text-muted">No hay negocios registrados aún.</p>
+            <?php endif; ?>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMULARIO DE CONTACTO -->
     <section class="py-5 bg-light text-dark text-center">
       <h3><b>¿Tienes un restaurante en Chincha?</b></h3>
       <p>Únete a <b>Ruta del Sabor Chincha</b> y haz que tu negocio aparezca en nuestra plataforma.</p>
+
       <form class="row g-2 justify-content-center mt-3" style="max-width: 900px; margin: auto;">
         <div class="col-md-5"><input type="text" class="form-control" placeholder="Nombre del negocio" required></div>
         <div class="col-md-5"><input type="email" class="form-control" placeholder="Correo de contacto" required></div>
@@ -152,111 +129,97 @@
     </section>
   </main>
 
-  
-<?= $dinamica; ?>
-  <!-- FOOTER -->
+  <!-- BLOQUES DINÁMICOS Y FOOTER -->
+  <?= $dinamica; ?>
   <?= $footer; ?>
-  
-</body>
-</html>
 
-<script>
-  window.isLoggedIn = <?= session()->get('logged_in') ? 'true' : 'false' ?>;
-  window.loginUrl = "<?= base_url('login') ?>";  // Guarda la URL del login para usar en JS
-</script>
+  <!-- VARIABLES GLOBALES -->
+  <script>
+    window.isLoggedIn = <?= session()->get('logged_in') ? 'true' : 'false' ?>;
+    window.loginUrl = "<?= base_url('login') ?>"; 
+  </script>
 
+  <!-- FUNCIONES JS -->
+  <script>
+    function scrollRestaurantes(direction) {
+      const container = document.getElementById('restaurantesScroll');
+      const scrollAmount = 300;
+      container.scrollBy({ left: scrollAmount * direction, behavior: 'smooth' });
+    }
+  </script>
+
+  <!-- SCRIPTS -->
   <script src="<?= base_url('assets/js/global.js') ?>"></script>
-  <!-- Scripts -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="<?= base_url('assets/js/Map.js') ?>"></script>
-  
+
+  <!--JS BUSCADOR -->
   <script>
-const buscador = document.getElementById("buscador");
-const btnBuscar = document.getElementById("btnBuscar");
-const sugerenciasDiv = document.getElementById("sugerencias");
-const resultadosDiv = document.getElementById("resultados");
+    const buscador = document.getElementById("buscador");
+    const btnBuscar = document.getElementById("btnBuscar");
+    const sugerenciasDiv = document.getElementById("sugerencias");
+    const resultadosDiv = document.getElementById("resultados");
 
-// Buscar
-btnBuscar.addEventListener("click", function() {
-  const query = buscador.value.trim();
-  if (!query) return;
-  fetch("<?= base_url('/buscar') ?>?q=" + encodeURIComponent(query))
-    .then(res => {
-      if (!res.ok) throw new Error('Respuesta no OK: ' + res.status);
-      return res.text();
-    })
-    .then(html => {
-      resultadosDiv.innerHTML = html;
-      sugerenciasDiv.innerHTML = "";
-      // actualizar mapa con la búsqueda
-      if (window.cargarRestaurantesPorPlato) {
-        window.cargarRestaurantesPorPlato(query);
-      }
-    })
-    .catch(err => console.error("Error en búsqueda:", err));
-});
-
-// Autocomplete
-buscador.addEventListener("input", function() {
-  const query = buscador.value.trim();
-  if (query.length < 3) {
-    sugerenciasDiv.innerHTML = "";
-    limpiarMarcadores(); // Limpia el mapa si la búsqueda es muy corta
-    return;
-  }
-  fetch("<?= base_url('/buscar/sugerencias') ?>?q=" + encodeURIComponent(query))
-    .then(res => res.json())
-    .then(data => {
-      sugerenciasDiv.innerHTML = "";
-      if (data.length === 0) {
-        sugerenciasDiv.innerHTML = "<div class='list-group-item'>Sin resultados</div>";
-        limpiarMarcadores();
-        return;
-      }
-      data.forEach(item => {
-        const option = document.createElement("button");
-        option.type = "button";
-        option.className = "list-group-item list-group-item-action";
-        option.textContent = item.texto;
-        option.addEventListener("click", function() {
-          buscador.value = item.texto;
+    // 🔸 Buscar
+    btnBuscar.addEventListener("click", () => {
+      const query = buscador.value.trim();
+      if (!query) return;
+      fetch("<?= base_url('/buscar') ?>?q=" + encodeURIComponent(query))
+        .then(res => res.text())
+        .then(html => {
+          resultadosDiv.innerHTML = html;
           sugerenciasDiv.innerHTML = "";
+          if (window.cargarRestaurantesPorPlato) window.cargarRestaurantesPorPlato(query);
+        })
+        .catch(err => console.error("Error en búsqueda:", err));
+    });
 
-          // Cargar en el mapa los restaurantes/platos según la sugerencia
-          cargarRestaurantesPorPlato(item.texto);
-
-          // Si tienes un botón buscar para enviar formulario o recargar resultados, también puedes activarlo:
-          // btnBuscar.click();
-        });
-        sugerenciasDiv.appendChild(option);
-      });
-    })
-    .catch(err => console.error("Error en sugerencias:", err));
-});
-
-
-
-window.cargarRestaurantesPorPlato = function(plato = '') {
-    let url = "<?= base_url('/buscar/mapaBusquedaPorPlato') ?>";
-    if (plato) {
-        url += '?q=' + encodeURIComponent(plato);
-    } else {
+    //Autocomplete
+    buscador.addEventListener("input", () => {
+      const query = buscador.value.trim();
+      if (query.length < 3) {
+        sugerenciasDiv.innerHTML = "";
         limpiarMarcadores();
         return;
-    }
-
-    fetch(url)
-        .then(res => {
-            if (!res.ok) throw new Error("Error en la respuesta del servidor");
-            return res.json();
-        })
+      }
+      fetch("<?= base_url('/buscar/sugerencias') ?>?q=" + encodeURIComponent(query))
+        .then(res => res.json())
         .then(data => {
-            mostrarRestaurantes(data);
+          sugerenciasDiv.innerHTML = "";
+          if (data.length === 0) {
+            sugerenciasDiv.innerHTML = "<div class='list-group-item'>Sin resultados</div>";
+            limpiarMarcadores();
+            return;
+          }
+          data.forEach(item => {
+            const option = document.createElement("button");
+            option.type = "button";
+            option.className = "list-group-item list-group-item-action";
+            option.textContent = item.texto;
+            option.addEventListener("click", () => {
+              buscador.value = item.texto;
+              sugerenciasDiv.innerHTML = "";
+              cargarRestaurantesPorPlato(item.texto);
+            });
+            sugerenciasDiv.appendChild(option);
+          });
         })
+        .catch(err => console.error("Error en sugerencias:", err));
+    });
+
+    //Cargar resultados en mapa
+    window.cargarRestaurantesPorPlato = function(plato = '') {
+      let url = "<?= base_url('/buscar/mapaBusquedaPorPlato') ?>";
+      if (plato) url += '?q=' + encodeURIComponent(plato);
+      else { limpiarMarcadores(); return; }
+
+      fetch(url)
+        .then(res => res.json())
+        .then(data => mostrarRestaurantes(data))
         .catch(err => console.error("Error cargando restaurantes por plato:", err));
-};
-
-
-</script>
+    };
+  </script>
+</body>
+</html>

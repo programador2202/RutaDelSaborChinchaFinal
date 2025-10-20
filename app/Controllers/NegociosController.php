@@ -50,6 +50,7 @@ class NegociosController extends BaseController
         ->select('idpersona, nombres, apellidos')
         ->orderBy('apellidos', 'ASC')
         ->findAll();
+        
 
     $datos['header'] = view('admin/dashboard');
 

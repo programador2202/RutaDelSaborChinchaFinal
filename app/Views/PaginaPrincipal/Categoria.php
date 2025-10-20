@@ -25,11 +25,19 @@
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   }
-  .card-business img {
-    object-fit: cover;
-    height: 180px;
-    width: 100%;
-  }
+ .card-business img {
+  width: 100%;
+  height: 200px;              /* 🔧 Altura fija para uniformar */
+  object-fit: cover;          /* Recorta proporcionalmente sin deformar */
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  transition: transform 0.3s ease;
+}
+
+.card-business img:hover {
+  transform: scale(1.05);     /* Efecto sutil al pasar el mouse */
+}
+
   /* Estilo del título de la categoría */
 .category-title {
     display: block;

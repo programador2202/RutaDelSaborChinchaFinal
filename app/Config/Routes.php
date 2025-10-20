@@ -16,6 +16,7 @@ $routes->get('comentarios', 'ComentarioController::index');
 $routes->get('/datos/dashboard', 'DashboardController::index');
 
 
+
 $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->post('comentarios/guardar', 'ComentarioController::guardar');
 });
@@ -24,6 +25,7 @@ $routes->group('', ['filter' => 'auth'], function($routes) {
 $routes->get('/index', 'AdminLogin::index');
 $routes->post('admin/loginPost', 'AdminLogin::loginPost');
 $routes->get('admin/logout', 'AdminLogin::logout');
+
 
 //listar usuarios
 $routes->get('/usuarios', 'LoginController::index');
@@ -80,6 +82,9 @@ $routes->post('/chatbot', 'ChatController::index');
 //ruta para contratos 
 $routes->get('/contratos', 'ContratoController::index');
 $routes->post('contrato/ajax','ContratoController::ajax');
+// Rutas para reservas
+$routes->get('/reservas', 'ReservasController::index');        
+$routes->post('ajax', 'ReservasController::ajax');  
 
 
 

@@ -21,21 +21,47 @@ class Reservas extends Model
 
     protected $useTimestamps = false;
 
-    // Obtener reservas con datos de usuario y local
-    public function obtenerReservasConDetalles()
-    {
-        return $this->select('
-                    reservas.*, 
-                    locales.nombre AS nombre_local,
-                    solicitante.nombre AS solicitante_nombre, 
-                    solicitante.apellido AS solicitante_apellido, 
-                    validador.nombre AS validador_nombre, 
-                    validador.apellido AS validador_apellido
-                ')
-                ->join('usuarios_login AS solicitante', 'reservas.idpersonasolicitud = solicitante.id')
-                ->join('usuarios_login AS validador', 'reservas.idusuariovalida = validador.id', 'left')
-                ->join('locales', 'reservas.idlocales = locales.idlocales')
-                ->orderBy('reservas.fechahora', 'DESC')
-                ->findAll();
-    }
+    /**
+     * Obtiene todas las reservas con información relacionada
+     */
+public function obtenerReservasConUsuarios()
+{
+    return $this->select("
+            reservas.*, 
+            CONCAT(ul.nombre, ' ', ul.apellido) AS solicitante,
+            CONCAT(p.nombres, ' ', p.apellidos) AS validador,
+            CONCAT(h.inicio, ' - ', h.fin) AS horario,
+            n.nombre AS nombre_local
+        ")
+        ->join('usuarios_login ul', 'ul.id = reservas.idpersonasolicitud')
+        ->join('usuarios u', 'u.idusuario = reservas.idusuariovalida', 'left')
+        ->join('personas p', 'p.idpersona = u.idpersona', 'left')
+        ->join('horarios h', 'h.idhorario = reservas.idhorario')
+        ->join('locales l', 'l.idlocales = reservas.idlocales')
+        ->join('negocios n', 'n.idnegocio = l.idnegocio')
+        ->orderBy('reservas.idreserva', 'DESC')
+        ->findAll();
+}
+public function obtenerReservasPorRepresentante($idpersona)
+{
+    return $this->select("
+            reservas.*, 
+            CONCAT(ul.nombre, ' ', ul.apellido) AS solicitante,
+            CONCAT(p.nombres, ' ', p.apellidos) AS validador,
+            CONCAT(h.inicio, ' - ', h.fin) AS horario,
+            l.idlocales,
+            l.idnegocio
+        ")
+        ->join('usuarios_login ul', 'ul.id = reservas.idpersonasolicitud')
+        ->join('usuarios u', 'u.idusuario = reservas.idusuariovalida', 'left')
+        ->join('personas p', 'p.idpersona = u.idpersona', 'left')
+        ->join('horarios h', 'h.idhorario = reservas.idhorario')
+        ->join('locales l', 'l.idlocales = reservas.idlocales')
+        ->join('negocios n', 'n.idnegocio = l.idnegocio')
+        ->where('n.idrepresentante', $idpersona)
+        ->orderBy('reservas.idreserva', 'DESC')
+        ->findAll();
+}
+
+
 }

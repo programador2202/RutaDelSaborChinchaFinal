@@ -5,17 +5,24 @@ use App\Models\Negocio;
 use App\Models\Categorias;
 class Home extends BaseController
 {
-    public function index()
+     public function index()
     {
-         //Solicitar las secciones: HEADER+FOOTER
+        // Instancia del modelo
+        $negocioModel = new Negocio();
+
+        // Obtener los negocios ordenados por valoración y cantidad de comentarios
+        $negociosDestacados = $negocioModel->getNegociosOrdenados();
+
+        // Solicitar las secciones: HEADER + FOOTER + DINÁMICA
         $datos['header'] = view('Layouts/header');
         $datos['footer'] = view('Layouts/footer');
         $datos['dinamica'] = view('Layouts/dinamica');
 
-        //return view('welcome_message'); //welcome_message HTML predeterminado
-        return view('PaginaPrincipal/Principal', $datos); //HTML personalizado
-        
+        // Pasar también los negocios a la vista principal
+        $datos['negociosDestacados'] = $negociosDestacados;
 
+        // Cargar la vista principal personalizada
+        return view('PaginaPrincipal/Principal', $datos);
     }
 
     public function nosotros()
