@@ -11,34 +11,53 @@ use App\Models\Provincias;
 
 class LocalController extends BaseController
 {
-    public function index(): string
-    {
-        $localModel      = new Locales();
-        $negocioModel    = new Negocio();
-        $distritoModel   = new Distritos();
-        $departamentoModel = new Departamentos();
-        $provinciaModel  = new Provincias();
+public function index(): string
+{
+    $localModel       = new Locales();
+    $negocioModel     = new Negocio();
+    $distritoModel    = new Distritos();
+    $departamentoModel = new Departamentos();
+    $provinciaModel   = new Provincias();
 
-        // Traer locales con información de provincia y departamento
-        $datos['locales'] = $localModel
-            ->select('locales.*, negocios.nombre AS negocio, distritos.distrito AS distrito, 
-                      provincias.provincia AS provincia, departamentos.departamento AS departamento, 
-                      provincias.idprovincia, departamentos.iddepartamento')
-            ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
-            ->join('distritos', 'distritos.iddistrito = locales.iddistrito')
-            ->join('provincias', 'provincias.idprovincia = distritos.idprovincia')
-            ->join('departamentos', 'departamentos.iddepartamento = provincias.iddepartamento')
-            ->orderBy('locales.idlocales', 'ASC')
-            ->findAll();
+    $nivel     = session()->get('nivelacceso');
+    $idpersona = session()->get('idpersona'); // idpersona del representante
 
-        $datos['negocios']      = $negocioModel->findAll();
-        $datos['distritos']     = $distritoModel->findAll();
-        $datos['provincias']    = $provinciaModel->findAll();
-        $datos['departamentos'] = $departamentoModel->findAll();
-        $datos['header']        = view('admin/dashboard');
+    // Traer locales con información de provincia y departamento
+    $localesQuery = $localModel
+        ->select('locales.*, negocios.nombre AS negocio, distritos.distrito AS distrito, 
+                  provincias.provincia AS provincia, departamentos.departamento AS departamento, 
+                  provincias.idprovincia, departamentos.iddepartamento')
+        ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
+        ->join('distritos', 'distritos.iddistrito = locales.iddistrito')
+        ->join('provincias', 'provincias.idprovincia = distritos.idprovincia')
+        ->join('departamentos', 'departamentos.iddepartamento = provincias.iddepartamento')
+        ->orderBy('locales.idlocales', 'ASC');
 
-        return view('admin/recursos/Locales', $datos);
+    if ($nivel === 'representante') {
+        // Solo los locales de los negocios que pertenecen a este representante
+        $localesQuery->where('negocios.idrepresentante', $idpersona);
     }
+
+    $datos['locales'] = $localesQuery->findAll();
+
+    // Negocios filtrados según el nivel
+    if ($nivel === 'representante') {
+        $datos['negocios'] = $negocioModel
+            ->where('idrepresentante', $idpersona)
+            ->findAll();
+    } else {
+        $datos['negocios'] = $negocioModel->findAll();
+    }
+
+    // Para el resto de datos, los puede ver completo
+    $datos['distritos']     = $distritoModel->findAll();
+    $datos['provincias']    = $provinciaModel->findAll();
+    $datos['departamentos'] = $departamentoModel->findAll();
+    $datos['header']        = view('admin/dashboard');
+
+    return view('admin/recursos/Locales', $datos);
+}
+
 
     public function ajax()
     {

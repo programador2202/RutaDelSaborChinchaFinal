@@ -140,11 +140,9 @@ CREATE TABLE IF NOT EXISTS `contratos` (
   KEY `idnegocio` (`idnegocio`),
   CONSTRAINT `contratos_ibfk_1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`),
   CONSTRAINT `contratos_ibfk_2` FOREIGN KEY (`idnegocio`) REFERENCES `negocios` (`idnegocio`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.contratos: ~0 rows (aproximadamente)
-INSERT INTO `contratos` (`idcontrato`, `idusuario`, `idnegocio`, `fechainicio`, `fechafin`, `inversion`) VALUES
-	(1, 1, 1, '2024-12-02', '2025-10-17', 150.00);
 
 -- Volcando estructura para tabla sistema_menus.departamentos
 CREATE TABLE IF NOT EXISTS `departamentos` (
@@ -2072,7 +2070,7 @@ CREATE TABLE IF NOT EXISTS `horarios` (
   PRIMARY KEY (`idhorario`),
   KEY `idlocales` (`idlocales`),
   CONSTRAINT `horarios_ibfk_1` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.horarios: ~6 rows (aproximadamente)
 INSERT INTO `horarios` (`idhorario`, `idlocales`, `diasemana`, `inicio`, `fin`) VALUES
@@ -2081,7 +2079,8 @@ INSERT INTO `horarios` (`idhorario`, `idlocales`, `diasemana`, `inicio`, `fin`) 
 	(3, 1, 'jueves', '14:00:00', '22:00:00'),
 	(4, 1, 'viernes', '14:00:00', '22:00:00'),
 	(5, 1, 'sabado', '14:00:00', '22:00:00'),
-	(6, 1, 'domingo', '14:00:00', '22:00:00');
+	(6, 1, 'domingo', '14:00:00', '22:00:00'),
+	(7, 6, 'lunes', '14:00:00', '22:00:00');
 
 -- Volcando estructura para tabla sistema_menus.locales
 CREATE TABLE IF NOT EXISTS `locales` (
@@ -2133,13 +2132,13 @@ CREATE TABLE IF NOT EXISTS `negocios` (
 INSERT INTO `negocios` (`idnegocio`, `idcategoria`, `idrepresentante`, `nombre`, `nombrecomercial`, `slogan`, `ruc`, `logo`) VALUES
 	(1, 2, 1, 'DAITO', 'DAITO', 'Daito es un restaurante que ofrece cocina Nikkei, una fusión de sabores peruanos y japoneses...', '20111111119', 'uploads/negocios/logo/1758990903_a02a106a10ea2ddbab2d.jpg'),
 	(3, 2, 1, 'Mister Wok', 'Mister Wok', 'Mister Wok en Pueblo Nuevo ofrece auténtica comida china en un ambiente familiar y acogedor...', '20111111111', 'uploads/negocios/logo/1758990972_034e9ee3dce0d78ba076.jpg'),
-	(4, 2, 1, 'Sacha Nikkei', 'Sacha Nikkei', 'Sacha Nikkei una fusión japonesa-peruana con sushi, ramen y platos del...', '21111111113', 'uploads/negocios/logo/1758991024_a8678d4a6d7169eecff9.jpg'),
-	(7, 3, 1, 'El Gran Combo', 'El Gran Combo', 'Sanguchería "El Gran Combo" ofrece productos frescos y de calidad que celebran...', '20111111120', 'uploads/negocios/logo/1759009285_10b416e8f367074c8684.jpg'),
-	(8, 3, 1, '¡Daddy’s Truck’s Burger!', '¡Daddy’s Truck’s Burger!', '"Daddy’s Truck’s Burger" hamburguesas auténticas y frescas en estilo food truck...', '21111111130', 'uploads/negocios/logo/1759009337_5d8121ca00f666d134c9.jpg'),
-	(9, 5, 1, 'El Punto Marino', 'El Punto Marino', 'El Punto Marino ofrece platos marinos frescos y un excelente servicio...', '20111111129', 'uploads/negocios/logo/1759009424_d2f54c62c8327cea43a2.jpg'),
-	(10, 1, 1, 'Viñedos San Carlos', 'Viñedos San Carlos', 'Somos una bodega ubicada en el pintoresco valle de Sunampe, Chincha, Perú. Fundada con la...', '20111111149', 'uploads/negocios/logo/1759009513_fe364eca8a4eac95098f.jpg'),
-	(11, 1, 1, 'Viñedos Grimaldi', 'Viñedos Grimaldi', 'Cuatro generaciones dedicadas a crear vinos y pisco de excelencia, llevando el sabor al mundo.', '20111111101', 'uploads/negocios/logo/1759009612_f8ab6a4d29a9cf9ec68f.jpg'),
-	(12, 1, 1, 'El Copete', 'El Copete', '"Viñedos Copete" tradición, autenticidad y sabor único en cada botella artesanal.', '20111111109', 'uploads/negocios/logo/1759009678_4d7999756aeeb80bcfc0.jpg');
+	(4, 2, 6, 'Sacha Nikkei', 'Sacha Nikkei', 'Sacha Nikkei una fusión japonesa-peruana con sushi, ramen y platos del...', '21111111113', 'uploads/negocios/logo/1758991024_a8678d4a6d7169eecff9.jpg'),
+	(7, 3, 6, 'El Gran Combo', 'El Gran Combo', 'Sanguchería ', '20111111120', 'uploads/negocios/logo/1759009285_10b416e8f367074c8684.jpg'),
+	(8, 3, 4, '¡Daddy’s Truck’s Burger!', '¡Daddy’s Truck’s Burger!', 'Rápido y delicioso', '21111111130', 'uploads/negocios/logo/1759009337_5d8121ca00f666d134c9.jpg'),
+	(9, 5, 4, 'El Punto Marino', 'El Punto Marino', 'El Punto Marino ofrece platos marinos frescos y un excelente servicio...', '20111111129', 'uploads/negocios/logo/1759009424_d2f54c62c8327cea43a2.jpg'),
+	(10, 1, 5, 'Viñedos San Carlos', 'Viñedos San Carlos', 'Somos una bodega ubicada en el pintoresco valle de Sunampe, Chincha, Perú. Fundada con la...', '20111111149', 'uploads/negocios/logo/1759009513_fe364eca8a4eac95098f.jpg'),
+	(11, 1, 5, 'Viñedos Grimaldi', 'Viñedos Grimaldi', 'Cuatro generaciones dedicadas a crear vinos y pisco de excelencia, llevando el sabor al mundo.', '20111111101', 'uploads/negocios/logo/1759009612_f8ab6a4d29a9cf9ec68f.jpg'),
+	(12, 1, 5, 'El Copete', 'El Copete', '', '20111111109', 'uploads/negocios/logo/1759009678_4d7999756aeeb80bcfc0.jpg');
 
 -- Volcando estructura para tabla sistema_menus.personas
 CREATE TABLE IF NOT EXISTS `personas` (
@@ -2151,12 +2150,14 @@ CREATE TABLE IF NOT EXISTS `personas` (
   `telefono` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`idpersona`),
   UNIQUE KEY `numerodoc` (`numerodoc`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.personas: ~2 rows (aproximadamente)
 INSERT INTO `personas` (`idpersona`, `apellidos`, `nombres`, `tipodoc`, `numerodoc`, `telefono`) VALUES
-	(1, 'Contreras Carrillo', 'Aimar', 'DNI', '73989219', '955365019'),
-	(4, 'Flores', 'Lopez', 'DNI', '71548236', '956123456');
+	(1, 'Contreras Carrillo', 'Aimar Alexander', 'DNI', '73989219', '955365019'),
+	(4, 'Flores Lopez', 'Maria Alejandra', 'DNI', '71548236', '956123456'),
+	(5, 'Huamani Merino', 'Jesus Sam', 'DNI', '74125896', '900153478'),
+	(6, 'Cabrera Torres', 'Ximena Xiomara', 'DNI', '75398165', '984653211');
 
 -- Volcando estructura para tabla sistema_menus.provincias
 CREATE TABLE IF NOT EXISTS `provincias` (
@@ -2368,9 +2369,28 @@ INSERT INTO `provincias` (`idprovincia`, `provincia`, `iddepartamento`) VALUES
 	(195, 'Padre Abad ', 25),
 	(196, 'Purús', 25);
 
--- Volcando datos para la tabla sistema_menus.reservas: ~1 rows (aproximadamente)
-INSERT INTO `reservas` (`idreserva`, `idusuario`, `idlocal`, `fecha_reserva`, `hora_reserva`, `cantidad_personas`, `mensaje`, `estado`, `fecha_registro`) VALUES
-	(1, 1, 2, '2025-10-20', '19:30:00', 4, 'Mesa cerca de la ventana, por favor.', 'pendiente', '2025-10-17 04:23:38');
+-- Volcando estructura para tabla sistema_menus.reservas
+CREATE TABLE IF NOT EXISTS `reservas` (
+  `idreserva` int unsigned NOT NULL AUTO_INCREMENT,
+  `idhorario` int NOT NULL,
+  `idlocales` int NOT NULL,
+  `fechahora` datetime NOT NULL,
+  `cantidadpersonas` int DEFAULT NULL,
+  `confirmacion` tinyint(1) DEFAULT '0',
+  `idusuariovalida` int unsigned DEFAULT NULL,
+  `idpersonasolicitud` int unsigned NOT NULL,
+  PRIMARY KEY (`idreserva`),
+  KEY `idhorario` (`idhorario`),
+  KEY `idlocales` (`idlocales`),
+  KEY `idusuariovalida` (`idusuariovalida`),
+  KEY `idpersonasolicitud` (`idpersonasolicitud`),
+  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`idhorario`) REFERENCES `horarios` (`idhorario`) ON DELETE CASCADE,
+  CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE,
+  CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`idusuariovalida`) REFERENCES `usuarios_login` (`id`) ON DELETE SET NULL,
+  CONSTRAINT `reservas_ibfk_4` FOREIGN KEY (`idpersonasolicitud`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Volcando datos para la tabla sistema_menus.reservas: ~0 rows (aproximadamente)
 
 -- Volcando estructura para tabla sistema_menus.secciones
 CREATE TABLE IF NOT EXISTS `secciones` (
@@ -2402,30 +2422,31 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   UNIQUE KEY `nombreusuario` (`nombreusuario`),
   KEY `idpersona` (`idpersona`),
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`idpersona`) REFERENCES `personas` (`idpersona`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Volcando datos para la tabla sistema_menus.usuarios: ~2 rows (aproximadamente)
 INSERT INTO `usuarios` (`idusuario`, `nombreusuario`, `claveacceso`, `nivelacceso`, `idpersona`) VALUES
-	(1, 'rutadelsabor@gmail.com', '123456', 'admin', 1),
-	(3, 'flores2025', '159874263', '', 4);
+	(4, 'restaurante1@gmail.com', '$2y$10$XM7/Heg4Z04dABtlrE6pRe1oWqm70geaYKB.XPPK1vR.9bD9F100O', 'admin', 1),
+	(5, 'restaurante2@gmail.com', '$2y$10$uO83OWMbi3doQ0dbU/tavOVPtYNE4U6FW20nggmnUv8zUCRYR68tm', 'representante', 4),
+	(7, 'restaurante3@gmail.com', '$2y$10$NZEfYbIBNhW74cfW8YuziewLA/RnRCJdK8TmVG2iKNZE/Wk7TRr9C', 'representante', 5),
+	(8, 'restaurante4@gmail.com', '$2y$10$uTbZ.8sP63aV94Vwr/8KrenVNIfzNfIj7pFsxc.g10YMQPar.bKKu', 'representante', 6);
 
-
-CREATE TABLE IF NOT EXISTS `reservas` (
-  `idreserva` int NOT NULL AUTO_INCREMENT,
-  `idusuario` int NOT NULL,
-  `idlocal` int NOT NULL,
-  `fecha_reserva` date NOT NULL,
-  `hora_reserva` time NOT NULL,
-  `cantidad_personas` int DEFAULT '1',
-  `mensaje` text COLLATE utf8mb4_general_ci,
-  `estado` enum('pendiente','confirmada','cancelada','completada') COLLATE utf8mb4_general_ci DEFAULT 'pendiente',
+-- Volcando estructura para tabla sistema_menus.usuarios_login
+CREATE TABLE IF NOT EXISTS `usuarios_login` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(100) NOT NULL,
+  `apellido` varchar(100) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `password` varchar(255) NOT NULL,
   `fecha_registro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`idreserva`),
-  KEY `idusuario` (`idusuario`),
-  KEY `idlocal` (`idlocal`),
-  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`idusuario`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`idlocal`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Volcando datos para la tabla sistema_menus.usuarios_login: ~1 rows (aproximadamente)
+INSERT INTO `usuarios_login` (`id`, `nombre`, `apellido`, `email`, `password`, `fecha_registro`) VALUES
+	(1, 'Aimar', 'Contreras Carrillo', 'alexander2000contreras@gmail.com', '$2y$10$UdP8tpOBZDD7LTnpuryDiuQwEF95q.AccEgFADqOUVCesJdp52qWi', '2025-10-19 02:58:03');
+
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;

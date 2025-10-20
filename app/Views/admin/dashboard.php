@@ -80,20 +80,39 @@
     
     <h4 class="mb-4 text-center">Ruta del Sabor Chincha</h4>
     <ul class="nav nav-pills flex-column mb-auto">
-      <li class="nav-item">
-        <a class="nav-link active" href="<?= base_url('/datos/dashboard') ?>"><i class="fas fa-home me-2"></i>Inicio</a>
-      </li>
-      <li><a class="nav-link" href="<?= base_url('/ListaPersona') ?>"><i class="fas fa-user-friends me-2"></i>Personas</a></li>
-      <li><a class="nav-link" href="<?= base_url('/ListaUsuarios') ?>"><i class="fas fa-users-cog me-2"></i>Usuarios</a></li>
-      <li><a class="nav-link" href="<?= base_url('/usuarios') ?>"><i class="fas fa-users-cog me-2"></i>Visitantes</a></li>
-      <li><a class="nav-link" href="<?= base_url('negocios') ?>"><i class="fas fa-store me-2"></i>Negocios</a></li>
-      <li><a class="nav-link" href="<?= base_url('/locales') ?>"><i class="fas fa-map-marker-alt me-2"></i>Locales</a></li>
-      <li><a class="nav-link" href="<?= base_url('/cartas') ?>"><i class="fas fa-utensils me-2"></i>Cartas</a></li>
-      <li><a class="nav-link" href="<?= base_url('/horarios') ?>"><i class="fas fa-clock me-2"></i>Horario</a></li>
-      <li><a class="nav-link" href="<?= base_url('/contratos') ?>"><i class="fas fa-file-contract me-2"></i>Contratos</a></li>
-      <li><a class="nav-link" href="<?= base_url('comentarios') ?>"><i class="fas fa-comments me-2"></i>Comentarios</a></li>
-      <li><a class="nav-link" href="#"><i class="fas fa-calendar-check me-2"></i>Reservas</a></li>
-    </ul>
+      <ul class="nav nav-pills flex-column mb-auto px-2">
+   <li>
+
+  <a class="nav-link <?= uri_string() === 'datos/dashboard' ? 'active' : '' ?>" href="<?= base_url('/datos/dashboard') ?>">
+    <i class="fas fa-home me-2"></i>Inicio
+  </a>
+</li>
+
+
+    <?php if(session()->get('nivelacceso') === 'admin'): ?>
+        <li><a class="nav-link" href="<?= base_url('/ListaPersona') ?>"><i class="fas fa-user-friends me-2"></i>Personas</a></li>
+        <li><a class="nav-link" href="<?= base_url('/ListaUsuarios') ?>"><i class="fas fa-users-cog me-2"></i>Usuarios</a></li>
+        <li><a class="nav-link" href="<?= base_url('/usuarios') ?>"><i class="fas fa-users me-2"></i>Visitantes</a></li>
+        <li><a class="nav-link" href="<?= base_url('negocios') ?>"><i class="fas fa-store me-2"></i>Negocios</a></li>
+        <li><a class="nav-link" href="<?= base_url('/locales') ?>"><i class="fas fa-map-marker-alt me-2"></i>Locales</a></li>
+        <li><a class="nav-link" href="<?= base_url('/cartas') ?>"><i class="fas fa-utensils me-2"></i>Cartas</a></li>
+        <li><a class="nav-link" href="<?= base_url('/horarios') ?>"><i class="fas fa-clock me-2"></i>Horario</a></li>
+        <li><a class="nav-link" href="<?= base_url('/contratos') ?>"><i class="fas fa-file-contract me-2"></i>Contratos</a></li>
+        <li><a class="nav-link" href="<?= base_url('comentarios') ?>"><i class="fas fa-comments me-2"></i>Comentarios</a></li>
+        <li><a class="nav-link" href="#"><i class="fas fa-calendar-check me-2"></i>Reservas</a></li>
+
+    <?php elseif(session()->get('nivelacceso') === 'representante'): ?>
+  
+        <li><a class="nav-link" href="<?= base_url('negocios') ?>"><i class="fas fa-store me-2"></i>Mis Negocios</a></li>
+        <li><a class="nav-link" href="<?= base_url('/locales') ?>"><i class="fas fa-map-marker-alt me-2"></i>Locales</a></li>
+        <li><a class="nav-link" href="<?= base_url('/cartas') ?>"><i class="fas fa-utensils me-2"></i>Cartas</a></li>
+        <li><a class="nav-link" href="<?= base_url('/horarios') ?>"><i class="fas fa-clock me-2"></i>Horario</a></li>
+        <li><a class="nav-link" href="<?= base_url('comentarios') ?>"><i class="fas fa-comments me-2"></i>Comentarios</a></li>
+    
+  
+    <?php endif; ?>
+</ul>
+
     <hr>
   </div>
 
@@ -105,8 +124,8 @@
       <i class="fas fa-bars"></i>
     </button>
     <div class="ms-auto d-flex align-items-center">
-      <span class="me-3"><b>Bienvenido</b>, <?= session()->get('nombre_completo') ?></span>
-      <a href="<?= base_url('/index') ?>" class="btn btn-outline-danger btn-sm">Cerrar sesión</a>
+      <span class="me-3"><b>Bienvenido</b>, <?= esc(session()->get('nombre_completo')) ?></span>
+      <a href="<?= base_url('admin/logout') ?>" class="btn btn-outline-danger btn-sm">Cerrar sesión</a>
     </div>
   </nav>
 

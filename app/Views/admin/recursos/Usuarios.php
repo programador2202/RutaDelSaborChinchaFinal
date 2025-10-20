@@ -77,7 +77,7 @@
                 <?php if($u['nivelacceso'] == 'admin'): ?>
                   <span class="badge bg-danger">Administrador</span>
                 <?php else: ?>
-                  <span class="badge bg-success">Usuario</span>
+                  <span class="badge bg-success">representante</span>
                 <?php endif; ?>
               </td>
               <td><?= $u['nombres'] . ' ' . $u['apellidos'] ?></td>
@@ -109,7 +109,7 @@
 
                       <label>Clave Acceso:</label>
                       <div class="input-group mb-2">
-                        <input type="password" name="claveacceso" class="form-control" value="<?= $u['claveacceso'] ?>" id="clave<?= $u['idusuario'] ?>" required>
+                       <input type="password" name="claveacceso" class="form-control mb-2" placeholder="Dejar vacío si no cambia">
                         <button class="btn btn-outline-secondary toggle-pass" type="button" data-target="clave<?= $u['idusuario'] ?>">
                           <i class="bi bi-eye"></i>
                         </button>
@@ -118,8 +118,7 @@
                       <label>Nivel Acceso:</label>
                       <select name="nivelacceso" class="form-select mb-2">
                         <option value="admin" <?= $u['nivelacceso']=='admin'?'selected':'' ?>>Admin</option>
-                        <option value="usuario" <?= $u['nivelacceso']=='usuario'?'selected':'' ?>>Usuario</option>
-                        <option value="moderador" <?= $u['nivelacceso']=='cliente'?'selected':'' ?>>Cliente</option>
+                        <option value="representante" <?= $u['nivelacceso']=='representante'?'selected':'' ?>>representante</option>
                       </select>
 
                       <label>Persona:</label>
@@ -170,8 +169,7 @@
           <label>Nivel Acceso:</label>
           <select name="nivelacceso" class="form-control mb-2">
             <option value="admin">Admin</option>
-            <option value="usuario">Usuario</option>
-            <option value="cliente">Cliente</option>
+            <option value="representante">representante</option>
           </select>
 
           <label>Persona:</label>
@@ -194,13 +192,6 @@
   </div>
 </div>
 
-<!-- Bootstrap JS y SweetAlert -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<!-- Bootstrap JS y SweetAlert -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Bootstrap JS y SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -226,7 +217,7 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  const AJAX_URL = "<?= base_url('usuarios/ajax') ?>";
+  const AJAX_URL = "<?= base_url('/usuarios/accion') ?>";
 
   // Función genérica de alertas
   const showAlert = (icon, title, timer = 1500) =>

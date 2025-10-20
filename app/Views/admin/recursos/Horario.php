@@ -107,7 +107,7 @@
             <?php else: ?>
               <tr>
                 <td colspan="7" class="text-center">
-                  <div class="alert alert-info mb-0">No hay horarios registrados</div>
+                  <div class=" mb-0">No hay horarios registrados</div>
                 </td>
               </tr>
             <?php endif; ?>

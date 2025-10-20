@@ -33,7 +33,6 @@ $routes->post('/usuarios/ajax', 'LoginController::ajax');
 
 
 
-
 //login de usuarios 
 $routes->get('login', 'LoginController::login');
 $routes->post('loginPost', 'LoginController::loginPost');
@@ -63,7 +62,7 @@ $routes->get('/ListaPersona', 'PersonaController::index');
 $routes->post('personas/ajax', 'PersonaController::ajax');    
 //rutas para usuarios
 $routes->get('/ListaUsuarios', 'UsuarioController::index');       
-$routes->post('usuarios/ajax', 'UsuarioController::ajax');    
+$routes->post('/usuarios/accion', 'UsuarioController::ajax');    
 // Rutas para el CRUD de Negocios
 $routes->get('negocios', 'NegociosController::index');
 $routes->post('negocios/ajax', 'NegociosController::ajax');
@@ -78,7 +77,6 @@ $routes->get('/horarios', 'HorarioController::index');
 $routes->post('Horario/ajax', 'HorarioController::ajax');
 //ruta para chatbox
 $routes->post('/chatbot', 'ChatController::index');
-
 //ruta para contratos 
 $routes->get('/contratos', 'ContratoController::index');
 $routes->post('contrato/ajax','ContratoController::ajax');

@@ -9,43 +9,56 @@ use App\Models\Secciones;
 
 class CartaController extends BaseController
 {
-    public function index(): string
-    {
-        $cartaModel   = new Cartas();
-        $localModel   = new Locales();
-        $seccionModel = new Secciones();
+   public function index(): string
+{
+    $cartaModel   = new Cartas();
+    $localModel   = new Locales();
+    $seccionModel = new Secciones();
 
-        $datos['cartas'] = $cartaModel
-            ->select('
-                cartas.idcarta,
-                cartas.idlocales,
-                cartas.idseccion,
-                cartas.nombreplato,
-                cartas.precio,
-                cartas.foto,
-                locales.direccion AS direccion_local,
-                negocios.nombre AS nombre_negocio,
-                secciones.seccion AS nombre_seccion
-            ')
-            ->join('locales', 'locales.idlocales = cartas.idlocales')
-            ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
-            ->join('secciones', 'secciones.idseccion = cartas.idseccion')
-            ->orderBy('secciones.seccion', 'ASC')
-            ->orderBy('cartas.idcarta', 'ASC')
+    $nivel     = session()->get('nivelacceso');
+    $idpersona = session()->get('idpersona'); 
 
-            ->findAll();
+    // Cartas
+    $cartasQuery = $cartaModel
+        ->select('
+            cartas.idcarta,
+            cartas.idlocales,
+            cartas.idseccion,
+            cartas.nombreplato,
+            cartas.precio,
+            cartas.foto,
+            locales.direccion AS direccion_local,
+            negocios.nombre AS nombre_negocio,
+            secciones.seccion AS nombre_seccion
+        ')
+        ->join('locales', 'locales.idlocales = cartas.idlocales')
+        ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
+        ->join('secciones', 'secciones.idseccion = cartas.idseccion')
+        ->orderBy('secciones.seccion', 'ASC')
+        ->orderBy('cartas.idcarta', 'ASC');
 
-        $datos['locales'] = $localModel
-            ->select('locales.*, negocios.nombre AS nombre_negocio')
-            ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
-            ->findAll();
-
-        $datos['secciones'] = $seccionModel->findAll();
-
-        $datos['header'] = view('admin/dashboard');
-
-        return view('admin/recursos/Carta', $datos);
+    if ($nivel === 'representante') {
+        // Solo cartas de negocios del representante
+        $cartasQuery->where('negocios.idrepresentante', $idpersona);
     }
+
+    $datos['cartas'] = $cartasQuery->findAll();
+
+    // Locales
+    $localesQuery = $localModel
+        ->select('locales.*, negocios.nombre AS nombre_negocio')
+        ->join('negocios', 'negocios.idnegocio = locales.idnegocio');
+
+    if ($nivel === 'representante') {
+        $localesQuery->where('negocios.idrepresentante', $idpersona);
+    }
+
+    $datos['locales'] = $localesQuery->findAll();
+    $datos['secciones'] = $seccionModel->findAll();
+    $datos['header'] = view('admin/dashboard');
+
+    return view('admin/recursos/Carta', $datos);
+}
 
     public function ajax()
     {

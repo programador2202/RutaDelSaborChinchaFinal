@@ -14,14 +14,19 @@ class Comentario extends Model
 
 
 
-public function obtenerComentariosConUsuario()
+public function obtenerComentariosConUsuario($idrepresentante = null)
 {
-    return $this->db->table($this->table)
-                    ->select('comentarios.*, usuarios_login.nombre AS nombre_usuario, usuarios_login.apellido, negocios.nombre AS nombre_local')
-                    ->join('usuarios_login', 'usuarios_login.id = comentarios.tokenusuario')
-                    ->join('locales', 'locales.idlocales = comentarios.idlocales')
-                    ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
-                    ->get()
-                    ->getResultArray();
+    $builder = $this->db->table($this->table)
+        ->select('comentarios.*, usuarios_login.nombre AS nombre_usuario, usuarios_login.apellido, negocios.nombre AS nombre_local')
+        ->join('usuarios_login', 'usuarios_login.id = comentarios.tokenusuario')
+        ->join('locales', 'locales.idlocales = comentarios.idlocales')
+        ->join('negocios', 'negocios.idnegocio = locales.idnegocio');
+
+    if ($idrepresentante) {
+        // Filtrar solo los comentarios de los negocios del representante
+        $builder->where('negocios.idrepresentante', $idrepresentante);
     }
+
+    return $builder->get()->getResultArray();
 }
+    }

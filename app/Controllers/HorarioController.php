@@ -11,25 +11,38 @@ class HorarioController extends BaseController
     {
          public function __construct()
     {
-        date_default_timezone_set('America/Lima'); // Establece la zona horaria a Lima, Perú
+        date_default_timezone_set('America/Lima'); 
     }
 public function index()
 {
     $model = new Horario();
     $modelLocales = new Locales();
 
-    $data['horarios'] = $model
+    $nivel     = session()->get('nivelacceso');
+    $idpersona = session()->get('idpersona'); 
+    // Horarios
+    $horariosQuery = $model
         ->select('horarios.*, locales.direccion, locales.telefono, negocios.nombre AS negocio, negocios.nombrecomercial AS nombre_local')
         ->join('locales', 'locales.idlocales = horarios.idlocales')
         ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
-        ->orderBy('horarios.diasemana', 'ASC')
-        ->findAll();
+        ->orderBy('horarios.diasemana', 'ASC');
 
-    // Consulta todos los locales y negocios para el select
-    $data['locales'] = $modelLocales
+    if ($nivel === 'representante') {
+        $horariosQuery->where('negocios.idrepresentante', $idpersona);
+    }
+
+    $data['horarios'] = $horariosQuery->findAll();
+
+    // Locales
+    $localesQuery = $modelLocales
         ->select('locales.*, negocios.nombre AS negocio')
-        ->join('negocios', 'negocios.idnegocio = locales.idnegocio')
-        ->findAll();
+        ->join('negocios', 'negocios.idnegocio = locales.idnegocio');
+
+    if ($nivel === 'representante') {
+        $localesQuery->where('negocios.idrepresentante', $idpersona);
+    }
+
+    $data['locales'] = $localesQuery->findAll();
 
     $data['header'] = view('admin/dashboard');
     return view('admin/recursos/Horario', $data);

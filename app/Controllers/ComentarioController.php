@@ -7,18 +7,26 @@ use App\Models\Comentario;
 
 class ComentarioController extends BaseController
 {
-    public function index()
-    {
-        $comentarioModel = new Comentario();
+  public function index()
+{
+    $comentarioModel = new Comentario();
+    $nivel     = session()->get('nivelacceso');
+    $idpersona = session()->get('idpersona'); 
+
+    if ($nivel === 'representante') {
+        $comentarios = $comentarioModel->obtenerComentariosConUsuario($idpersona);
+    } else {
         $comentarios = $comentarioModel->obtenerComentariosConUsuario();
-
-        $data = [
-            'comentarios' => $comentarios,
-            'header'      => view('admin/dashboard')
-        ];
-
-        return view('admin/recursos/Comentarios', $data);
     }
+
+    $data = [
+        'comentarios' => $comentarios,
+        'header'      => view('admin/dashboard')
+    ];
+
+    return view('admin/recursos/Comentarios', $data);
+}
+
 
    public function guardar()
 {

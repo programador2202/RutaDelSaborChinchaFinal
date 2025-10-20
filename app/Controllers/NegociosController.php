@@ -10,35 +10,53 @@ use CodeIgniter\Exceptions\PageNotFoundException;
 
 class NegociosController extends BaseController
 {
-    public function index(): string
-    {
-        $negocioModel   = new Negocio();
-        $categoriaModel = new Categorias();
-        $personaModel   = new Personas();
+   public function index(): string
+{
+    $negocioModel   = new Negocio();
+    $categoriaModel = new Categorias();
+    $personaModel   = new Personas();
 
+    $nivel     = session()->get('nivelacceso');
+    $idpersona = session()->get('idpersona');
+    // Filtrar según el usuario
+    if ($nivel === 'admin') {
         $datos['negocios'] = $negocioModel
-        ->select('negocios.*, categorias.categoria, personas.nombres, personas.apellidos')
-        ->join('categorias', 'categorias.idcategoria = negocios.idcategoria')
-        ->join('personas', 'personas.idpersona = negocios.idrepresentante')
-        ->orderBy('categorias.categoria', 'ASC') 
-        ->orderBy('negocios.idnegocio', 'ASC')
+            ->select('negocios.*, categorias.categoria, personas.nombres, personas.apellidos')
+            ->join('categorias', 'categorias.idcategoria = negocios.idcategoria')
+            ->join('personas', 'personas.idpersona = negocios.idrepresentante')
+            ->orderBy('categorias.categoria', 'ASC') 
+            ->orderBy('negocios.idnegocio', 'ASC')
+            ->findAll();
+    } elseif ($nivel === 'representante') {
+        // Solo los negocios que pertenecen a su persona
+        $datos['negocios'] = $negocioModel
+            ->select('negocios.*, categorias.categoria, personas.nombres, personas.apellidos')
+            ->join('categorias', 'categorias.idcategoria = negocios.idcategoria')
+            ->join('personas', 'personas.idpersona = negocios.idrepresentante')
+            ->where('negocios.idrepresentante', $idpersona) 
+            ->orderBy('categorias.categoria', 'ASC') 
+            ->orderBy('negocios.idnegocio', 'ASC')
+            ->findAll();
+    } else {
+        $datos['negocios'] = [];
+    }
+
+    $datos['categorias'] = $categoriaModel
+        ->select('idcategoria, categoria')
+        ->orderBy('categoria', 'ASC')
         ->findAll();
 
+    $datos['personas'] = $personaModel
+        ->select('idpersona, nombres, apellidos')
+        ->orderBy('apellidos', 'ASC')
+        ->findAll();
 
-        $datos['categorias'] = $categoriaModel
-            ->select('idcategoria, categoria')
-            ->orderBy('categoria', 'ASC')
-            ->findAll();
+    $datos['header'] = view('admin/dashboard');
 
-        $datos['personas'] = $personaModel
-            ->select('idpersona, nombres, apellidos')
-            ->orderBy('apellidos', 'ASC')
-            ->findAll();
+    return view('admin/recursos/Negocios', $datos);
+}
 
-        $datos['header'] = view('admin/dashboard');
 
-        return view('admin/recursos/Negocios', $datos);
-    }
 
     public function ajax()
     {
