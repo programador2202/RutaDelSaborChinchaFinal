@@ -73,17 +73,7 @@ class Home extends BaseController
         return view('admin/dashboard', $datos); //HTML personalizado
 }
 
-    public function vitinicolas()
-    {
-        $datos['header']= view('Layouts/header');
-        $datos['footer'] = view('Layouts/footer');
-
-        //retornamos la vista vitinicolas
-
-        return view('PaginaPrincipal/vino',$datos);
-
-    }
-
+    
 
 
   

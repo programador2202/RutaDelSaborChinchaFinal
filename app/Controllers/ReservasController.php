@@ -27,10 +27,30 @@ class ReservasController extends BaseController
     ];
 
     return view('admin/recursos/Reservas', $data);
+    
+}
+
+public function vistaPublica()
+{
+    $session = session();
+
+    $data = [
+        'nombreCompleto' => $session->has('logged_in')
+            ? $session->get('nombre') . ' ' . $session->get('apellido')
+            : '',
+        'idusuario' => $session->get('user_id') ?? null,
+        'email'     => $session->get('email') ?? '',
+        'telefono'  => $session->get('telefono') ?? '',
+    ];
+
+    return view('PaginaPrincipal/Reservas', $data);
 }
 
 
+
+
     // Método AJAX general
+
     public function ajax()
     {
         $reservaModel = new Reservas();

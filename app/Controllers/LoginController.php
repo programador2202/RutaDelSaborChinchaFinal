@@ -75,6 +75,7 @@ public function ajax()
                 'nombre'    => $user['nombre'],
                 'apellido'  => $user['apellido'],
                 'email'     => $user['email'],
+                'telefono'  => $user['telefono'] ?? '',
                 'logged_in' => true
             ]);
 
@@ -85,7 +86,7 @@ public function ajax()
                 return redirect()->to($redirectUrl);
             }
 
-            return redirect()->to(base_url('/categorias'));
+            return redirect()->to(base_url('/'));
         }
 
         return redirect()
@@ -118,6 +119,7 @@ public function ajax()
         $data = [
             'nombre'    => $this->request->getPost('nombre'),
             'apellido'  => $this->request->getPost('apellido'),
+            'telefono'  => $this->request->getPost('telefono'),
             'email'     => $email,
             'password'  => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT)
         ];

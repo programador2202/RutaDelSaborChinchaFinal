@@ -123,9 +123,9 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   KEY `idlocales` (`idlocales`),
   CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`tokenusuario`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla sistema_menus.comentarios: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.comentarios: ~2 rows (aproximadamente)
 
 -- Volcando estructura para tabla sistema_menus.contratos
 CREATE TABLE IF NOT EXISTS `contratos` (
@@ -2133,12 +2133,12 @@ INSERT INTO `negocios` (`idnegocio`, `idcategoria`, `idrepresentante`, `nombre`,
 	(1, 2, 1, 'DAITO', 'DAITO', 'Daito es un restaurante que ofrece cocina Nikkei, una fusión de sabores peruanos y japoneses...', '20111111119', 'uploads/negocios/logo/1758990903_a02a106a10ea2ddbab2d.jpg'),
 	(3, 2, 1, 'Mister Wok', 'Mister Wok', 'Mister Wok en Pueblo Nuevo ofrece auténtica comida china en un ambiente familiar y acogedor...', '20111111111', 'uploads/negocios/logo/1758990972_034e9ee3dce0d78ba076.jpg'),
 	(4, 2, 6, 'Sacha Nikkei', 'Sacha Nikkei', 'Sacha Nikkei una fusión japonesa-peruana con sushi, ramen y platos del...', '21111111113', 'uploads/negocios/logo/1758991024_a8678d4a6d7169eecff9.jpg'),
-	(7, 3, 6, 'El Gran Combo', 'El Gran Combo', 'Sanguchería ', '20111111120', 'uploads/negocios/logo/1759009285_10b416e8f367074c8684.jpg'),
-	(8, 3, 4, '¡Daddy’s Truck’s Burger!', '¡Daddy’s Truck’s Burger!', 'Rápido y delicioso', '21111111130', 'uploads/negocios/logo/1759009337_5d8121ca00f666d134c9.jpg'),
+	(7, 3, 6, 'El Gran Combo', 'El Gran Combo', '"Daddy’s Truck’s Burger" hamburguesas auténticas y frescas en estilo food truck..', '20111111120', 'uploads/negocios/logo/1759009285_10b416e8f367074c8684.jpg'),
+	(8, 3, 4, '¡Daddy’s Truck’s Burger!', '¡Daddy’s Truck’s Burger!', '"Daddy’s Truck’s Burger" hamburguesas auténticas y frescas en estilo food truck..', '21111111130', 'uploads/negocios/logo/1759009337_5d8121ca00f666d134c9.jpg'),
 	(9, 5, 4, 'El Punto Marino', 'El Punto Marino', 'El Punto Marino ofrece platos marinos frescos y un excelente servicio...', '20111111129', 'uploads/negocios/logo/1759009424_d2f54c62c8327cea43a2.jpg'),
 	(10, 1, 5, 'Viñedos San Carlos', 'Viñedos San Carlos', 'Somos una bodega ubicada en el pintoresco valle de Sunampe, Chincha, Perú. Fundada con la...', '20111111149', 'uploads/negocios/logo/1759009513_fe364eca8a4eac95098f.jpg'),
 	(11, 1, 5, 'Viñedos Grimaldi', 'Viñedos Grimaldi', 'Cuatro generaciones dedicadas a crear vinos y pisco de excelencia, llevando el sabor al mundo.', '20111111101', 'uploads/negocios/logo/1759009612_f8ab6a4d29a9cf9ec68f.jpg'),
-	(12, 1, 5, 'El Copete', 'El Copete', '', '20111111109', 'uploads/negocios/logo/1759009678_4d7999756aeeb80bcfc0.jpg');
+	(12, 1, 5, 'El Copete', 'El Copete', '"Viñedos Copete" tradición, autenticidad y sabor único en cada botella artesanal.', '20111111109', 'uploads/negocios/logo/1759009678_4d7999756aeeb80bcfc0.jpg');
 
 -- Volcando estructura para tabla sistema_menus.personas
 CREATE TABLE IF NOT EXISTS `personas` (
@@ -2152,7 +2152,7 @@ CREATE TABLE IF NOT EXISTS `personas` (
   UNIQUE KEY `numerodoc` (`numerodoc`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.personas: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.personas: ~3 rows (aproximadamente)
 INSERT INTO `personas` (`idpersona`, `apellidos`, `nombres`, `tipodoc`, `numerodoc`, `telefono`) VALUES
 	(1, 'Contreras Carrillo', 'Aimar Alexander', 'DNI', '73989219', '955365019'),
 	(4, 'Flores Lopez', 'Maria Alejandra', 'DNI', '71548236', '956123456'),
@@ -2376,21 +2376,25 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   `idlocales` int NOT NULL,
   `fechahora` datetime NOT NULL,
   `cantidadpersonas` int DEFAULT NULL,
-  `confirmacion` tinyint(1) DEFAULT '0',
-  `idusuariovalida` int unsigned DEFAULT NULL,
+  `confirmacion` enum('pendiente','confirmado','cancelado') COLLATE utf8mb4_general_ci DEFAULT 'pendiente',
+  `idusuariovalida` int DEFAULT NULL,
   `idpersonasolicitud` int unsigned NOT NULL,
   PRIMARY KEY (`idreserva`),
-  KEY `idhorario` (`idhorario`),
-  KEY `idlocales` (`idlocales`),
-  KEY `idusuariovalida` (`idusuariovalida`),
-  KEY `idpersonasolicitud` (`idpersonasolicitud`),
-  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`idhorario`) REFERENCES `horarios` (`idhorario`) ON DELETE CASCADE,
-  CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE,
-  CONSTRAINT `reservas_ibfk_3` FOREIGN KEY (`idusuariovalida`) REFERENCES `usuarios_login` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `reservas_ibfk_4` FOREIGN KEY (`idpersonasolicitud`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `fk_reservas_horario` (`idhorario`),
+  KEY `fk_reservas_local` (`idlocales`),
+  KEY `fk_reservas_validador` (`idusuariovalida`),
+  KEY `fk_reservas_solicitante` (`idpersonasolicitud`),
+  CONSTRAINT `fk_reservas_horario` FOREIGN KEY (`idhorario`) REFERENCES `horarios` (`idhorario`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_reservas_local` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_reservas_solicitante` FOREIGN KEY (`idpersonasolicitud`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_reservas_validador` FOREIGN KEY (`idusuariovalida`) REFERENCES `usuarios` (`idusuario`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.reservas: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.reservas: ~1 rows (aproximadamente)
+INSERT INTO `reservas` (`idreserva`, `idhorario`, `idlocales`, `fechahora`, `cantidadpersonas`, `confirmacion`, `idusuariovalida`, `idpersonasolicitud`) VALUES
+	(2, 1, 1, '2026-02-12 14:20:00', 10, 'cancelado', NULL, 2),
+	(3, 1, 1, '2025-10-25 16:00:00', 2, 'cancelado', NULL, 2),
+	(5, 1, 1, '2025-10-23 14:00:00', 5, 'cancelado', NULL, 3);
 
 -- Volcando estructura para tabla sistema_menus.secciones
 CREATE TABLE IF NOT EXISTS `secciones` (
@@ -2424,7 +2428,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`idpersona`) REFERENCES `personas` (`idpersona`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.usuarios: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.usuarios: ~4 rows (aproximadamente)
 INSERT INTO `usuarios` (`idusuario`, `nombreusuario`, `claveacceso`, `nivelacceso`, `idpersona`) VALUES
 	(4, 'restaurante1@gmail.com', '$2y$10$XM7/Heg4Z04dABtlrE6pRe1oWqm70geaYKB.XPPK1vR.9bD9F100O', 'admin', 1),
 	(5, 'restaurante2@gmail.com', '$2y$10$uO83OWMbi3doQ0dbU/tavOVPtYNE4U6FW20nggmnUv8zUCRYR68tm', 'representante', 4),
@@ -2439,13 +2443,15 @@ CREATE TABLE IF NOT EXISTS `usuarios_login` (
   `email` varchar(150) NOT NULL,
   `password` varchar(255) NOT NULL,
   `fecha_registro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `telefono` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla sistema_menus.usuarios_login: ~1 rows (aproximadamente)
-INSERT INTO `usuarios_login` (`id`, `nombre`, `apellido`, `email`, `password`, `fecha_registro`) VALUES
-	(1, 'Aimar', 'Contreras Carrillo', 'alexander2000contreras@gmail.com', '$2y$10$UdP8tpOBZDD7LTnpuryDiuQwEF95q.AccEgFADqOUVCesJdp52qWi', '2025-10-19 02:58:03');
+-- Volcando datos para la tabla sistema_menus.usuarios_login: ~0 rows (aproximadamente)
+INSERT INTO `usuarios_login` (`id`, `nombre`, `apellido`, `email`, `password`, `fecha_registro`, `telefono`) VALUES
+	(2, 'Aimar', 'Contreras Carrillo', 'alexander20002contreras@gmail.com', '$2y$10$KU8jVtNir5PajDyk7v2pzOhoWnWcJaJ4EMkgqLr10Nn0Te5Z5jOhS', '2025-10-22 19:43:30', '955365019'),
+	(3, 'Maria Alexandra', 'Lopez Lopez', 'Lopes2002@gmail.com', '$2y$10$1DNsSBjmVmtd6NZpLosy5eJQaWYS2va3jXHQBoVDgU6v12AS/Q1i6', '2025-10-22 20:46:15', '956977876');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

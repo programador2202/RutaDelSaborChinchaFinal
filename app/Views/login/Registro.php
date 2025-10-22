@@ -51,6 +51,11 @@
           </div>
 
           <div class="mb-3">
+            <label class="form-label">Teléfono</label>
+            <input type="text" name="telefono" class="form-control" placeholder="Tu número de teléfono" required>
+          </div>
+
+          <div class="mb-3">
             <label class="form-label">Contraseña</label>
             <input type="password" name="password" class="form-control" placeholder="••••••••" required>
           </div>

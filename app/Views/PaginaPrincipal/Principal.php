@@ -130,7 +130,7 @@
   </main>
 
   <!-- BLOQUES DINÁMICOS Y FOOTER -->
-  <?= $dinamica; ?>
+  <?= $dinamica;?>
   <?= $footer; ?>
 
   <!-- VARIABLES GLOBALES -->

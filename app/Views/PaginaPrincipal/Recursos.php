@@ -66,6 +66,7 @@
                             <?= esc($negocio['estado']) ?>
                         </span>
                     </p>
+                    
                 </div>
             </div>
         </div>

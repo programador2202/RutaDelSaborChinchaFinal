@@ -199,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   CONSTRAINT `fk_reservas_local` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_reservas_solicitante` FOREIGN KEY (`idpersonasolicitud`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_reservas_validador` FOREIGN KEY (`idusuariovalida`) REFERENCES `usuarios` (`idusuario`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- La exportación de datos fue deseleccionada.
 
@@ -235,9 +235,10 @@ CREATE TABLE IF NOT EXISTS `usuarios_login` (
   `email` varchar(150) NOT NULL,
   `password` varchar(255) NOT NULL,
   `fecha_registro` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `telefono` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- La exportación de datos fue deseleccionada.
 

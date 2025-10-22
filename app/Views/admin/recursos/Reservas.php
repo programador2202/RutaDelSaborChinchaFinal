@@ -42,6 +42,7 @@
               <th>Local</th>
               <th>Horario</th>
               <th>Fecha</th>
+              <th>Telefono</th>
               <th>Personas</th>
               <th>Estado</th>
               <th>Acciones</th>
@@ -54,6 +55,7 @@
                   <td><?= esc($r['idreserva']) ?></td>
                   <td><?= esc($r['solicitante']) ?></td>
                   <td><?= esc($r['nombre_local']) ?></td>
+                  <td><?= esc($r['telefono_solicitante']) ?></td>
                   <td><?= esc($r['horario']) ?></td>
                   <td><?= date('d/m/Y H:i', strtotime($r['fechahora'])) ?></td>
                   <td><?= esc($r['cantidadpersonas']) ?></td>

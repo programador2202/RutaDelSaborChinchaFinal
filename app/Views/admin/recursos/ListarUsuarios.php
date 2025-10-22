@@ -70,6 +70,7 @@
               <th>Nombre</th>
               <th>Apellido</th>
               <th>Email</th>
+               <th>telefono</th>
               <th>Acciones</th>
             </tr>
           </thead>
@@ -80,6 +81,7 @@
                 <td><?= esc($usuario['nombre']) ?></td>
                 <td><?= esc($usuario['apellido']) ?></td>
                 <td><?= esc($usuario['email']) ?></td>
+                <td><?= esc($usuario['telefono']) ?></td>
                 <td>
                   <button class="btn btn-sm btn-warning btnEditar btn-action"
                           data-id="<?= $usuario['id'] ?>"
@@ -127,8 +129,8 @@
           <input type="email" id="editEmail" class="form-control">
         </div>
         <div class="mb-3">
-          <label class="form-label">Nueva contraseña (opcional)</label>
-          <input type="password" id="editPassword" class="form-control">
+          <label class="form-label">Teléfono</label>
+          <input type="text" id="editTelefono" class="form-control">
         </div>
       </div>
       <div class="modal-footer">
@@ -154,7 +156,7 @@ $(document).ready(function() {
     $('#editNombre').val($(this).data('nombre'));
     $('#editApellido').val($(this).data('apellido'));
     $('#editEmail').val($(this).data('email'));
-    $('#editPassword').val('');
+    $('#telefono').val($(this).data('telefono'));
     $('#modalEditar').modal('show');
   });
 
@@ -166,7 +168,7 @@ $(document).ready(function() {
       nombre: $('#editNombre').val(),
       apellido: $('#editApellido').val(),
       email: $('#editEmail').val(),
-      password: $('#editPassword').val()
+      telefono: $('#editTelefono').val()
     }, function(res) {
       if (res.status === 'success') {
         Swal.fire({

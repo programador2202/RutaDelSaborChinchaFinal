@@ -13,6 +13,7 @@ class Login extends Model
         'nombre',
         'apellido',
         'email',
+        'telefono',
         'password',
         'fecha_registro'
     ];

@@ -29,6 +29,7 @@ public function obtenerReservasConUsuarios()
     return $this->select("
             reservas.*, 
             CONCAT(ul.nombre, ' ', ul.apellido) AS solicitante,
+            ul.telefono AS telefono_solicitante,
             CONCAT(p.nombres, ' ', p.apellidos) AS validador,
             CONCAT(h.inicio, ' - ', h.fin) AS horario,
             n.nombre AS nombre_local
@@ -42,6 +43,8 @@ public function obtenerReservasConUsuarios()
         ->orderBy('reservas.idreserva', 'DESC')
         ->findAll();
 }
+    
+
 public function obtenerReservasPorRepresentante($idpersona)
 {
     return $this->select("

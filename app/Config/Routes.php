@@ -17,6 +17,7 @@ $routes->get('/datos/dashboard', 'DashboardController::index');
 
 
 
+
 $routes->group('', ['filter' => 'auth'], function($routes) {
     $routes->post('comentarios/guardar', 'ComentarioController::guardar');
 });
@@ -85,6 +86,7 @@ $routes->post('contrato/ajax','ContratoController::ajax');
 // Rutas para reservas
 $routes->get('/reservas', 'ReservasController::index');        
 $routes->post('ajax', 'ReservasController::ajax');  
+$routes->get('/reservas/public', 'ReservasController::vistaPublica');
 
 
 
