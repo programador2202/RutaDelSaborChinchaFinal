@@ -143,7 +143,7 @@ public function vistaPublica()
                     'mensaje' => 'La reserva no existe'
                 ]);
             }
-
+  
             $datos = [
                 'idhorario'        => $this->request->getVar('idhorario'),
                 'idlocales'        => $this->request->getVar('idlocales'),
