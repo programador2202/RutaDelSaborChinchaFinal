@@ -86,7 +86,7 @@ $routes->post('contrato/ajax','ContratoController::ajax');
 // Rutas para reservas
 $routes->get('/reservas', 'ReservasController::index');        
 $routes->post('ajax', 'ReservasController::ajax');  
-$routes->get('/reservas/public', 'ReservasController::vistaPublica');
+$routes->get('/reservas/public/', 'ReservasController::vistaPublica');
 
 
 

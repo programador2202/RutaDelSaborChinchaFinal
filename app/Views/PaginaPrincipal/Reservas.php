@@ -83,7 +83,7 @@
           <form id="formReserva">
             <input type="hidden" name="accion" value="registrar">
             <input type="hidden" name="idpersonasolicitud" value="<?= esc($idusuario) ?>">
-            <input type="hidden" name="idlocales" value="1">
+            <input type="hidden" name="idlocales" value="<?= esc($idlocales) ?>">
             <input type="hidden" name="idhorario" value="1">
 
             <?php if (!empty($nombreCompleto)): ?>

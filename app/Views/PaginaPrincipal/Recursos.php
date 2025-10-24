@@ -261,3 +261,28 @@
 
 <script src="<?= base_url('assets/js/global.js') ?>"></script>
 <?= $footer; ?>
+
+<!-- ✅ Agregar SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<?php if (session()->getFlashdata('success')): ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '¡Éxito!',
+            text: '<?= esc(session()->getFlashdata('success')) ?>',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+<?php elseif (session()->getFlashdata('error')): ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '¡Error!',
+            text: '<?= esc(session()->getFlashdata('error')) ?>',
+            confirmButtonColor: '#d33',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+<?php endif; ?>

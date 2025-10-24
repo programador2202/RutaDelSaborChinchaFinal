@@ -115,7 +115,7 @@
     </section>
 
     <!-- FORMULARIO DE CONTACTO -->
-    <section class="py-5 bg-light text-dark text-center">
+   <!-- <section class="py-5 bg-light text-dark text-center">
       <h3><b>¿Tienes un restaurante en Chincha?</b></h3>
       <p>Únete a <b>Ruta del Sabor Chincha</b> y haz que tu negocio aparezca en nuestra plataforma.</p>
 
@@ -126,7 +126,7 @@
         <div class="col-md-5"><input type="text" class="form-control" placeholder="¿De qué trata tu negocio?" required></div>
         <div class="col-12"><button class="btn btn-danger px-4 mt-2"><b>Quiero unirme</b></button></div>
       </form>
-    </section>
+    </section> -->
   </main>
 
   <!-- BLOQUES DINÁMICOS Y FOOTER -->

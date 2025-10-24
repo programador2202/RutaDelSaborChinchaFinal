@@ -40,9 +40,9 @@
               <th>ID</th>
               <th>Solicitante</th>
               <th>Local</th>
+              <th>telefono</th>
               <th>Horario</th>
-              <th>Fecha</th>
-              <th>Telefono</th>
+              <th>fecha</th>
               <th>Personas</th>
               <th>Estado</th>
               <th>Acciones</th>

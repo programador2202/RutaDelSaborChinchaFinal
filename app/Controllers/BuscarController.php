@@ -18,39 +18,42 @@ class BuscarController extends BaseController
         if (!empty($q)) {
             //Búsqueda principal
             $resultados = $negocioModel
-                ->select('
+            ->select('
+                negocios.idnegocio,
+                negocios.nombre AS negocio,
+                negocios.logo,
+                cartas.nombreplato AS plato,
+                cartas.precio,
+                cartas.foto,
+                locales.idlocales, 
+                locales.direccion,
+                locales.latitud,
+                locales.longitud
+            ')
+            ->join('locales', 'locales.idnegocio = negocios.idnegocio')
+            ->join('cartas', 'cartas.idlocales = locales.idlocales', 'left')
+            ->groupStart()
+                ->like('negocios.nombre', $q)
+                ->orLike('cartas.nombreplato', $q)
+            ->groupEnd()
+            ->findAll();
+
+
+            // Si no hay resultados, mostrar recomendaciones aleatorias
+            if (empty($resultados)) {
+                $recomendaciones = $negocioModel
+                   ->select('
                     negocios.idnegocio,
                     negocios.nombre AS negocio,
                     negocios.logo,
                     cartas.nombreplato AS plato,
                     cartas.precio,
                     cartas.foto,
+                    locales.idlocales, 
                     locales.direccion,
                     locales.latitud,
                     locales.longitud
                 ')
-                ->join('locales', 'locales.idnegocio = negocios.idnegocio')
-                ->join('cartas', 'cartas.idlocales = locales.idlocales', 'left')
-                ->groupStart()
-                    ->like('negocios.nombre', $q)
-                    ->orLike('cartas.nombreplato', $q)
-                ->groupEnd()
-                ->findAll();
-
-            // Si no hay resultados, mostrar recomendaciones aleatorias
-            if (empty($resultados)) {
-                $recomendaciones = $negocioModel
-                    ->select('
-                        negocios.idnegocio,
-                        negocios.nombre AS negocio,
-                        negocios.logo,
-                        cartas.nombreplato AS plato,
-                        cartas.precio,
-                        cartas.foto,
-                        locales.direccion,
-                        locales.latitud,
-                        locales.longitud
-                    ')
                     ->join('locales', 'locales.idnegocio = negocios.idnegocio')
                     ->join('cartas', 'cartas.idlocales = locales.idlocales', 'inner')
                     ->orderBy('RAND()')

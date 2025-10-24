@@ -23,14 +23,11 @@
                     
 
                     <!-- Botón correcto -->
-                    <button class="btn btn-sm btn-success mt-2 align-self-start"
-                        onclick='agregarAlCarrito({
-                            nombre: "<?= esc($row['plato'] ?? $row['negocio']); ?>",
-                            precio: <?= esc($row['precio'] ?? 0); ?>,
-                            cantidad: 1
-                        })'>
-                        <i class="fas fa-cart-plus"></i> Reservar
-                    </button>
+                   <a href="<?= base_url('/reservas/public?idlocal=' . $row['idlocales']); ?>" class="btn btn-sm btn-success mt-2 align-self-start">
+                                <i class="fas fa-cart-plus"></i> Reservar
+                            </a>
+
+
                 </div>
             </li>
         <?php endforeach; ?>
@@ -54,14 +51,13 @@
                             <small class="text-muted"><?= esc($rec['negocio']); ?></small><br>
                             <span class="text-success">S/ <?= number_format($rec['precio'], 2); ?></span>
                         </div>
-                        <button class="btn btn-sm btn-success mt-2 align-self-start"
-                            onclick='agregarAlCarrito({
-                                nombre: "<?= esc($rec['plato'] ?? $rec['negocio']); ?>",
-                                precio: <?= esc($rec['precio'] ?? 0); ?>,
-                                cantidad: 1
-                            })'>
-                            <i class="fas fa-cart-plus"></i> Reservar
-                        </button>
+                    <a href="<?= base_url('/reservas/public?idlocal=' . $rec['idlocales']); ?>" class="btn btn-sm btn-success mt-2 align-self-start">
+                                    <i class="fas fa-cart-plus"></i> Reservar
+                                </a>
+
+
+                    <!-- antes de ejecutar deberia ejecutarse en inicio de sesion -->
+
                     </div>
                 </li>
             <?php endforeach; ?>

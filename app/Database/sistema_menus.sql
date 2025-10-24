@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `cartas` (
   CONSTRAINT `fk_cartas_seccion` FOREIGN KEY (`idseccion`) REFERENCES `secciones` (`idseccion`)
 ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.cartas: ~51 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.cartas: ~10 rows (aproximadamente)
 INSERT INTO `cartas` (`idcarta`, `idlocales`, `idseccion`, `nombreplato`, `precio`, `foto`) VALUES
 	(3, 1, 1, 'Rollos de Sushi Especiales', 25.00, 'uploads/cartas/1759089177_62adcbe471517748a56c.jpg'),
 	(4, 1, 1, 'Alitas de Pollo Glaseadas con Sésamo', 20.00, 'uploads/cartas/1759090924_256ef0e06dcb842189ed.jpg'),
@@ -123,9 +123,12 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   KEY `idlocales` (`idlocales`),
   CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`tokenusuario`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE,
   CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla sistema_menus.comentarios: ~2 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.comentarios: ~0 rows (aproximadamente)
+INSERT INTO `comentarios` (`idcomentario`, `idlocales`, `tokenusuario`, `comentario`, `valoracion`, `fechahora`) VALUES
+	(3, 1, 2, 'Buen restaurante\r\n', 5, '2025-10-23 23:51:06'),
+	(4, 4, 3, 'Buen restaurante, atencion de clase A1', 3, '2025-10-23 23:56:57');
 
 -- Volcando estructura para tabla sistema_menus.contratos
 CREATE TABLE IF NOT EXISTS `contratos` (
@@ -2070,9 +2073,9 @@ CREATE TABLE IF NOT EXISTS `horarios` (
   PRIMARY KEY (`idhorario`),
   KEY `idlocales` (`idlocales`),
   CONSTRAINT `horarios_ibfk_1` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.horarios: ~6 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.horarios: ~7 rows (aproximadamente)
 INSERT INTO `horarios` (`idhorario`, `idlocales`, `diasemana`, `inicio`, `fin`) VALUES
 	(1, 1, 'martes', '14:00:00', '22:00:00'),
 	(2, 1, 'miercoles', '14:00:00', '22:00:00'),
@@ -2080,7 +2083,31 @@ INSERT INTO `horarios` (`idhorario`, `idlocales`, `diasemana`, `inicio`, `fin`) 
 	(4, 1, 'viernes', '14:00:00', '22:00:00'),
 	(5, 1, 'sabado', '14:00:00', '22:00:00'),
 	(6, 1, 'domingo', '14:00:00', '22:00:00'),
-	(7, 6, 'lunes', '14:00:00', '22:00:00');
+	(7, 6, 'lunes', '14:00:00', '22:00:00'),
+	(8, 7, 'lunes', '08:00:00', '19:00:00'),
+	(9, 7, 'martes', '08:00:00', '19:00:00'),
+	(10, 7, 'miercoles', '08:00:00', '19:00:00'),
+	(11, 7, 'jueves', '08:00:00', '19:00:00'),
+	(12, 7, 'viernes', '08:00:00', '19:00:00'),
+	(13, 7, 'sabado', '08:00:00', '19:00:00'),
+	(14, 7, 'domingo', '08:00:00', '18:00:00'),
+	(15, 8, 'lunes', '00:00:00', '23:59:00'),
+	(16, 8, 'martes', '00:00:00', '23:59:00'),
+	(17, 8, 'miercoles', '00:00:00', '23:59:00'),
+	(18, 8, 'jueves', '00:00:00', '23:59:00'),
+	(19, 8, 'viernes', '00:00:00', '23:59:00'),
+	(20, 8, 'sabado', '00:00:00', '23:59:00'),
+	(21, 8, 'domingo', '00:00:00', '23:59:00'),
+	(22, 9, 'lunes', '08:00:00', '19:00:00'),
+	(23, 9, 'martes', '08:00:00', '19:00:00'),
+	(24, 9, 'miercoles', '08:00:00', '19:00:00'),
+	(25, 9, 'miercoles', '08:00:00', '19:00:00'),
+	(26, 9, 'jueves', '08:00:00', '19:00:00'),
+	(27, 9, 'viernes', '08:00:00', '19:00:00'),
+	(28, 9, 'sabado', '08:00:00', '19:00:00'),
+	(29, 9, 'domingo', '08:00:00', '19:00:00'),
+	(30, 4, 'jueves', '12:00:00', '20:00:00'),
+	(31, 5, 'jueves', '12:00:00', '23:00:00');
 
 -- Volcando estructura para tabla sistema_menus.locales
 CREATE TABLE IF NOT EXISTS `locales` (
@@ -2152,7 +2179,7 @@ CREATE TABLE IF NOT EXISTS `personas` (
   UNIQUE KEY `numerodoc` (`numerodoc`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.personas: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.personas: ~4 rows (aproximadamente)
 INSERT INTO `personas` (`idpersona`, `apellidos`, `nombres`, `tipodoc`, `numerodoc`, `telefono`) VALUES
 	(1, 'Contreras Carrillo', 'Aimar Alexander', 'DNI', '73989219', '955365019'),
 	(4, 'Flores Lopez', 'Maria Alejandra', 'DNI', '71548236', '956123456'),
@@ -2376,7 +2403,7 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   `idlocales` int NOT NULL,
   `fechahora` datetime NOT NULL,
   `cantidadpersonas` int DEFAULT NULL,
-  `confirmacion` enum('pendiente','confirmado','cancelado') COLLATE utf8mb4_general_ci DEFAULT 'pendiente',
+  `confirmacion` enum('pendiente','confirmado','cancelado') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT 'pendiente',
   `idusuariovalida` int DEFAULT NULL,
   `idpersonasolicitud` int unsigned NOT NULL,
   PRIMARY KEY (`idreserva`),
@@ -2388,13 +2415,18 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   CONSTRAINT `fk_reservas_local` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_reservas_solicitante` FOREIGN KEY (`idpersonasolicitud`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_reservas_validador` FOREIGN KEY (`idusuariovalida`) REFERENCES `usuarios` (`idusuario`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.reservas: ~1 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.reservas: ~3 rows (aproximadamente)
 INSERT INTO `reservas` (`idreserva`, `idhorario`, `idlocales`, `fechahora`, `cantidadpersonas`, `confirmacion`, `idusuariovalida`, `idpersonasolicitud`) VALUES
-	(2, 1, 1, '2026-02-12 14:20:00', 10, 'cancelado', NULL, 2),
-	(3, 1, 1, '2025-10-25 16:00:00', 2, 'cancelado', NULL, 2),
-	(5, 1, 1, '2025-10-23 14:00:00', 5, 'cancelado', NULL, 3);
+	(1, 1, 1, '2025-10-23 19:00:00', 1, 'confirmado', NULL, 2),
+	(2, 1, 4, '2025-12-23 19:00:00', 1, 'confirmado', NULL, 3),
+	(3, 1, 5, '2025-10-24 14:00:00', 1, 'confirmado', NULL, 2),
+	(4, 1, 5, '2025-10-24 16:00:00', 1, 'confirmado', NULL, 2),
+	(5, 1, 5, '2025-10-24 19:20:00', 1, 'cancelado', NULL, 2),
+	(6, 1, 1, '2025-12-12 14:00:00', 1, 'pendiente', NULL, 2),
+	(7, 1, 1, '2025-10-23 20:00:00', 1, 'pendiente', NULL, 2),
+	(8, 1, 1, '2025-10-23 20:00:00', 1, 'pendiente', NULL, 2);
 
 -- Volcando estructura para tabla sistema_menus.secciones
 CREATE TABLE IF NOT EXISTS `secciones` (
@@ -2428,9 +2460,9 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`idpersona`) REFERENCES `personas` (`idpersona`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.usuarios: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.usuarios: ~0 rows (aproximadamente)
 INSERT INTO `usuarios` (`idusuario`, `nombreusuario`, `claveacceso`, `nivelacceso`, `idpersona`) VALUES
-	(4, 'restaurante1@gmail.com', '$2y$10$XM7/Heg4Z04dABtlrE6pRe1oWqm70geaYKB.XPPK1vR.9bD9F100O', 'admin', 1),
+	(4, 'restaurante1@gmail.com', '$2y$10$JISIiNEnfaZ.v7hOedwMEenkFErhroRk2qDNaGpff7Keuj0.gHtbG', 'admin', 1),
 	(5, 'restaurante2@gmail.com', '$2y$10$uO83OWMbi3doQ0dbU/tavOVPtYNE4U6FW20nggmnUv8zUCRYR68tm', 'representante', 4),
 	(7, 'restaurante3@gmail.com', '$2y$10$NZEfYbIBNhW74cfW8YuziewLA/RnRCJdK8TmVG2iKNZE/Wk7TRr9C', 'representante', 5),
 	(8, 'restaurante4@gmail.com', '$2y$10$uTbZ.8sP63aV94Vwr/8KrenVNIfzNfIj7pFsxc.g10YMQPar.bKKu', 'representante', 6);
@@ -2448,7 +2480,7 @@ CREATE TABLE IF NOT EXISTS `usuarios_login` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla sistema_menus.usuarios_login: ~0 rows (aproximadamente)
+-- Volcando datos para la tabla sistema_menus.usuarios_login: ~2 rows (aproximadamente)
 INSERT INTO `usuarios_login` (`id`, `nombre`, `apellido`, `email`, `password`, `fecha_registro`, `telefono`) VALUES
 	(2, 'Aimar', 'Contreras Carrillo', 'alexander20002contreras@gmail.com', '$2y$10$KU8jVtNir5PajDyk7v2pzOhoWnWcJaJ4EMkgqLr10Nn0Te5Z5jOhS', '2025-10-22 19:43:30', '955365019'),
 	(3, 'Maria Alexandra', 'Lopez Lopez', 'Lopes2002@gmail.com', '$2y$10$1DNsSBjmVmtd6NZpLosy5eJQaWYS2va3jXHQBoVDgU6v12AS/Q1i6', '2025-10-22 20:46:15', '956977876');
