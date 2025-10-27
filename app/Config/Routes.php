@@ -88,6 +88,11 @@ $routes->get('/reservas', 'ReservasController::index');
 $routes->post('ajax', 'ReservasController::ajax');  
 $routes->get('/reservas/public/', 'ReservasController::vistaPublica');
 
+//rutas para reservas platos
+$routes->get('/reservasplatos', 'ReservasPlatosController::index');
+$routes->get('reservas-platos/agregar/(:num)/(:num)', 'ReservasPlatosController::agregar/$1/$2'); // agregar platos a reserva
+$routes->post('reservas-platos/guardar', 'ReservasPlatosController::guardar'); 
+
 
 
 

@@ -64,74 +64,82 @@ public function vistaPublica()
         $accion       = $this->request->getVar('accion');
         $respuesta    = ['status' => 'error', 'mensaje' => 'Acción no definida'];
 
-         if ($accion === 'registrar') {
-        $idlocal   = $this->request->getVar('idlocales');
-        $idhorario = $this->request->getVar('idhorario');
-        $fechaHora = $this->request->getVar('fechahora');
-        $idPersona = $this->request->getVar('idpersonasolicitud');
+    if ($accion === 'registrar') {
+    $idlocal   = $this->request->getVar('idlocales');
+    $idhorario = $this->request->getVar('idhorario');
+    $fechaHora = $this->request->getVar('fechahora');
+    $idPersona = $this->request->getVar('idpersonasolicitud');
 
-        //Convertir la fecha y hora enviada
-        try {
-            $fechaReserva = new \DateTime($fechaHora);
-        } catch (\Exception $e) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'mensaje' => 'Formato de fecha y hora inválido.'
-            ]);
-        }
-
-        //Validar que no sea una fecha pasada
-        $ahora = new \DateTime(); // fecha y hora actual
-        if ($fechaReserva < $ahora) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'mensaje' => 'No se puede reservar para horas o fechas pasadas.'
-            ]);
-        }
-
-        //Obtener horario del local
-        $db = \Config\Database::connect();
-        $builder = $db->table('horarios');
-        $builder->select('inicio, fin');
-        $builder->where('idhorario', $idhorario);
-        $horario = $builder->get()->getRow();
-
-        if (!$horario) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'mensaje' => 'El horario seleccionado no existe.'
-            ]);
-        }
-
-        //Validar que la hora esté dentro del rango del local
-        $horaReserva = $fechaReserva->format('H:i:s');
-
-        if ($horaReserva < $horario->inicio || $horaReserva > $horario->fin) {
-            return $this->response->setJSON([
-                'status'  => 'error',
-                'mensaje' => 'La hora seleccionada está fuera del horario de atención del local.'
-            ]);
-        }
-
-        //Registrar la reserva si pasa todas las validaciones
-        $registro = [
-            'idhorario'          => $idhorario,
-            'idlocales'          => $idlocal,
-            'fechahora'          => $fechaHora,
-            'cantidadpersonas'   => $this->request->getVar('cantidadpersonas'),
-            'confirmacion'       => 'pendiente',
-            'idpersonasolicitud' => $idPersona,
-        ];
-
-            $reservaModel->insert($registro);
-            $respuesta = ['status' => 'success', 'mensaje' => 'Reserva registrada correctamente'];
-
-                // Guardar en sesión el local reservado
-                $reservas = session()->get('reservas_realizadas') ?? [];
-                $reservas[] = $idlocal;
-                session()->set('reservas_realizadas', $reservas);
-
+    // Convertir la fecha y hora enviada
+    try {
+        $fechaReserva = new \DateTime($fechaHora);
+    } catch (\Exception $e) {
+        return $this->response->setJSON([
+            'status'  => 'error',
+            'mensaje' => 'Formato de fecha y hora inválido.'
+        ]);
     }
+
+    // Validar que no sea una fecha pasada
+    $ahora = new \DateTime();
+    if ($fechaReserva < $ahora) {
+        return $this->response->setJSON([
+            'status'  => 'error',
+            'mensaje' => 'No se puede reservar para horas o fechas pasadas.'
+        ]);
+    }
+
+    // Obtener horario del local
+    $db = \Config\Database::connect();
+    $builder = $db->table('horarios');
+    $builder->select('inicio, fin');
+    $builder->where('idhorario', $idhorario);
+    $horario = $builder->get()->getRow();
+
+    if (!$horario) {
+        return $this->response->setJSON([
+            'status'  => 'error',
+            'mensaje' => 'El horario seleccionado no existe.'
+        ]);
+    }
+
+    // Validar que la hora esté dentro del rango del local
+    $horaReserva = $fechaReserva->format('H:i:s');
+
+    if ($horaReserva < $horario->inicio || $horaReserva > $horario->fin) {
+        return $this->response->setJSON([
+            'status'  => 'error',
+            'mensaje' => 'La hora seleccionada está fuera del horario de atención del local.'
+        ]);
+    }
+
+    // Registrar la reserva si pasa todas las validaciones
+    $registro = [
+        'idhorario'          => $idhorario,
+        'idlocales'          => $idlocal,
+        'fechahora'          => $fechaHora,
+        'cantidadpersonas'   => $this->request->getVar('cantidadpersonas'),
+        'confirmacion'       => 'pendiente',
+        'idpersonasolicitud' => $idPersona,
+    ];
+
+    $reservaModel->insert($registro);
+    $idreserva = $reservaModel->insertID();
+
+    // Guardar en sesión el local reservado
+    $reservas = session()->get('reservas_realizadas') ?? [];
+    $reservas[] = $idlocal;
+    session()->set('reservas_realizadas', $reservas);
+
+    $respuesta = [
+        'status'   => 'success',
+        'mensaje'  => 'Reserva registrada correctamente.',
+        'redirect' => base_url("reservas-platos/agregar/{$idreserva}/{$idlocal}")
+    ];
+
+    return $this->response->setJSON($respuesta);
+}
+
         //Actualizar reserva
         elseif ($accion === 'actualizar') {
             $id = $this->request->getVar('idreserva');

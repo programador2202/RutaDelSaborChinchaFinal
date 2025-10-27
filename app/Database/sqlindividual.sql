@@ -247,3 +247,20 @@ CREATE TABLE IF NOT EXISTS `usuarios_login` (
 /*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
+
+CREATE TABLE IF NOT EXISTS `reservas_platos` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `idreserva` INT UNSIGNED NOT NULL,
+  `idcarta` INT NOT NULL,
+  `cantidad` INT DEFAULT 1,
+  `observacion` VARCHAR(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_reservas_platos_reserva` (`idreserva`),
+  KEY `fk_reservas_platos_carta` (`idcarta`),
+  CONSTRAINT `fk_reservas_platos_reserva`
+    FOREIGN KEY (`idreserva`) REFERENCES `reservas` (`idreserva`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_reservas_platos_carta`
+    FOREIGN KEY (`idcarta`) REFERENCES `cartas` (`idcarta`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

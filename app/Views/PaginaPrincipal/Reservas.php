@@ -122,41 +122,48 @@
 
   <script>
     $('#formReserva').on('submit', function(e) {
-      e.preventDefault();
+  e.preventDefault();
 
-      $.ajax({
-        url: '<?= base_url('ajax') ?>',
-        type: 'POST',
-        data: $(this).serialize(),
-        dataType: 'json',
-        success: function(response) {
-          if (response.status === 'success') {
-            Swal.fire({
-              icon: 'success',
-              title: '¡Reserva registrada!',
-              text: response.mensaje || 'Tu reserva ha sido guardada correctamente.',
-              confirmButtonColor: '#ff7043'
-            });
-            $('#formReserva')[0].reset();
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: response.mensaje || 'No se pudo guardar la reserva.',
-              confirmButtonColor: '#ff7043'
-            });
+  $.ajax({
+    url: '<?= base_url('ajax') ?>',
+    type: 'POST',
+    data: $(this).serialize(),
+    dataType: 'json',
+    success: function(response) {
+      if (response.status === 'success') {
+        Swal.fire({
+          icon: 'success',
+          title: '¡Reserva registrada!',
+          text: response.mensaje || 'Tu reserva ha sido guardada correctamente.',
+          confirmButtonColor: '#ff7043',
+          timer: 1800,
+          showConfirmButton: false
+        }).then(() => {
+          if (response.redirect) {
+            // 🔹 Redirigir automáticamente a la selección de platos
+            window.location.href = response.redirect;
           }
-        },
-        error: function() {
-          Swal.fire({
-            icon: 'error',
-            title: 'Error de conexión',
-            text: 'No se pudo enviar la reserva. Intenta nuevamente.',
-            confirmButtonColor: '#ff7043'
-          });
-        }
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: response.mensaje || 'No se pudo guardar la reserva.',
+          confirmButtonColor: '#ff7043'
+        });
+      }
+    },
+    error: function() {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error de conexión',
+        text: 'No se pudo enviar la reserva. Intenta nuevamente.',
+        confirmButtonColor: '#ff7043'
       });
-    });
+    }
+  });
+});
+
   </script>
 
 </body>

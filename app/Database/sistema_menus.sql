@@ -2480,10 +2480,15 @@ CREATE TABLE IF NOT EXISTS `usuarios_login` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
+
 -- Volcando datos para la tabla sistema_menus.usuarios_login: ~2 rows (aproximadamente)
 INSERT INTO `usuarios_login` (`id`, `nombre`, `apellido`, `email`, `password`, `fecha_registro`, `telefono`) VALUES
 	(2, 'Aimar', 'Contreras Carrillo', 'alexander20002contreras@gmail.com', '$2y$10$KU8jVtNir5PajDyk7v2pzOhoWnWcJaJ4EMkgqLr10Nn0Te5Z5jOhS', '2025-10-22 19:43:30', '955365019'),
 	(3, 'Maria Alexandra', 'Lopez Lopez', 'Lopes2002@gmail.com', '$2y$10$1DNsSBjmVmtd6NZpLosy5eJQaWYS2va3jXHQBoVDgU6v12AS/Q1i6', '2025-10-22 20:46:15', '956977876');
+
+
+
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
