@@ -1,6 +1,3 @@
-<!-- ==============================
-     Librerías principales
-================================= -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
@@ -8,6 +5,7 @@
     body {
         background-color: #f9fafb;
         font-family: 'Poppins', sans-serif;
+        padding: 1rem;
     }
 
     .card-plato {
@@ -15,11 +13,15 @@
         border-radius: 1rem;
         transition: transform 0.25s ease, box-shadow 0.25s ease;
         overflow: hidden;
+        background: #fff;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     .card-plato:hover {
         transform: translateY(-6px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     }
 
     .precio-badge {
@@ -56,19 +58,148 @@
         font-style: italic;
         color: #aaa;
     }
+
+    /* ==============================
+       🔹 Ajustes Responsive
+    =============================== */
+    @media (max-width: 992px) {
+        .row-cols-md-3 {
+            row-gap: 1.5rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .card-img-top {
+            height: 240px !important;
+        }
+        .btn-lg {
+            font-size: 1rem;
+            padding: 0.75rem 2rem;
+        }
+    }
+
+    /* ✅ Móviles: 1 tarjeta centrada */
+    @media (max-width: 576px) {
+        body {
+            padding: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+        }
+
+        .text-muted {
+            font-size: 0.95rem;
+        }
+
+        .row.row-cols-1.row-cols-sm-2.row-cols-md-3 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .col {
+            width: 95%;
+            max-width: 420px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card-plato {
+            width: 100%;
+            margin-bottom: 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-body {
+            padding: 1.2rem;
+        }
+
+        .card-img-top {
+            height: 260px !important;
+            object-fit: cover;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+        }
+
+        .input-group-text,
+        .form-check-label {
+            font-size: 0.95rem;
+        }
+
+        .form-control,
+        textarea {
+            font-size: 0.95rem;
+        }
+
+        .btn-lg {
+            width: 100%;
+            font-size: 1.05rem;
+            padding: 0.9rem;
+        }
+    }
+
+    /* ✅ Muy pequeños (<400px): 2 por fila */
+    @media (max-width: 400px) {
+        .row.row-cols-1.row-cols-sm-2.row-cols-md-3 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .col {
+            width: 100%;
+        }
+
+        .card-plato {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-img-top {
+            height: 180px !important;
+        }
+
+        .card-body {
+            padding: 0.9rem;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+        }
+
+        .precio-badge {
+            font-size: 0.8rem;
+        }
+
+        .btn-lg {
+            font-size: 0.9rem;
+            padding: 0.7rem;
+        }
+    }
 </style>
 
+
 <div class="container py-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold text-primary"><i class="fa-solid fa-utensils me-2"></i>Selecciona tus Platos</h2>
-        <p class="text-muted mb-0">Elige los platos que deseas incluir en tu reserva y ajusta la cantidad si es necesario.</p>
+    <div class="text-center mb-4">
+        <h2 class="fw-bold text-primary">
+            <i class="fa-solid fa-utensils me-2"></i>Selecciona tus Platos
+        </h2>
+        <p class="text-muted mb-0">
+            Elige los platos que deseas incluir en tu reserva y ajusta la cantidad si es necesario.
+        </p>
     </div>
 
     <form id="formSeleccionPlatos" action="<?= base_url('reservas-platos/guardar'); ?>" method="POST">
         <input type="hidden" name="idreserva" value="<?= esc($idreserva); ?>">
         <input type="hidden" name="idlocal" value="<?= esc($idlocal); ?>">
 
-        <div class="row row-cols-1 row-cols-md-3 g-4">
+        <!-- 🔹 Rejilla responsive -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             <?php if (!empty($platos)): ?>
                 <?php foreach ($platos as $plato): ?>
                     <div class="col">
@@ -78,12 +209,12 @@
                                     src="<?= !empty($plato['foto']) ? base_url($plato['foto']) : base_url('assets/img/sin-imagen.png'); ?>" 
                                     alt="<?= esc($plato['nombreplato']); ?>"
                                     class="card-img-top"
-                                    style="height: 220px; object-fit: cover;"
                                 >
                                 <span class="badge precio-badge position-absolute top-0 end-0 m-2 px-3 py-2 shadow">
                                     S/ <?= number_format($plato['precio'], 2); ?>
                                 </span>
                             </div>
+
                             <div class="card-body d-flex flex-column">
                                 <h5 class="card-title mb-2"><?= esc($plato['nombreplato']); ?></h5>
 
@@ -140,9 +271,6 @@
     </form>
 </div>
 
-<!-- ==============================
-     Librerías JS
-================================= -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

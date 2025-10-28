@@ -113,6 +113,7 @@
         <li><a class="nav-link" href="<?= base_url('/horarios') ?>"><i class="fas fa-clock me-2"></i>Horario</a></li>
         <li><a class="nav-link" href="<?= base_url('comentarios') ?>"><i class="fas fa-comments me-2"></i>Comentarios</a></li>
         <li><a class="nav-link" href="<?= base_url('/reservas')?>"><i class="fas fa-calendar-check me-2"></i>Reservas</a></li>
+        <li><a class="nav-link" href="<?= base_url('/reservasplatos')?>"><i class="bi bi-hourglass-split"></i>Pedidos</a></li>
         <li><a class="nav-link" href="<?= base_url('/') ?>"><i class="bi bi-arrow-left me-2"></i> Volver</a></li>
 
   

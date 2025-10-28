@@ -53,6 +53,7 @@
             </tr>
           </thead>
           <tbody>
+            
             <?php if (!empty($platos_confirmados)): ?>
               <?php $i = 1; foreach($platos_confirmados as $p): ?>
               <tr>

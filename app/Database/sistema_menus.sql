@@ -1,10 +1,3 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Versión del servidor:         8.4.3 - MySQL Community Server - GPL
--- SO del servidor:              Win64
--- HeidiSQL Versión:             12.8.0.6908
--- --------------------------------------------------------
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
@@ -14,12 +7,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-
--- Volcando estructura de base de datos para sistema_menus
-CREATE DATABASE IF NOT EXISTS `sistema_menus` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `sistema_menus`;
-
--- Volcando estructura para tabla sistema_menus.cartas
 CREATE TABLE IF NOT EXISTS `cartas` (
   `idcarta` int NOT NULL AUTO_INCREMENT,
   `idlocales` int NOT NULL,
@@ -34,7 +21,6 @@ CREATE TABLE IF NOT EXISTS `cartas` (
   CONSTRAINT `fk_cartas_seccion` FOREIGN KEY (`idseccion`) REFERENCES `secciones` (`idseccion`)
 ) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.cartas: ~10 rows (aproximadamente)
 INSERT INTO `cartas` (`idcarta`, `idlocales`, `idseccion`, `nombreplato`, `precio`, `foto`) VALUES
 	(3, 1, 1, 'Rollos de Sushi Especiales', 25.00, 'uploads/cartas/1759089177_62adcbe471517748a56c.jpg'),
 	(4, 1, 1, 'Alitas de Pollo Glaseadas con Sésamo', 20.00, 'uploads/cartas/1759090924_256ef0e06dcb842189ed.jpg'),
@@ -88,14 +74,12 @@ INSERT INTO `cartas` (`idcarta`, `idlocales`, `idseccion`, `nombreplato`, `preci
 	(52, 9, 3, 'Pisco torontel y quebranta', 35.00, 'uploads/cartas/1759178695_fa96557679da0e07b959.jpg'),
 	(53, 9, 3, 'Licores de crema', 30.00, 'uploads/cartas/1759178732_569cd9e776e9fd53084c.jpg');
 
--- Volcando estructura para tabla sistema_menus.categorias
 CREATE TABLE IF NOT EXISTS `categorias` (
   `idcategoria` int NOT NULL AUTO_INCREMENT,
   `categoria` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`idcategoria`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.categorias: ~12 rows (aproximadamente)
 INSERT INTO `categorias` (`idcategoria`, `categoria`) VALUES
 	(1, 'Vitinicolas'),
 	(2, 'Comida Oriental'),
@@ -110,7 +94,6 @@ INSERT INTO `categorias` (`idcategoria`, `categoria`) VALUES
 	(11, 'Pizza'),
 	(12, 'Huariques y Otros');
 
--- Volcando estructura para tabla sistema_menus.comentarios
 CREATE TABLE IF NOT EXISTS `comentarios` (
   `idcomentario` int unsigned NOT NULL AUTO_INCREMENT,
   `idlocales` int NOT NULL,
@@ -125,12 +108,10 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Volcando datos para la tabla sistema_menus.comentarios: ~0 rows (aproximadamente)
 INSERT INTO `comentarios` (`idcomentario`, `idlocales`, `tokenusuario`, `comentario`, `valoracion`, `fechahora`) VALUES
 	(3, 1, 2, 'Buen restaurante\r\n', 5, '2025-10-23 23:51:06'),
 	(4, 4, 3, 'Buen restaurante, atencion de clase A1', 3, '2025-10-23 23:56:57');
 
--- Volcando estructura para tabla sistema_menus.contratos
 CREATE TABLE IF NOT EXISTS `contratos` (
   `idcontrato` int NOT NULL AUTO_INCREMENT,
   `idusuario` int NOT NULL,
@@ -145,9 +126,7 @@ CREATE TABLE IF NOT EXISTS `contratos` (
   CONSTRAINT `contratos_ibfk_2` FOREIGN KEY (`idnegocio`) REFERENCES `negocios` (`idnegocio`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.contratos: ~0 rows (aproximadamente)
 
--- Volcando estructura para tabla sistema_menus.departamentos
 CREATE TABLE IF NOT EXISTS `departamentos` (
   `iddepartamento` int NOT NULL AUTO_INCREMENT,
   `departamento` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -155,7 +134,6 @@ CREATE TABLE IF NOT EXISTS `departamentos` (
   UNIQUE KEY `departamento` (`departamento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.departamentos: ~25 rows (aproximadamente)
 INSERT INTO `departamentos` (`iddepartamento`, `departamento`) VALUES
 	(1, 'Amazonas'),
 	(2, 'Áncash'),
@@ -183,7 +161,6 @@ INSERT INTO `departamentos` (`iddepartamento`, `departamento`) VALUES
 	(24, 'Tumbes'),
 	(25, 'Ucayali');
 
--- Volcando estructura para tabla sistema_menus.distritos
 CREATE TABLE IF NOT EXISTS `distritos` (
   `iddistrito` int NOT NULL AUTO_INCREMENT,
   `distrito` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -193,7 +170,6 @@ CREATE TABLE IF NOT EXISTS `distritos` (
   CONSTRAINT `distritos_ibfk_1` FOREIGN KEY (`idprovincia`) REFERENCES `provincias` (`idprovincia`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1868 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.distritos: ~1,867 rows (aproximadamente)
 INSERT INTO `distritos` (`iddistrito`, `distrito`, `idprovincia`) VALUES
 	(1, 'Chachapoyas', 1),
 	(2, 'Asunción', 1),
@@ -2063,7 +2039,6 @@ INSERT INTO `distritos` (`iddistrito`, `distrito`, `idprovincia`) VALUES
 	(1866, 'Alexander Von Humboldt', 195),
 	(1867, 'Purus', 196);
 
--- Volcando estructura para tabla sistema_menus.horarios
 CREATE TABLE IF NOT EXISTS `horarios` (
   `idhorario` int NOT NULL AUTO_INCREMENT,
   `idlocales` int NOT NULL,
@@ -2075,7 +2050,6 @@ CREATE TABLE IF NOT EXISTS `horarios` (
   CONSTRAINT `horarios_ibfk_1` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.horarios: ~7 rows (aproximadamente)
 INSERT INTO `horarios` (`idhorario`, `idlocales`, `diasemana`, `inicio`, `fin`) VALUES
 	(1, 1, 'martes', '14:00:00', '22:00:00'),
 	(2, 1, 'miercoles', '14:00:00', '22:00:00'),
@@ -2109,7 +2083,6 @@ INSERT INTO `horarios` (`idhorario`, `idlocales`, `diasemana`, `inicio`, `fin`) 
 	(30, 4, 'jueves', '12:00:00', '20:00:00'),
 	(31, 5, 'jueves', '12:00:00', '23:00:00');
 
--- Volcando estructura para tabla sistema_menus.locales
 CREATE TABLE IF NOT EXISTS `locales` (
   `idlocales` int NOT NULL AUTO_INCREMENT,
   `idnegocio` int NOT NULL,
@@ -2125,7 +2098,6 @@ CREATE TABLE IF NOT EXISTS `locales` (
   CONSTRAINT `locales_ibfk_2` FOREIGN KEY (`iddistrito`) REFERENCES `distritos` (`iddistrito`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.locales: ~9 rows (aproximadamente)
 INSERT INTO `locales` (`idlocales`, `idnegocio`, `iddistrito`, `direccion`, `telefono`, `latitud`, `longitud`) VALUES
 	(1, 1, 1010, 'Av. Principal 388 - Carr. de Sunampe', '940790534', -13.4163, -76.158),
 	(2, 3, 1007, 'Av. Óscar R. Benavides 598 - Plaza de Armas de Pueblo Nuevo', '924817518', -13.4053876, -76.1301925),
@@ -2137,7 +2109,6 @@ INSERT INTO `locales` (`idlocales`, `idnegocio`, `iddistrito`, `direccion`, `tel
 	(8, 11, 1010, 'Av. Benavides 1412 Sunampe', '908913572', -13.4135953, -76.1534393),
 	(9, 12, 1001, 'Urb. Olivar del Sur Mz. C – Lt. 04', '964998037', -13.41528, -76.12417);
 
--- Volcando estructura para tabla sistema_menus.negocios
 CREATE TABLE IF NOT EXISTS `negocios` (
   `idnegocio` int NOT NULL AUTO_INCREMENT,
   `idcategoria` int NOT NULL,
@@ -2155,7 +2126,6 @@ CREATE TABLE IF NOT EXISTS `negocios` (
   CONSTRAINT `negocios_ibfk_2` FOREIGN KEY (`idrepresentante`) REFERENCES `personas` (`idpersona`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.negocios: ~9 rows (aproximadamente)
 INSERT INTO `negocios` (`idnegocio`, `idcategoria`, `idrepresentante`, `nombre`, `nombrecomercial`, `slogan`, `ruc`, `logo`) VALUES
 	(1, 2, 1, 'DAITO', 'DAITO', 'Daito es un restaurante que ofrece cocina Nikkei, una fusión de sabores peruanos y japoneses...', '20111111119', 'uploads/negocios/logo/1758990903_a02a106a10ea2ddbab2d.jpg'),
 	(3, 2, 1, 'Mister Wok', 'Mister Wok', 'Mister Wok en Pueblo Nuevo ofrece auténtica comida china en un ambiente familiar y acogedor...', '20111111111', 'uploads/negocios/logo/1758990972_034e9ee3dce0d78ba076.jpg'),
@@ -2167,7 +2137,6 @@ INSERT INTO `negocios` (`idnegocio`, `idcategoria`, `idrepresentante`, `nombre`,
 	(11, 1, 5, 'Viñedos Grimaldi', 'Viñedos Grimaldi', 'Cuatro generaciones dedicadas a crear vinos y pisco de excelencia, llevando el sabor al mundo.', '20111111101', 'uploads/negocios/logo/1759009612_f8ab6a4d29a9cf9ec68f.jpg'),
 	(12, 1, 5, 'El Copete', 'El Copete', '"Viñedos Copete" tradición, autenticidad y sabor único en cada botella artesanal.', '20111111109', 'uploads/negocios/logo/1759009678_4d7999756aeeb80bcfc0.jpg');
 
--- Volcando estructura para tabla sistema_menus.personas
 CREATE TABLE IF NOT EXISTS `personas` (
   `idpersona` int NOT NULL AUTO_INCREMENT,
   `apellidos` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -2179,14 +2148,12 @@ CREATE TABLE IF NOT EXISTS `personas` (
   UNIQUE KEY `numerodoc` (`numerodoc`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.personas: ~4 rows (aproximadamente)
 INSERT INTO `personas` (`idpersona`, `apellidos`, `nombres`, `tipodoc`, `numerodoc`, `telefono`) VALUES
 	(1, 'Contreras Carrillo', 'Aimar Alexander', 'DNI', '73989219', '955365019'),
 	(4, 'Flores Lopez', 'Maria Alejandra', 'DNI', '71548236', '956123456'),
 	(5, 'Huamani Merino', 'Jesus Sam', 'DNI', '74125896', '900153478'),
 	(6, 'Cabrera Torres', 'Ximena Xiomara', 'DNI', '75398165', '984653211');
 
--- Volcando estructura para tabla sistema_menus.provincias
 CREATE TABLE IF NOT EXISTS `provincias` (
   `idprovincia` int NOT NULL AUTO_INCREMENT,
   `provincia` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -2197,7 +2164,6 @@ CREATE TABLE IF NOT EXISTS `provincias` (
   CONSTRAINT `provincias_ibfk_1` FOREIGN KEY (`iddepartamento`) REFERENCES `departamentos` (`iddepartamento`)
 ) ENGINE=InnoDB AUTO_INCREMENT=197 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.provincias: ~196 rows (aproximadamente)
 INSERT INTO `provincias` (`idprovincia`, `provincia`, `iddepartamento`) VALUES
 	(1, 'Chachapoyas', 1),
 	(2, 'Bagua', 1),
@@ -2396,7 +2362,6 @@ INSERT INTO `provincias` (`idprovincia`, `provincia`, `iddepartamento`) VALUES
 	(195, 'Padre Abad ', 25),
 	(196, 'Purús', 25);
 
--- Volcando estructura para tabla sistema_menus.reservas
 CREATE TABLE IF NOT EXISTS `reservas` (
   `idreserva` int unsigned NOT NULL AUTO_INCREMENT,
   `idhorario` int NOT NULL,
@@ -2415,27 +2380,40 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   CONSTRAINT `fk_reservas_local` FOREIGN KEY (`idlocales`) REFERENCES `locales` (`idlocales`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_reservas_solicitante` FOREIGN KEY (`idpersonasolicitud`) REFERENCES `usuarios_login` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_reservas_validador` FOREIGN KEY (`idusuariovalida`) REFERENCES `usuarios` (`idusuario`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.reservas: ~3 rows (aproximadamente)
 INSERT INTO `reservas` (`idreserva`, `idhorario`, `idlocales`, `fechahora`, `cantidadpersonas`, `confirmacion`, `idusuariovalida`, `idpersonasolicitud`) VALUES
-	(1, 1, 1, '2025-10-23 19:00:00', 1, 'confirmado', NULL, 2),
-	(2, 1, 4, '2025-12-23 19:00:00', 1, 'confirmado', NULL, 3),
-	(3, 1, 5, '2025-10-24 14:00:00', 1, 'confirmado', NULL, 2),
-	(4, 1, 5, '2025-10-24 16:00:00', 1, 'confirmado', NULL, 2),
-	(5, 1, 5, '2025-10-24 19:20:00', 1, 'cancelado', NULL, 2),
-	(6, 1, 1, '2025-12-12 14:00:00', 1, 'pendiente', NULL, 2),
-	(7, 1, 1, '2025-10-23 20:00:00', 1, 'pendiente', NULL, 2),
-	(8, 1, 1, '2025-10-23 20:00:00', 1, 'pendiente', NULL, 2);
+	(1, 1, 6, '2025-10-27 14:00:00', 5, 'cancelado', NULL, 3),
+	(2, 1, 1, '2025-10-27 14:00:00', 15, 'cancelado', NULL, 3),
+	(3, 1, 1, '2025-10-27 14:00:00', 1, 'confirmado', NULL, 3),
+	(4, 1, 6, '2025-11-26 15:00:00', 2, 'confirmado', NULL, 3),
+	(5, 1, 8, '2025-10-27 14:00:00', 1, 'confirmado', NULL, 3);
 
--- Volcando estructura para tabla sistema_menus.secciones
+CREATE TABLE IF NOT EXISTS `reservas_platos` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `idreserva` int unsigned NOT NULL,
+  `idcarta` int NOT NULL,
+  `cantidad` int DEFAULT '1',
+  `observacion` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_reservas_platos_reserva` (`idreserva`),
+  KEY `fk_reservas_platos_carta` (`idcarta`),
+  CONSTRAINT `fk_reservas_platos_carta` FOREIGN KEY (`idcarta`) REFERENCES `cartas` (`idcarta`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_reservas_platos_reserva` FOREIGN KEY (`idreserva`) REFERENCES `reservas` (`idreserva`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `reservas_platos` (`id`, `idreserva`, `idcarta`, `cantidad`, `observacion`) VALUES
+	(1, 2, 3, 1, 'sin lechuga'),
+	(2, 2, 5, 1, ''),
+	(3, 3, 3, 1, ''),
+	(4, 5, 45, 1, '');
+
 CREATE TABLE IF NOT EXISTS `secciones` (
   `idseccion` int NOT NULL AUTO_INCREMENT,
   `seccion` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`idseccion`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.secciones: ~9 rows (aproximadamente)
 INSERT INTO `secciones` (`idseccion`, `seccion`) VALUES
 	(1, 'Entradas'),
 	(2, 'Platos de Fondo'),
@@ -2447,7 +2425,6 @@ INSERT INTO `secciones` (`idseccion`, `seccion`) VALUES
 	(8, 'Vegetarianos'),
 	(9, 'Infantil');
 
--- Volcando estructura para tabla sistema_menus.usuarios
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `idusuario` int NOT NULL AUTO_INCREMENT,
   `nombreusuario` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
@@ -2460,14 +2437,12 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`idpersona`) REFERENCES `personas` (`idpersona`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla sistema_menus.usuarios: ~0 rows (aproximadamente)
 INSERT INTO `usuarios` (`idusuario`, `nombreusuario`, `claveacceso`, `nivelacceso`, `idpersona`) VALUES
 	(4, 'restaurante1@gmail.com', '$2y$10$JISIiNEnfaZ.v7hOedwMEenkFErhroRk2qDNaGpff7Keuj0.gHtbG', 'admin', 1),
 	(5, 'restaurante2@gmail.com', '$2y$10$uO83OWMbi3doQ0dbU/tavOVPtYNE4U6FW20nggmnUv8zUCRYR68tm', 'representante', 4),
 	(7, 'restaurante3@gmail.com', '$2y$10$NZEfYbIBNhW74cfW8YuziewLA/RnRCJdK8TmVG2iKNZE/Wk7TRr9C', 'representante', 5),
 	(8, 'restaurante4@gmail.com', '$2y$10$uTbZ.8sP63aV94Vwr/8KrenVNIfzNfIj7pFsxc.g10YMQPar.bKKu', 'representante', 6);
 
--- Volcando estructura para tabla sistema_menus.usuarios_login
 CREATE TABLE IF NOT EXISTS `usuarios_login` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) NOT NULL,
@@ -2480,15 +2455,9 @@ CREATE TABLE IF NOT EXISTS `usuarios_login` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-
-
--- Volcando datos para la tabla sistema_menus.usuarios_login: ~2 rows (aproximadamente)
 INSERT INTO `usuarios_login` (`id`, `nombre`, `apellido`, `email`, `password`, `fecha_registro`, `telefono`) VALUES
 	(2, 'Aimar', 'Contreras Carrillo', 'alexander20002contreras@gmail.com', '$2y$10$KU8jVtNir5PajDyk7v2pzOhoWnWcJaJ4EMkgqLr10Nn0Te5Z5jOhS', '2025-10-22 19:43:30', '955365019'),
 	(3, 'Maria Alexandra', 'Lopez Lopez', 'Lopes2002@gmail.com', '$2y$10$1DNsSBjmVmtd6NZpLosy5eJQaWYS2va3jXHQBoVDgU6v12AS/Q1i6', '2025-10-22 20:46:15', '956977876');
-
-
-
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

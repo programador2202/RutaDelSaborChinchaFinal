@@ -7,6 +7,7 @@ use App\Models\ReservasPlatos;
 use App\Models\Cartas;
 use App\Models\Reservas;
 
+
 class ReservasPlatosController extends BaseController
 {
     /**
@@ -15,12 +16,20 @@ class ReservasPlatosController extends BaseController
     public function index(): string
     {
         $reservasPlatosModel = new ReservasPlatos();
+        $nivel = session()->get('nivelacceso');
+        $idpersona = session()->get('idpersona');
 
-        $datos['platos_confirmados'] = $reservasPlatosModel->obtenerPlatosConfirmados();
+        if ($nivel === 'representante') {
+            $datos['platos_confirmados'] = $reservasPlatosModel->obtenerPlatosConfirmadosPorRepresentante($idpersona);
+        } else {
+            $datos['platos_confirmados'] = $reservasPlatosModel->obtenerPlatosConfirmados();
+        }
+
         $datos['header'] = view('admin/dashboard');
 
         return view('admin/recursos/PlatosReservados', $datos);
     }
+
 
     /**
      * Muestra la vista para agregar platos a una reserva
