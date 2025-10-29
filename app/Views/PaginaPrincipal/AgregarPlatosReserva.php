@@ -6,6 +6,7 @@
         background-color: #f9fafb;
         font-family: 'Poppins', sans-serif;
         padding: 1rem;
+        overflow-x: hidden; /* ✅ Evita desbordes horizontales */
     }
 
     .card-plato {
@@ -22,6 +23,15 @@
     .card-plato:hover {
         transform: translateY(-6px);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    /* ✅ Mantiene proporción sin deformar */
+    .card-img-top {
+        width: 100%;
+        aspect-ratio: 4 / 3; /* relación 4:3 adaptable */
+        object-fit: cover;
+        display: block;
+        border-bottom: 1px solid #eee;
     }
 
     .precio-badge {
@@ -70,7 +80,7 @@
 
     @media (max-width: 768px) {
         .card-img-top {
-            height: 240px !important;
+            aspect-ratio: 1 / 1; /* ✅ cuadrada en tablets */
         }
         .btn-lg {
             font-size: 1rem;
@@ -78,7 +88,6 @@
         }
     }
 
-    /* ✅ Móviles: 1 tarjeta centrada */
     @media (max-width: 576px) {
         body {
             padding: 0.5rem;
@@ -96,11 +105,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin: 0;
         }
 
         .col {
-            width: 95%;
-            max-width: 420px;
+            width: 100%;
+            max-width: 400px;
             display: flex;
             justify-content: center;
         }
@@ -113,59 +123,27 @@
         }
 
         .card-body {
-            padding: 1.2rem;
-        }
-
-        .card-img-top {
-            height: 260px !important;
-            object-fit: cover;
+            padding: 1rem;
         }
 
         .card-title {
-            font-size: 1.1rem;
-        }
-
-        .input-group-text,
-        .form-check-label {
-            font-size: 0.95rem;
-        }
-
-        .form-control,
-        textarea {
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .btn-lg {
             width: 100%;
-            font-size: 1.05rem;
+            font-size: 1rem;
             padding: 0.9rem;
         }
     }
 
-    /* ✅ Muy pequeños (<400px): 2 por fila */
     @media (max-width: 400px) {
-        .row.row-cols-1.row-cols-sm-2.row-cols-md-3 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-        }
-
-        .col {
-            width: 100%;
-        }
-
-        .card-plato {
-            width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
         .card-img-top {
-            height: 180px !important;
+            aspect-ratio: 1 / 1; /* ✅ cuadrada para pantallas muy pequeñas */
         }
 
         .card-body {
-            padding: 0.9rem;
+            padding: 0.8rem;
         }
 
         .card-title {
@@ -198,12 +176,11 @@
         <input type="hidden" name="idreserva" value="<?= esc($idreserva); ?>">
         <input type="hidden" name="idlocal" value="<?= esc($idlocal); ?>">
 
-        <!-- 🔹 Rejilla responsive -->
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
             <?php if (!empty($platos)): ?>
                 <?php foreach ($platos as $plato): ?>
                     <div class="col">
-                        <div class="card card-plato h-100">
+                        <div class="card card-plato">
                             <div class="position-relative">
                                 <img 
                                     src="<?= !empty($plato['foto']) ? base_url($plato['foto']) : base_url('assets/img/sin-imagen.png'); ?>" 
