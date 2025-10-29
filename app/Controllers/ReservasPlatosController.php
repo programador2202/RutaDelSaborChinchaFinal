@@ -76,7 +76,7 @@ class ReservasPlatosController extends BaseController
     $cantidades    = $this->request->getVar('cantidades'); // array con cantidades
     $observaciones = $this->request->getVar('observaciones'); // array opcional
 
-    // ✅ Validar que exista una reserva y al menos un plato
+    // Validar que exista una reserva y al menos un plato
     if (empty($idreserva) || !is_array($platos) || count($platos) === 0) {
         return $this->response->setJSON([
             'status'  => 'error',
@@ -85,7 +85,7 @@ class ReservasPlatosController extends BaseController
     }
 
     try {
-        // 🔄 Guardar los platos seleccionados
+        // Guardar los platos seleccionados
         foreach ($platos as $index => $idcarta) {
             $data = [
                 'idreserva'   => $idreserva,
@@ -96,7 +96,7 @@ class ReservasPlatosController extends BaseController
             $reservasPlatosModel->insert($data);
         }
 
-        // ✅ Respuesta tipo JSON para mostrar mensaje sin redirección
+        // Respuesta tipo JSON para mostrar mensaje sin redirección
         return $this->response->setJSON([
             'status'  => 'success',
             'mensaje' => '✅ Pedido registrado. En un momento se comunicarán para confirmar su pedido. ¡Gracias por su comprensión!'
