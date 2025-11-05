@@ -66,8 +66,17 @@
                             <?= esc($negocio['estado']) ?>
                         </span>
                     </p>
-                    
                 </div>
+                <p>
+                <i class="bi bi-calendar-check-fill text-danger"></i>
+                <strong>Reservas:</strong>
+                <a href="<?= base_url('/reservas/public') ?>?idlocal=<?= $negocio['idlocales'] ?>&idnegocio=<?= $negocio['idnegocio'] ?>" 
+                    class="btn btn-danger btn-sm ms-3">
+                    <i class="bi bi-calendar-plus"></i> Reservar ahora
+                </a>
+                </p>
+
+
             </div>
         </div>
     </div>
@@ -252,7 +261,7 @@
 <?php endif; ?>
 
 <br><br>
-<?= $dinamica; ?>
+<?= $carrito; ?>
 
 <script>
   window.isLoggedIn = <?= session()->get('logged_in') ? 'true' : 'false' ?>;

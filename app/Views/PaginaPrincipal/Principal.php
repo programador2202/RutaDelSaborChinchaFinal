@@ -114,23 +114,10 @@
       </div>
     </section>
 
-    <!-- FORMULARIO DE CONTACTO -->
-   <!-- <section class="py-5 bg-light text-dark text-center">
-      <h3><b>¿Tienes un restaurante en Chincha?</b></h3>
-      <p>Únete a <b>Ruta del Sabor Chincha</b> y haz que tu negocio aparezca en nuestra plataforma.</p>
-
-      <form class="row g-2 justify-content-center mt-3" style="max-width: 900px; margin: auto;">
-        <div class="col-md-5"><input type="text" class="form-control" placeholder="Nombre del negocio" required></div>
-        <div class="col-md-5"><input type="email" class="form-control" placeholder="Correo de contacto" required></div>
-        <div class="col-md-5"><input type="tel" class="form-control" placeholder="Número de celular" maxlength="9" required></div>
-        <div class="col-md-5"><input type="text" class="form-control" placeholder="¿De qué trata tu negocio?" required></div>
-        <div class="col-12"><button class="btn btn-danger px-4 mt-2"><b>Quiero unirme</b></button></div>
-      </form>
-    </section> -->
   </main>
-
+  
   <!-- BLOQUES DINÁMICOS Y FOOTER -->
-  <?= $dinamica;?>
+  <?= $chatbox;?>
   <?= $footer; ?>
 
   <!-- VARIABLES GLOBALES -->
@@ -138,6 +125,10 @@
     window.isLoggedIn = <?= session()->get('logged_in') ? 'true' : 'false' ?>;
     window.loginUrl = "<?= base_url('login') ?>"; 
   </script>
+
+  <script>
+  const base_url = "<?= base_url() ?>";
+</script>
 
   <!-- FUNCIONES JS -->
   <script>

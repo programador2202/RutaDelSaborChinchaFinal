@@ -16,7 +16,7 @@ class Home extends BaseController
         // Solicitar las secciones: HEADER + FOOTER + DINÁMICA
         $datos['header'] = view('Layouts/header');
         $datos['footer'] = view('Layouts/footer');
-        $datos['dinamica'] = view('Layouts/dinamica');
+        $datos['chatbox'] = view('Layouts/chatbox');
 
         // Pasar también los negocios a la vista principal
         $datos['negociosDestacados'] = $negociosDestacados;

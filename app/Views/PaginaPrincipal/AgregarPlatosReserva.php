@@ -223,4 +223,4 @@ $('#formSeleccionPlatos').on('submit', function(e) {
         }
     });
 });
-</script>
+</script>  

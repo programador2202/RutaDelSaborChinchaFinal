@@ -91,7 +91,7 @@ class DetalleController extends BaseController
             'promedio'    => $promedio,
             'header'      => view('Layouts/header'),
             'footer'      => view('Layouts/footer'),
-            'dinamica'    => view('Layouts/dinamica'),
+            'carrito'    => view('Layouts/carrito'),
         ];
 
         return view('PaginaPrincipal/Recursos', $data);

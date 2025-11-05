@@ -79,7 +79,7 @@ $routes->post('cartas/ajax', 'CartaController::ajax');
 $routes->get('/horarios', 'HorarioController::index');
 $routes->post('Horario/ajax', 'HorarioController::ajax');
 //ruta para chatbox
-$routes->post('/chatbot', 'ChatController::index');
+$routes->post('/chat', 'ChatController::index');
 //ruta para contratos 
 $routes->get('/contratos', 'ContratoController::index');
 $routes->post('contrato/ajax','ContratoController::ajax');
