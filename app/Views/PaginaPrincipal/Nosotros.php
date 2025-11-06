@@ -196,6 +196,7 @@
     </div>
   </section>
 
+  
   <!-- FOOTER -->
   <?= $footer; ?>
 

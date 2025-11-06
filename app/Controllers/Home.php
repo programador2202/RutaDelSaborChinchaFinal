@@ -73,6 +73,16 @@ class Home extends BaseController
         return view('admin/dashboard', $datos); //HTML personalizado
 }
 
+
+
+    public function directorio(){
+
+        $data['header'] = view('layouts/header');
+        $data['footer'] = view('layouts/footer');
+
+
+        return view('PaginaPrincipal/Directorio',$data);
+    }
     
 
 

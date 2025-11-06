@@ -267,8 +267,6 @@
   window.isLoggedIn = <?= session()->get('logged_in') ? 'true' : 'false' ?>;
   window.loginUrl = "<?= base_url('login') ?>";
 </script>
-
-<script src="<?= base_url('assets/js/global.js') ?>"></script>
 <?= $footer; ?>
 
 <!-- ✅ Agregar SweetAlert2 -->

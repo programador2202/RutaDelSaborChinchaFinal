@@ -34,6 +34,7 @@
             <li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/') ?>">Inicio</a></li>
             <li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/nosotros') ?>">Nosotros</a></li>
             <li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/categorias') ?>">Categorías</a></li>
+             <li class="nav-item mx-2"><a class="nav-link" href="<?= base_url('/directorio') ?>">Directorio</a></li>
 
             <!-- Íconos redes -->
             <li class="nav-item mx-2"><a class="nav-link" href="https://www.facebook.com/profile.php?id=61560111157759" target="_blank"><i class="fab fa-facebook fa-lg"></i></a></li>

@@ -23,7 +23,7 @@
     }
 
     .card-reserva {
-      background: rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.92);
       border: none;
       border-radius: 20px;
       box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
@@ -97,7 +97,7 @@
               </div>
               <div class="mb-3">
                 <label class="form-label">📞 Teléfono</label>
-                <input type="text" class="form-control" value="<?= esc($telefono) ?>" readonly>
+                <input type="text" class="form-control" id="telefono" name="telefono" value="<?= esc($telefono) ?>" required>
               </div>
             <?php endif; ?>
 
@@ -122,49 +122,70 @@
 
   <script>
     $('#formReserva').on('submit', function(e) {
-  e.preventDefault();
+      e.preventDefault();
 
-  $.ajax({
-    url: '<?= base_url('ajax') ?>',
-    type: 'POST',
-    data: $(this).serialize(),
-    dataType: 'json',
-    success: function(response) {
-      if (response.status === 'success') {
+      const telefono = $('#telefono').val().trim();
+      if (telefono === '' || telefono.length < 6) {
         Swal.fire({
-          icon: 'success',
-          title: '¡Reserva registrada!',
-          text: response.mensaje || 'Tu reserva ha sido guardada correctamente.',
-          confirmButtonColor: '#ff7043',
-          timer: 1800,
-          showConfirmButton: false
-        }).then(() => {
-          if (response.redirect) {
-            // 🔹 Redirigir automáticamente a la selección de platos
-            window.location.href = response.redirect;
-          }
-        });
-      } else {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: response.mensaje || 'No se pudo guardar la reserva.',
+          icon: 'warning',
+          title: 'Verifica tu número',
+          text: 'Por favor, ingresa un número de teléfono válido.',
           confirmButtonColor: '#ff7043'
         });
+        return;
       }
-    },
-    error: function() {
+
       Swal.fire({
-        icon: 'error',
-        title: 'Error de conexión',
-        text: 'No se pudo enviar la reserva. Intenta nuevamente.',
-        confirmButtonColor: '#ff7043'
+        title: '¿Confirmar reserva?',
+        text: 'Por favor, asegúrate de que tus datos (especialmente el número de teléfono) sean correctos antes de continuar.',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ff7043',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, confirmar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: '<?= base_url('ajax') ?>',
+            type: 'POST',
+            data: $('#formReserva').serialize(),
+            dataType: 'json',
+            success: function(response) {
+              if (response.status === 'success') {
+                Swal.fire({
+                  icon: 'success',
+                  title: '¡Reserva registrada!',
+                  text: response.mensaje || 'Tu reserva ha sido guardada correctamente.',
+                  confirmButtonColor: '#ff7043',
+                  timer: 1800,
+                  showConfirmButton: false
+                }).then(() => {
+                  if (response.redirect) {
+                    window.location.href = response.redirect;
+                  }
+                });
+              } else {
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Error',
+                  text: response.mensaje || 'No se pudo guardar la reserva.',
+                  confirmButtonColor: '#ff7043'
+                });
+              }
+            },
+            error: function() {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión',
+                text: 'No se pudo enviar la reserva. Intenta nuevamente.',
+                confirmButtonColor: '#ff7043'
+              });
+            }
+          });
+        }
       });
-    }
-  });
-});
-
+    });
   </script>
-
 </body>
 </html>

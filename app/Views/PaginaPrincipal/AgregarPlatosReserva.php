@@ -2,119 +2,133 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
 <style>
+
+body {
+  background-color: #f9fafb;
+  font-family: 'Poppins', sans-serif;
+  padding: clamp(0.5rem, 2vw, 1rem);
+}
+
+.card-plato {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card-plato:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card-img-top {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(0.8rem, 2vw, 1rem);
+}
+
+.card-title {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  margin-bottom: 0.5rem;
+}
+
+
+.precio-badge {
+  font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+  padding: clamp(0.3rem, 0.8vw, 0.5rem) clamp(0.6rem, 1.5vw, 0.8rem);
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: #b80000ff;
+  border-radius: 0.5rem;
+}
+
+/* ==============================
+   🔘 Botones
+============================== */
+.btn-lg {
+  width: 100%;
+  font-size: clamp(0.9rem, 2vw, 1.1rem);
+  padding: clamp(0.6rem, 1.5vw, 0.8rem);
+  border-radius: 2rem;
+}
+
+/* ==============================
+   🖥 Columnas y filas adaptables
+============================== */
+.row-cols-1, .row-cols-sm-2, .row-cols-md-3 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.col {
+  flex: 1 1 calc(33.333% - 1rem); /* hasta 3 columnas */
+  max-width: 100%;
+}
+
+@media (max-width: 992px) {
+  .col {
+    flex: 1 1 calc(50% - 1rem); /* 2 columnas tablet */
+  }
+}
+
+@media (max-width: 576px) {
+  .col {
+    flex: 1 1 100%; /* 1 columna móvil */
+  }
+}
+
+/* ==============================
+   📱 Responsive Ajustes
+============================== */
+@media (max-width: 768px) {
   body {
-    background-color: #f9fafb;
-    font-family: 'Poppins', sans-serif;
-    padding: 0.8rem;
-  }
-
-  .card-plato {
-    border: none;
-    border-radius: 1rem;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .card-plato:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-  }
-
-  .card-img-top {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-    border-bottom: 1px solid #eee;
-  }
-
-  .precio-badge {
-    font-weight: 600;
-    background: linear-gradient(135deg, #28a745, #20c997);
-    font-size: 0.9rem;
+    padding: clamp(0.5rem, 2vw, 0.8rem);
   }
 
   .card-title {
-    font-weight: 600;
-    font-size: 1.05rem;
-    color: #212529;
+    font-size: clamp(0.95rem, 2vw, 1.15rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .card-body {
+    padding: clamp(0.6rem, 2vw, 0.8rem);
   }
 
-  .btn-primary {
-    background: linear-gradient(135deg, #007bff, #0069d9);
-    border: none;
-    transition: 0.3s ease;
+  .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .btn-primary:hover {
-    background: linear-gradient(135deg, #0069d9, #0056b3);
+  .card-plato {
+    width: 100%;
   }
 
-  textarea::placeholder {
-    font-style: italic;
-    color: #aaa;
+  .card-img-top {
+    height: auto;
   }
+}
 
-  /* =============================
-     📱 Ajustes Responsive
-  ============================== */
 
-  @media (max-width: 768px) {
-    body {
-      padding: 0.5rem;
-    }
-
-    .container {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
-
-    .card-img-top {
-      height: 160px;
-    }
-
-    .card-title {
-      font-size: 1rem;
-    }
-
-    .btn-lg {
-      width: 100%;
-      font-size: 1rem;
-      padding: 0.8rem;
-      border-radius: 2rem;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .row {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    .col {
-      width: 100%;
-      max-width: 360px;
-    }
-
-    .card-img-top {
-      height: 150px;
-    }
-
-    .card-body {
-      padding: 1rem;
-    }
-
-    .precio-badge {
-      font-size: 0.85rem;
-      padding: 0.4rem 0.8rem;
-    }
-  }
 </style>
 
 

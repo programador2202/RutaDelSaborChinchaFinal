@@ -6,13 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const chatbotInput = document.getElementById("chatbot-input");
   const chatbotMessages = document.getElementById("chatbot-messages");
 
-  // 🧩 Verificación de elementos requeridos
+  // Verificación de elementos requeridos
   if (!chatbot || !chatbotMessages) {
     console.error("❌ Error: elementos del chatbot no encontrados en el DOM.");
     return;
   }
 
-  // 🎛️ Mostrar / ocultar chat
+  // Mostrar / ocultar chat
   chatbotFab?.addEventListener("click", () => {
     const visible = chatbot.style.display === "flex";
     chatbot.style.display = visible ? "none" : "flex";
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (mensaje) await enviarMensaje(mensaje);
   });
 
-  // 🧠 Función principal para enviar mensaje al servidor
+  // Función principal para enviar mensaje al servidor
   async function enviarMensaje(mensaje) {
     agregarMensaje(mensaje, "user");
     chatbotInput.value = "";
@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // 💬 Agregar mensajes al chat
+  //  Agregar mensajes al chat
   function agregarMensaje(texto, tipo = "bot", temporal = false, html = false) {
     const msg = document.createElement("div");
     msg.classList.add("chat-message", tipo);
@@ -88,15 +88,15 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.addEventListener("click", () => {
         let textoEnviar;
 
-        // 🧭 Si es “volver al menú principal”
+        // Si es “volver al menú principal”
         if (op.toLowerCase().includes("volver al menú") || op.toLowerCase().includes("volver al menu")) {
           textoEnviar = "volver al menú principal";
         }
-        // 🍽️ Si es categoría
+        //  Si es categoría
         else if (esCategoria(op)) {
           textoEnviar = `platos de ${op}`;
         }
-        // 🔤 Caso general
+        // Caso general
         else {
           textoEnviar = op;
         }

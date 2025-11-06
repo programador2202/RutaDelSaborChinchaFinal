@@ -14,6 +14,7 @@ $routes->get('/blog','Home::blog');
 $routes->get('negocios/detalle/(:num)', 'DetalleController::detalle/$1');
 $routes->get('comentarios', 'ComentarioController::index');
 $routes->get('/datos/dashboard', 'DashboardController::index');
+$routes->get('/directorio','Home::directorio');
 
 
 
@@ -48,8 +49,6 @@ $routes->get('/logout', 'LoginController::logout');
 $routes->get('/buscar', 'BuscarController::index'); 
 $routes->get('/buscar/sugerencias', 'BuscarController::sugerencias'); 
 $routes->get('/buscar/mapaBusquedaPorPlato', 'BuscarController::mapaBusquedaPorPlato');
-
-
 
 
 //ruta de mapa
